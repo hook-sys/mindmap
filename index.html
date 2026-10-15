@@ -72,7 +72,10 @@
             <div class="user-dropdown-header">
               <span class="user-dropdown-caption" id="user-dropdown-caption">Active Mode</span>
               <strong id="user-dropdown-name">Guest User</strong>
-              <div id="user-dropdown-meta" class="user-dropdown-meta">Local Storage Only</div>
+              <div id="user-dropdown-meta" class="user-dropdown-meta">
+                <span id="user-dropdown-storage">Local Storage Only</span>
+                <span id="user-tier-badge" class="tier-pill tier-free">Free Plan</span>
+              </div>
             </div>
 
             <!-- Guest Action Section -->
@@ -93,6 +96,10 @@
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
                 <span>Change Password</span>
               </button>
+              <button id="btn-open-cloud-import" class="dropdown-item">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                <span>Import Local Maps to Cloud</span>
+              </button>
               <button id="btn-switch-to-guest" class="dropdown-item">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
                 <span>Switch to Local Guest Mode</span>
@@ -101,6 +108,10 @@
 
             <div class="user-dropdown-divider"></div>
 
+            <button id="btn-open-pricing" class="dropdown-item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+              <span>Plans &amp; Upgrades</span>
+            </button>
             <button id="btn-open-cloud-config" class="dropdown-item">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg>
               <span>Cloud Connection Settings</span>
@@ -793,6 +804,144 @@
           <button type="button" class="btn primary" id="btn-save-super-admin">
             <span class="btn-spinner" style="display: none;"></span>
             <span class="btn-text">Save &amp; Activate Provider</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: SaaS Pricing & Plans Comparison -->
+    <div class="modal-overlay" id="pricing-modal">
+      <div class="modal-content modal-large pricing-modal-content">
+        <div class="modal-header">
+          <div class="ai-modal-header-brand">
+            <span class="ai-badge-icon pricing-badge-icon">💎</span>
+            <div>
+              <h2>Plans &amp; Upgrades</h2>
+              <p class="modal-subtitle">Supercharge your mind mapping with unlimited cloud storage and frontier AI</p>
+            </div>
+          </div>
+          <button class="modal-close" id="btn-close-pricing-modal">&times;</button>
+        </div>
+
+        <div class="modal-body">
+          <div class="pricing-grid">
+            <!-- Free Plan Card -->
+            <div class="pricing-card" id="pricing-card-free">
+              <div class="pricing-card-header">
+                <span class="plan-name">Free Starter</span>
+                <div class="plan-price">
+                  <span class="currency">$</span>
+                  <span class="amount">0</span>
+                  <span class="period">/ forever</span>
+                </div>
+                <p class="plan-desc">Essential tools for local and basic cloud mind mapping.</p>
+              </div>
+              <ul class="plan-features">
+                <li><span class="feature-check">✓</span> Up to 3 Cloud Mind Maps</li>
+                <li><span class="feature-check">✓</span> Standard AI Generation (8–14 nodes)</li>
+                <li><span class="feature-check">✓</span> Node Expansion (up to 4 subtopics)</li>
+                <li><span class="feature-check">✓</span> Export to HTML, PNG, SVG &amp; JSON</li>
+                <li><span class="feature-check">✓</span> Unlimited Local / Offline Storage</li>
+              </ul>
+              <div class="pricing-card-footer">
+                <button type="button" class="btn outline btn-block" id="btn-current-plan-free" disabled>Current Active Plan</button>
+              </div>
+            </div>
+
+            <!-- Pro Monthly Card -->
+            <div class="pricing-card" id="pricing-card-monthly">
+              <div class="pricing-card-header">
+                <span class="plan-name">Pro Monthly</span>
+                <div class="plan-price">
+                  <span class="currency">$</span>
+                  <span class="amount">3.99</span>
+                  <span class="period">/ month</span>
+                </div>
+                <p class="plan-desc">For professionals seeking deep AI generation and unlimited maps.</p>
+              </div>
+              <ul class="plan-features">
+                <li><span class="feature-check">✓</span> <strong>Unlimited</strong> Cloud Mind Maps</li>
+                <li><span class="feature-check">✓</span> <strong>Deep AI</strong> Generation (15–25 nodes)</li>
+                <li><span class="feature-check">✓</span> Multi-Provider Access (Fal AI, Gemini, Claude)</li>
+                <li><span class="feature-check">✓</span> Extended Expansion (up to 6 subtopics)</li>
+                <li><span class="feature-check">✓</span> Cross-Device Instant Cloud Sync</li>
+              </ul>
+              <div class="pricing-card-footer">
+                <button type="button" class="btn secondary btn-block btn-upgrade-tier" data-tier="pro_monthly">Upgrade to Monthly</button>
+              </div>
+            </div>
+
+            <!-- Pro Yearly Card (Popular) -->
+            <div class="pricing-card popular" id="pricing-card-yearly">
+              <div class="pricing-ribbon">SAVE 62%</div>
+              <div class="pricing-card-header">
+                <span class="plan-name">Pro Yearly</span>
+                <div class="plan-price">
+                  <span class="currency">$</span>
+                  <span class="amount">17.88</span>
+                  <span class="period">/ year</span>
+                </div>
+                <p class="plan-desc"><strong>$1.49 / month</strong> — Our most powerful value for power creators.</p>
+              </div>
+              <ul class="plan-features">
+                <li><span class="feature-check">✓</span> <strong>Everything in Pro Monthly</strong></li>
+                <li><span class="feature-check">✓</span> <strong>Massive 62% Savings</strong> over monthly</li>
+                <li><span class="feature-check">✓</span> Priority AI Processing Queue</li>
+                <li><span class="feature-check">✓</span> Early Access to New Features &amp; Templates</li>
+                <li><span class="feature-check">✓</span> Priority Technical Support</li>
+              </ul>
+              <div class="pricing-card-footer">
+                <button type="button" class="btn primary btn-block btn-upgrade-tier" data-tier="pro_yearly">Upgrade to Yearly (Best Value) ✨</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="pricing-guarantee-note">
+            🔒 <strong>Safe SaaS Architecture:</strong> MindMap Studio is future-ready. No payment gateway charges occur at this stage. You can switch plan tiers safely in this preview.
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn secondary" id="btn-close-pricing">Close</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Safe Non-Destructive Cloud Import -->
+    <div class="modal-overlay" id="cloud-import-modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="ai-modal-header-brand">
+            <span class="ai-badge-icon">☁️</span>
+            <div>
+              <h2>Sync Mind Maps to Cloud</h2>
+              <p class="modal-subtitle">Non-destructive cloud import</p>
+            </div>
+          </div>
+          <button class="modal-close" id="btn-close-cloud-import-modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="admin-security-callout">
+            <div class="callout-icon">🛡️</div>
+            <div class="callout-body">
+              <strong>Your Local Data is 100% Safe:</strong>
+              <p>Importing copies your local mind maps into your secure Supabase Cloud database. Your existing local mind maps will <strong>never</strong> be deleted or overwritten.</p>
+            </div>
+          </div>
+
+          <p class="modal-desc" id="cloud-import-count-desc">
+            Found local mind maps on this device.
+          </p>
+
+          <div class="cloud-import-preview-box" id="cloud-import-preview-list">
+            <!-- Dynamically populated list of local projects -->
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn secondary" id="btn-cancel-cloud-import">Keep Separate</button>
+          <button type="button" class="btn primary" id="btn-confirm-cloud-import">
+            <span class="btn-spinner" style="display: none;"></span>
+            <span class="btn-text">Import Copies to Cloud (Safe)</span>
           </button>
         </div>
       </div>

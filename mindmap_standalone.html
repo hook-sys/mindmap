@@ -2295,6 +2295,200 @@ button:disabled {
   border: 1px solid #fecaca;
 }
 
+/* ==========================================================================
+   SaaS Plans & Pricing Modal
+   ========================================================================== */
+.pricing-badge-icon {
+  background: #ede9fe !important;
+  color: #7c3aed !important;
+}
+
+.tier-pill {
+  font-size: 11px;
+  padding: 1px 7px;
+  border-radius: var(--radius-full, 9999px);
+  font-weight: 600;
+  display: inline-block;
+  margin-left: 6px;
+}
+
+.tier-free {
+  background: #f1f5f9;
+  color: #475569;
+}
+
+.tier-pro {
+  background: #ede9fe;
+  color: #6d28d9;
+  border: 1px solid #c4b5fd;
+}
+
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+@media (max-width: 768px) {
+  .pricing-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+}
+
+.pricing-card {
+  position: relative;
+  background: var(--bg-surface, #ffffff);
+  border: 1px solid var(--border-default, #e2e8f0);
+  border-radius: var(--radius-lg, 12px);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: var(--shadow-sm, 0 1px 2px rgba(0,0,0,0.05));
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.pricing-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md, 0 4px 6px -1px rgba(0,0,0,0.1));
+}
+
+.pricing-card.popular {
+  border-color: #6366f1;
+  background: linear-gradient(180deg, #ffffff 0%, #fafafa 100%);
+  box-shadow: 0 0 0 2px #6366f1;
+}
+
+.pricing-ribbon {
+  position: absolute;
+  top: -10px;
+  right: 18px;
+  background: #6366f1;
+  color: #ffffff;
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: var(--radius-full, 9999px);
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 4px rgba(99, 102, 241, 0.3);
+}
+
+.pricing-card-header .plan-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary);
+  display: block;
+}
+
+.plan-price {
+  margin: 12px 0 6px;
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+}
+
+.plan-price .currency {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.plan-price .amount {
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1;
+}
+
+.plan-price .period {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-left: 2px;
+}
+
+.plan-desc {
+  font-size: 12.5px;
+  color: var(--text-secondary);
+  line-height: 1.4;
+  margin-bottom: 16px;
+  min-height: 36px;
+}
+
+.plan-features {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 20px;
+  border-top: 1px solid var(--border-default, #e2e8f0);
+  padding-top: 14px;
+}
+
+.plan-features li {
+  font-size: 12.5px;
+  color: var(--text-secondary);
+  margin-bottom: 9px;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  line-height: 1.4;
+}
+
+.plan-features li .feature-check {
+  color: #10b981;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.pricing-card-footer {
+  margin-top: auto;
+}
+
+.pricing-guarantee-note {
+  padding: 10px 14px;
+  background: var(--bg-subtle, #f8fafc);
+  border: 1px solid var(--border-default, #e2e8f0);
+  border-radius: var(--radius-sm, 6px);
+  font-size: 12px;
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+/* Cloud Import Modal */
+.cloud-import-preview-box {
+  max-height: 200px;
+  overflow-y: auto;
+  border: 1px solid var(--border-default, #e2e8f0);
+  border-radius: var(--radius-md, 8px);
+  background: var(--bg-surface, #ffffff);
+  padding: 8px;
+  margin-top: 10px;
+}
+
+.cloud-import-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border-default, #f1f5f9);
+  font-size: 13px;
+}
+
+.cloud-import-item:last-child {
+  border-bottom: none;
+}
+
+.cloud-import-item-name {
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.cloud-import-item-meta {
+  font-size: 11.5px;
+  color: var(--text-muted);
+}
+
+
 
 
 
@@ -2366,7 +2560,10 @@ button:disabled {
             <div class="user-dropdown-header">
               <span class="user-dropdown-caption" id="user-dropdown-caption">Active Mode</span>
               <strong id="user-dropdown-name">Guest User</strong>
-              <div id="user-dropdown-meta" class="user-dropdown-meta">Local Storage Only</div>
+              <div id="user-dropdown-meta" class="user-dropdown-meta">
+                <span id="user-dropdown-storage">Local Storage Only</span>
+                <span id="user-tier-badge" class="tier-pill tier-free">Free Plan</span>
+              </div>
             </div>
 
             <!-- Guest Action Section -->
@@ -2387,6 +2584,10 @@ button:disabled {
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
                 <span>Change Password</span>
               </button>
+              <button id="btn-open-cloud-import" class="dropdown-item">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                <span>Import Local Maps to Cloud</span>
+              </button>
               <button id="btn-switch-to-guest" class="dropdown-item">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
                 <span>Switch to Local Guest Mode</span>
@@ -2395,6 +2596,10 @@ button:disabled {
 
             <div class="user-dropdown-divider"></div>
 
+            <button id="btn-open-pricing" class="dropdown-item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+              <span>Plans &amp; Upgrades</span>
+            </button>
             <button id="btn-open-cloud-config" class="dropdown-item">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg>
               <span>Cloud Connection Settings</span>
@@ -3087,6 +3292,144 @@ button:disabled {
           <button type="button" class="btn primary" id="btn-save-super-admin">
             <span class="btn-spinner" style="display: none;"></span>
             <span class="btn-text">Save &amp; Activate Provider</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: SaaS Pricing & Plans Comparison -->
+    <div class="modal-overlay" id="pricing-modal">
+      <div class="modal-content modal-large pricing-modal-content">
+        <div class="modal-header">
+          <div class="ai-modal-header-brand">
+            <span class="ai-badge-icon pricing-badge-icon">💎</span>
+            <div>
+              <h2>Plans &amp; Upgrades</h2>
+              <p class="modal-subtitle">Supercharge your mind mapping with unlimited cloud storage and frontier AI</p>
+            </div>
+          </div>
+          <button class="modal-close" id="btn-close-pricing-modal">&times;</button>
+        </div>
+
+        <div class="modal-body">
+          <div class="pricing-grid">
+            <!-- Free Plan Card -->
+            <div class="pricing-card" id="pricing-card-free">
+              <div class="pricing-card-header">
+                <span class="plan-name">Free Starter</span>
+                <div class="plan-price">
+                  <span class="currency">$</span>
+                  <span class="amount">0</span>
+                  <span class="period">/ forever</span>
+                </div>
+                <p class="plan-desc">Essential tools for local and basic cloud mind mapping.</p>
+              </div>
+              <ul class="plan-features">
+                <li><span class="feature-check">✓</span> Up to 3 Cloud Mind Maps</li>
+                <li><span class="feature-check">✓</span> Standard AI Generation (8–14 nodes)</li>
+                <li><span class="feature-check">✓</span> Node Expansion (up to 4 subtopics)</li>
+                <li><span class="feature-check">✓</span> Export to HTML, PNG, SVG &amp; JSON</li>
+                <li><span class="feature-check">✓</span> Unlimited Local / Offline Storage</li>
+              </ul>
+              <div class="pricing-card-footer">
+                <button type="button" class="btn outline btn-block" id="btn-current-plan-free" disabled>Current Active Plan</button>
+              </div>
+            </div>
+
+            <!-- Pro Monthly Card -->
+            <div class="pricing-card" id="pricing-card-monthly">
+              <div class="pricing-card-header">
+                <span class="plan-name">Pro Monthly</span>
+                <div class="plan-price">
+                  <span class="currency">$</span>
+                  <span class="amount">3.99</span>
+                  <span class="period">/ month</span>
+                </div>
+                <p class="plan-desc">For professionals seeking deep AI generation and unlimited maps.</p>
+              </div>
+              <ul class="plan-features">
+                <li><span class="feature-check">✓</span> <strong>Unlimited</strong> Cloud Mind Maps</li>
+                <li><span class="feature-check">✓</span> <strong>Deep AI</strong> Generation (15–25 nodes)</li>
+                <li><span class="feature-check">✓</span> Multi-Provider Access (Fal AI, Gemini, Claude)</li>
+                <li><span class="feature-check">✓</span> Extended Expansion (up to 6 subtopics)</li>
+                <li><span class="feature-check">✓</span> Cross-Device Instant Cloud Sync</li>
+              </ul>
+              <div class="pricing-card-footer">
+                <button type="button" class="btn secondary btn-block btn-upgrade-tier" data-tier="pro_monthly">Upgrade to Monthly</button>
+              </div>
+            </div>
+
+            <!-- Pro Yearly Card (Popular) -->
+            <div class="pricing-card popular" id="pricing-card-yearly">
+              <div class="pricing-ribbon">SAVE 62%</div>
+              <div class="pricing-card-header">
+                <span class="plan-name">Pro Yearly</span>
+                <div class="plan-price">
+                  <span class="currency">$</span>
+                  <span class="amount">17.88</span>
+                  <span class="period">/ year</span>
+                </div>
+                <p class="plan-desc"><strong>$1.49 / month</strong> — Our most powerful value for power creators.</p>
+              </div>
+              <ul class="plan-features">
+                <li><span class="feature-check">✓</span> <strong>Everything in Pro Monthly</strong></li>
+                <li><span class="feature-check">✓</span> <strong>Massive 62% Savings</strong> over monthly</li>
+                <li><span class="feature-check">✓</span> Priority AI Processing Queue</li>
+                <li><span class="feature-check">✓</span> Early Access to New Features &amp; Templates</li>
+                <li><span class="feature-check">✓</span> Priority Technical Support</li>
+              </ul>
+              <div class="pricing-card-footer">
+                <button type="button" class="btn primary btn-block btn-upgrade-tier" data-tier="pro_yearly">Upgrade to Yearly (Best Value) ✨</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="pricing-guarantee-note">
+            🔒 <strong>Safe SaaS Architecture:</strong> MindMap Studio is future-ready. No payment gateway charges occur at this stage. You can switch plan tiers safely in this preview.
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn secondary" id="btn-close-pricing">Close</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Safe Non-Destructive Cloud Import -->
+    <div class="modal-overlay" id="cloud-import-modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="ai-modal-header-brand">
+            <span class="ai-badge-icon">☁️</span>
+            <div>
+              <h2>Sync Mind Maps to Cloud</h2>
+              <p class="modal-subtitle">Non-destructive cloud import</p>
+            </div>
+          </div>
+          <button class="modal-close" id="btn-close-cloud-import-modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="admin-security-callout">
+            <div class="callout-icon">🛡️</div>
+            <div class="callout-body">
+              <strong>Your Local Data is 100% Safe:</strong>
+              <p>Importing copies your local mind maps into your secure Supabase Cloud database. Your existing local mind maps will <strong>never</strong> be deleted or overwritten.</p>
+            </div>
+          </div>
+
+          <p class="modal-desc" id="cloud-import-count-desc">
+            Found local mind maps on this device.
+          </p>
+
+          <div class="cloud-import-preview-box" id="cloud-import-preview-list">
+            <!-- Dynamically populated list of local projects -->
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn secondary" id="btn-cancel-cloud-import">Keep Separate</button>
+          <button type="button" class="btn primary" id="btn-confirm-cloud-import">
+            <span class="btn-spinner" style="display: none;"></span>
+            <span class="btn-text">Import Copies to Cloud (Safe)</span>
           </button>
         </div>
       </div>
@@ -3955,6 +4298,23 @@ const adminTestMessage = document.getElementById('admin-test-message');
 const btnSaveSuperAdmin = document.getElementById('btn-save-super-admin');
 let superAdminConfigCache = null;
 
+// SaaS Pricing & Plans Modal Elements
+const btnOpenPricing = document.getElementById('btn-open-pricing');
+const pricingModal = document.getElementById('pricing-modal');
+const btnClosePricingModal = document.getElementById('btn-close-pricing-modal');
+const btnClosePricing = document.getElementById('btn-close-pricing');
+const userTierBadge = document.getElementById('user-tier-badge');
+const userDropdownStorage = document.getElementById('user-dropdown-storage');
+
+// Cloud Import Modal Elements
+const btnOpenCloudImport = document.getElementById('btn-open-cloud-import');
+const cloudImportModal = document.getElementById('cloud-import-modal');
+const btnCloseCloudImportModal = document.getElementById('btn-close-cloud-import-modal');
+const btnCancelCloudImport = document.getElementById('btn-cancel-cloud-import');
+const btnConfirmCloudImport = document.getElementById('btn-confirm-cloud-import');
+const cloudImportCountDesc = document.getElementById('cloud-import-count-desc');
+const cloudImportPreviewList = document.getElementById('cloud-import-preview-list');
+
 // Modals
 const projectsModal = document.getElementById('projects-modal');
 const btnCloseProjectsModal = document.getElementById('btn-close-projects-modal');
@@ -4050,20 +4410,29 @@ function updateUserUI() {
     const displayName = state.authUser.fullName || email.split('@')[0];
     const initial = (displayName.charAt(0) || email.charAt(0) || 'U').toUpperCase();
 
+    const tier = state.authUser.tier || 'free';
+    const isPro = tier.startsWith('pro');
+
     userAvatarBadge.innerText = initial;
-    userAvatarBadge.style.background = 'linear-gradient(135deg, #4F46E5, #7C3AED)';
+    userAvatarBadge.style.background = isPro 
+      ? 'linear-gradient(135deg, #7C3AED, #EC4899)' 
+      : 'linear-gradient(135deg, #4F46E5, #7C3AED)';
     userNameText.innerText = displayName;
 
     if (userPlanBadge) {
-      userPlanBadge.innerText = 'Free Plan';
-      userPlanBadge.className = 'user-plan-badge free';
+      userPlanBadge.innerText = isPro ? '★ Pro' : 'Free';
+      userPlanBadge.className = `user-plan-badge ${isPro ? 'pro' : 'free'}`;
     }
 
     if (btnHeaderAuth) btnHeaderAuth.style.display = 'none';
 
     if (userDropdownCaption) userDropdownCaption.innerText = 'Cloud Account';
     if (userDropdownName) userDropdownName.innerText = displayName;
-    if (userDropdownMeta) userDropdownMeta.innerText = `${email} • Free Tier`;
+    if (userDropdownStorage) userDropdownStorage.innerText = 'Supabase Cloud Sync';
+    if (userTierBadge) {
+      userTierBadge.innerText = isPro ? (tier === 'pro_yearly' ? '★ Pro Yearly' : '★ Pro Monthly') : 'Free Plan';
+      userTierBadge.className = `tier-pill ${isPro ? 'tier-pro' : 'tier-free'}`;
+    }
 
     if (dropdownGuestSection) dropdownGuestSection.style.display = 'none';
     if (dropdownAuthSection) dropdownAuthSection.style.display = 'block';
@@ -4086,7 +4455,11 @@ function updateUserUI() {
 
     if (userDropdownCaption) userDropdownCaption.innerText = 'Local Profile';
     if (userDropdownName) userDropdownName.innerText = state.currentUser;
-    if (userDropdownMeta) userDropdownMeta.innerText = 'Stored locally on this device';
+    if (userDropdownStorage) userDropdownStorage.innerText = 'Local Storage Only';
+    if (userTierBadge) {
+      userTierBadge.innerText = 'Free Starter';
+      userTierBadge.className = 'tier-pill tier-free';
+    }
 
     if (dropdownGuestSection) dropdownGuestSection.style.display = 'block';
     if (dropdownAuthSection) dropdownAuthSection.style.display = 'none';
@@ -4565,6 +4938,160 @@ function renderAdminProviderCards(providers, activeProviderId) {
     `;
     adminProviderCards.appendChild(card);
   });
+}
+
+// ==========================================================================
+// SaaS Pricing & Upgrade Modal Functions
+// ==========================================================================
+
+function openPricingModal() {
+  if (userDropdown) userDropdown.classList.remove('active');
+  if (pricingModal) pricingModal.classList.add('active');
+
+  const currentTier = (state.authUser && state.authUser.tier) ? state.authUser.tier : 'free';
+  const isPro = currentTier.startsWith('pro');
+
+  const btnFree = document.getElementById('btn-current-plan-free');
+  if (btnFree) {
+    btnFree.disabled = !isPro;
+    btnFree.textContent = isPro ? 'Downgrade to Free' : 'Current Active Plan';
+    btnFree.className = isPro ? 'btn secondary btn-block' : 'btn outline btn-block';
+  }
+}
+
+function closePricingModal() {
+  if (pricingModal) pricingModal.classList.remove('active');
+}
+
+async function handleTierSwitch(tierId) {
+  if (!state.authUser) {
+    closePricingModal();
+    openAuthModal('signin');
+    showToast('Please sign in or create an account to activate a SaaS plan.', 'info');
+    return;
+  }
+
+  // Update tier in user profile
+  state.authUser.tier = tierId;
+  const tierName = tierId === 'pro_yearly' ? 'Pro Yearly ($17.88/yr)' : (tierId === 'pro_monthly' ? 'Pro Monthly ($3.99/mo)' : 'Free Starter');
+
+  if (window.AuthService && window.AuthService.getUser()) {
+    try {
+      const user = window.AuthService.getUser();
+      user.user_metadata = user.user_metadata || {};
+      user.user_metadata.tier = tierId;
+    } catch (e) {
+      console.warn('Could not update metadata cache:', e);
+    }
+  }
+
+  updateUserUI();
+  closePricingModal();
+  showToast(`Plan successfully updated to ${tierName}! (Safe SaaS Architecture)`, 'success');
+}
+
+// ==========================================================================
+// Safe Non-Destructive Cloud Import Functions
+// ==========================================================================
+
+function getLocalProjectsList() {
+  const localList = [];
+  try {
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key && key.startsWith('mm_projects_')) {
+        const username = key.replace('mm_projects_', '');
+        const raw = localStorage.getItem(key);
+        if (raw) {
+          const projects = JSON.parse(raw);
+          if (Array.isArray(projects)) {
+            projects.forEach(p => {
+              localList.push({
+                username,
+                id: p.id,
+                title: p.title || 'Untitled Project',
+                nodeCount: p.nodeCount || (p.nodes ? Object.keys(p.nodes).length : 1),
+                updatedAt: p.updatedAt || Date.now(),
+                data: p
+              });
+            });
+          }
+        }
+      }
+    }
+  } catch (e) {
+    console.warn('Error reading local projects:', e);
+  }
+  return localList;
+}
+
+function openCloudImportModal() {
+  if (userDropdown) userDropdown.classList.remove('active');
+  const localProjects = getLocalProjectsList();
+
+  if (cloudImportCountDesc) {
+    cloudImportCountDesc.textContent = localProjects.length === 0
+      ? 'No local mind maps found to import.'
+      : `Found ${localProjects.length} local mind map${localProjects.length > 1 ? 's' : ''} stored on this device.`;
+  }
+
+  if (cloudImportPreviewList) {
+    cloudImportPreviewList.innerHTML = '';
+    if (localProjects.length === 0) {
+      cloudImportPreviewList.innerHTML = '<div style="padding: 10px; color: #64748b; text-align: center;">All your maps are already synced or no local maps exist.</div>';
+    } else {
+      localProjects.forEach(p => {
+        const item = document.createElement('div');
+        item.className = 'cloud-import-item';
+        item.innerHTML = `
+          <div>
+            <div class="cloud-import-item-name">${escapeHtml(p.title)}</div>
+            <div class="cloud-import-item-meta">Profile: ${escapeHtml(p.username)} • ${p.nodeCount} nodes</div>
+          </div>
+          <span style="font-size: 11px; color: #059669; font-weight: 600;">Safe Copy</span>
+        `;
+        cloudImportPreviewList.appendChild(item);
+      });
+    }
+  }
+
+  if (cloudImportModal) cloudImportModal.classList.add('active');
+}
+
+function closeCloudImportModal() {
+  if (cloudImportModal) cloudImportModal.classList.remove('active');
+}
+
+async function executeCloudImport() {
+  const localProjects = getLocalProjectsList();
+  if (localProjects.length === 0) {
+    closeCloudImportModal();
+    return;
+  }
+
+  setButtonLoading(btnConfirmCloudImport, true, 'Import Copies to Cloud (Safe)');
+  try {
+    let importedCount = 0;
+    for (const proj of localProjects) {
+      // Save copy into active user's projects safely without touching local storage
+      const copyId = `cloud_${proj.id.replace('cloud_', '')}`;
+      await StorageService.saveProject(state.currentUser, {
+        id: copyId,
+        title: proj.title,
+        nodes: proj.data.nodes || state.nodes,
+        rootId: proj.data.rootId || 'root'
+      });
+      importedCount++;
+    }
+
+    closeCloudImportModal();
+    showToast(`Successfully copied ${importedCount} mind maps to your cloud account! Local copies were safely preserved.`, 'success');
+    await loadUserProjects(state.currentUser);
+  } catch (err) {
+    showToast(`Error during import: ${err.message}`, 'error');
+  } finally {
+    setButtonLoading(btnConfirmCloudImport, false, 'Import Copies to Cloud (Safe)');
+  }
 }
 
 // Load or restore projects for given user
@@ -6149,6 +6676,37 @@ function setupEventListeners() {
         setButtonLoading(btnSaveSuperAdmin, false, 'Save & Activate Provider');
       }
     });
+  }
+
+  // SaaS Pricing & Upgrades Listeners
+  if (btnOpenPricing) {
+    btnOpenPricing.addEventListener('click', openPricingModal);
+  }
+  if (btnClosePricingModal) {
+    btnClosePricingModal.addEventListener('click', closePricingModal);
+  }
+  if (btnClosePricing) {
+    btnClosePricing.addEventListener('click', closePricingModal);
+  }
+  document.querySelectorAll('.btn-upgrade-tier').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const tierId = btn.getAttribute('data-tier');
+      handleTierSwitch(tierId);
+    });
+  });
+
+  // Cloud Import Listeners
+  if (btnOpenCloudImport) {
+    btnOpenCloudImport.addEventListener('click', openCloudImportModal);
+  }
+  if (btnCloseCloudImportModal) {
+    btnCloseCloudImportModal.addEventListener('click', closeCloudImportModal);
+  }
+  if (btnCancelCloudImport) {
+    btnCancelCloudImport.addEventListener('click', closeCloudImportModal);
+  }
+  if (btnConfirmCloudImport) {
+    btnConfirmCloudImport.addEventListener('click', executeCloudImport);
   }
 
   // Auth Modal Close & Tabs

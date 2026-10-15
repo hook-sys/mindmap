@@ -207,6 +207,12 @@ const server = http.createServer(async (req, res) => {
         }
       }
 
+      // Plans Catalog (Free, Pro Monthly $3.99, Pro Yearly $17.88)
+      if (pathname === '/api/ai/plans' && req.method === 'GET') {
+        const { getPlansCatalog } = require('./server/ai/entitlements');
+        return sendJson(res, 200, { success: true, plans: getPlansCatalog() });
+      }
+
       // 2. POST /api/ai/generate
       if (pathname === '/api/ai/generate') {
         if (req.method !== 'POST') {

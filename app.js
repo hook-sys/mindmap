@@ -368,6 +368,23 @@ const adminTestMessage = document.getElementById('admin-test-message');
 const btnSaveSuperAdmin = document.getElementById('btn-save-super-admin');
 let superAdminConfigCache = null;
 
+// SaaS Pricing & Plans Modal Elements
+const btnOpenPricing = document.getElementById('btn-open-pricing');
+const pricingModal = document.getElementById('pricing-modal');
+const btnClosePricingModal = document.getElementById('btn-close-pricing-modal');
+const btnClosePricing = document.getElementById('btn-close-pricing');
+const userTierBadge = document.getElementById('user-tier-badge');
+const userDropdownStorage = document.getElementById('user-dropdown-storage');
+
+// Cloud Import Modal Elements
+const btnOpenCloudImport = document.getElementById('btn-open-cloud-import');
+const cloudImportModal = document.getElementById('cloud-import-modal');
+const btnCloseCloudImportModal = document.getElementById('btn-close-cloud-import-modal');
+const btnCancelCloudImport = document.getElementById('btn-cancel-cloud-import');
+const btnConfirmCloudImport = document.getElementById('btn-confirm-cloud-import');
+const cloudImportCountDesc = document.getElementById('cloud-import-count-desc');
+const cloudImportPreviewList = document.getElementById('cloud-import-preview-list');
+
 // Modals
 const projectsModal = document.getElementById('projects-modal');
 const btnCloseProjectsModal = document.getElementById('btn-close-projects-modal');
@@ -463,20 +480,29 @@ function updateUserUI() {
     const displayName = state.authUser.fullName || email.split('@')[0];
     const initial = (displayName.charAt(0) || email.charAt(0) || 'U').toUpperCase();
 
+    const tier = state.authUser.tier || 'free';
+    const isPro = tier.startsWith('pro');
+
     userAvatarBadge.innerText = initial;
-    userAvatarBadge.style.background = 'linear-gradient(135deg, #4F46E5, #7C3AED)';
+    userAvatarBadge.style.background = isPro 
+      ? 'linear-gradient(135deg, #7C3AED, #EC4899)' 
+      : 'linear-gradient(135deg, #4F46E5, #7C3AED)';
     userNameText.innerText = displayName;
 
     if (userPlanBadge) {
-      userPlanBadge.innerText = 'Free Plan';
-      userPlanBadge.className = 'user-plan-badge free';
+      userPlanBadge.innerText = isPro ? '★ Pro' : 'Free';
+      userPlanBadge.className = `user-plan-badge ${isPro ? 'pro' : 'free'}`;
     }
 
     if (btnHeaderAuth) btnHeaderAuth.style.display = 'none';
 
     if (userDropdownCaption) userDropdownCaption.innerText = 'Cloud Account';
     if (userDropdownName) userDropdownName.innerText = displayName;
-    if (userDropdownMeta) userDropdownMeta.innerText = `${email} • Free Tier`;
+    if (userDropdownStorage) userDropdownStorage.innerText = 'Supabase Cloud Sync';
+    if (userTierBadge) {
+      userTierBadge.innerText = isPro ? (tier === 'pro_yearly' ? '★ Pro Yearly' : '★ Pro Monthly') : 'Free Plan';
+      userTierBadge.className = `tier-pill ${isPro ? 'tier-pro' : 'tier-free'}`;
+    }
 
     if (dropdownGuestSection) dropdownGuestSection.style.display = 'none';
     if (dropdownAuthSection) dropdownAuthSection.style.display = 'block';
@@ -499,7 +525,11 @@ function updateUserUI() {
 
     if (userDropdownCaption) userDropdownCaption.innerText = 'Local Profile';
     if (userDropdownName) userDropdownName.innerText = state.currentUser;
-    if (userDropdownMeta) userDropdownMeta.innerText = 'Stored locally on this device';
+    if (userDropdownStorage) userDropdownStorage.innerText = 'Local Storage Only';
+    if (userTierBadge) {
+      userTierBadge.innerText = 'Free Starter';
+      userTierBadge.className = 'tier-pill tier-free';
+    }
 
     if (dropdownGuestSection) dropdownGuestSection.style.display = 'block';
     if (dropdownAuthSection) dropdownAuthSection.style.display = 'none';
@@ -978,6 +1008,160 @@ function renderAdminProviderCards(providers, activeProviderId) {
     `;
     adminProviderCards.appendChild(card);
   });
+}
+
+// ==========================================================================
+// SaaS Pricing & Upgrade Modal Functions
+// ==========================================================================
+
+function openPricingModal() {
+  if (userDropdown) userDropdown.classList.remove('active');
+  if (pricingModal) pricingModal.classList.add('active');
+
+  const currentTier = (state.authUser && state.authUser.tier) ? state.authUser.tier : 'free';
+  const isPro = currentTier.startsWith('pro');
+
+  const btnFree = document.getElementById('btn-current-plan-free');
+  if (btnFree) {
+    btnFree.disabled = !isPro;
+    btnFree.textContent = isPro ? 'Downgrade to Free' : 'Current Active Plan';
+    btnFree.className = isPro ? 'btn secondary btn-block' : 'btn outline btn-block';
+  }
+}
+
+function closePricingModal() {
+  if (pricingModal) pricingModal.classList.remove('active');
+}
+
+async function handleTierSwitch(tierId) {
+  if (!state.authUser) {
+    closePricingModal();
+    openAuthModal('signin');
+    showToast('Please sign in or create an account to activate a SaaS plan.', 'info');
+    return;
+  }
+
+  // Update tier in user profile
+  state.authUser.tier = tierId;
+  const tierName = tierId === 'pro_yearly' ? 'Pro Yearly ($17.88/yr)' : (tierId === 'pro_monthly' ? 'Pro Monthly ($3.99/mo)' : 'Free Starter');
+
+  if (window.AuthService && window.AuthService.getUser()) {
+    try {
+      const user = window.AuthService.getUser();
+      user.user_metadata = user.user_metadata || {};
+      user.user_metadata.tier = tierId;
+    } catch (e) {
+      console.warn('Could not update metadata cache:', e);
+    }
+  }
+
+  updateUserUI();
+  closePricingModal();
+  showToast(`Plan successfully updated to ${tierName}! (Safe SaaS Architecture)`, 'success');
+}
+
+// ==========================================================================
+// Safe Non-Destructive Cloud Import Functions
+// ==========================================================================
+
+function getLocalProjectsList() {
+  const localList = [];
+  try {
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key && key.startsWith('mm_projects_')) {
+        const username = key.replace('mm_projects_', '');
+        const raw = localStorage.getItem(key);
+        if (raw) {
+          const projects = JSON.parse(raw);
+          if (Array.isArray(projects)) {
+            projects.forEach(p => {
+              localList.push({
+                username,
+                id: p.id,
+                title: p.title || 'Untitled Project',
+                nodeCount: p.nodeCount || (p.nodes ? Object.keys(p.nodes).length : 1),
+                updatedAt: p.updatedAt || Date.now(),
+                data: p
+              });
+            });
+          }
+        }
+      }
+    }
+  } catch (e) {
+    console.warn('Error reading local projects:', e);
+  }
+  return localList;
+}
+
+function openCloudImportModal() {
+  if (userDropdown) userDropdown.classList.remove('active');
+  const localProjects = getLocalProjectsList();
+
+  if (cloudImportCountDesc) {
+    cloudImportCountDesc.textContent = localProjects.length === 0
+      ? 'No local mind maps found to import.'
+      : `Found ${localProjects.length} local mind map${localProjects.length > 1 ? 's' : ''} stored on this device.`;
+  }
+
+  if (cloudImportPreviewList) {
+    cloudImportPreviewList.innerHTML = '';
+    if (localProjects.length === 0) {
+      cloudImportPreviewList.innerHTML = '<div style="padding: 10px; color: #64748b; text-align: center;">All your maps are already synced or no local maps exist.</div>';
+    } else {
+      localProjects.forEach(p => {
+        const item = document.createElement('div');
+        item.className = 'cloud-import-item';
+        item.innerHTML = `
+          <div>
+            <div class="cloud-import-item-name">${escapeHtml(p.title)}</div>
+            <div class="cloud-import-item-meta">Profile: ${escapeHtml(p.username)} • ${p.nodeCount} nodes</div>
+          </div>
+          <span style="font-size: 11px; color: #059669; font-weight: 600;">Safe Copy</span>
+        `;
+        cloudImportPreviewList.appendChild(item);
+      });
+    }
+  }
+
+  if (cloudImportModal) cloudImportModal.classList.add('active');
+}
+
+function closeCloudImportModal() {
+  if (cloudImportModal) cloudImportModal.classList.remove('active');
+}
+
+async function executeCloudImport() {
+  const localProjects = getLocalProjectsList();
+  if (localProjects.length === 0) {
+    closeCloudImportModal();
+    return;
+  }
+
+  setButtonLoading(btnConfirmCloudImport, true, 'Import Copies to Cloud (Safe)');
+  try {
+    let importedCount = 0;
+    for (const proj of localProjects) {
+      // Save copy into active user's projects safely without touching local storage
+      const copyId = `cloud_${proj.id.replace('cloud_', '')}`;
+      await StorageService.saveProject(state.currentUser, {
+        id: copyId,
+        title: proj.title,
+        nodes: proj.data.nodes || state.nodes,
+        rootId: proj.data.rootId || 'root'
+      });
+      importedCount++;
+    }
+
+    closeCloudImportModal();
+    showToast(`Successfully copied ${importedCount} mind maps to your cloud account! Local copies were safely preserved.`, 'success');
+    await loadUserProjects(state.currentUser);
+  } catch (err) {
+    showToast(`Error during import: ${err.message}`, 'error');
+  } finally {
+    setButtonLoading(btnConfirmCloudImport, false, 'Import Copies to Cloud (Safe)');
+  }
 }
 
 // Load or restore projects for given user
@@ -2562,6 +2746,37 @@ function setupEventListeners() {
         setButtonLoading(btnSaveSuperAdmin, false, 'Save & Activate Provider');
       }
     });
+  }
+
+  // SaaS Pricing & Upgrades Listeners
+  if (btnOpenPricing) {
+    btnOpenPricing.addEventListener('click', openPricingModal);
+  }
+  if (btnClosePricingModal) {
+    btnClosePricingModal.addEventListener('click', closePricingModal);
+  }
+  if (btnClosePricing) {
+    btnClosePricing.addEventListener('click', closePricingModal);
+  }
+  document.querySelectorAll('.btn-upgrade-tier').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const tierId = btn.getAttribute('data-tier');
+      handleTierSwitch(tierId);
+    });
+  });
+
+  // Cloud Import Listeners
+  if (btnOpenCloudImport) {
+    btnOpenCloudImport.addEventListener('click', openCloudImportModal);
+  }
+  if (btnCloseCloudImportModal) {
+    btnCloseCloudImportModal.addEventListener('click', closeCloudImportModal);
+  }
+  if (btnCancelCloudImport) {
+    btnCancelCloudImport.addEventListener('click', closeCloudImportModal);
+  }
+  if (btnConfirmCloudImport) {
+    btnConfirmCloudImport.addEventListener('click', executeCloudImport);
   }
 
   // Auth Modal Close & Tabs

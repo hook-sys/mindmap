@@ -31,12 +31,18 @@ module.exports = async function handler(req, res) {
     if (pathname.includes('/admin/test-connection')) action = 'admin-test';
     else if (pathname.includes('/admin/config')) action = 'admin-config';
     else if (pathname.includes('/status')) action = 'status';
+    else if (pathname.includes('/plans')) action = 'plans';
     else if (pathname.includes('/expand')) action = 'expand';
     else if (pathname.includes('/generate')) action = 'generate';
     else if (req.method === 'GET') action = 'status';
   }
 
   try {
+    // Plans Catalog (Free, Pro Monthly $3.99, Pro Yearly $17.88)
+    if (action === 'plans') {
+      const { getPlansCatalog } = require('../server/ai/entitlements');
+      return res.status(200).json({ success: true, plans: getPlansCatalog() });
+    }
     // 1. Super Admin: Config endpoint (GET/POST)
     if (action === 'admin-config') {
       const auth = verifySuperAdmin(req);
