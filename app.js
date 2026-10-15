@@ -112,6 +112,36 @@ const StorageService = {
   },
 
   async getProjects(username) {
+    if (window.AuthService && typeof window.AuthService.getClient === 'function') {
+      const client = window.AuthService.getClient();
+      if (client && state.authUser && state.authUser.id) {
+        try {
+          const { data, error } = await client
+            .from('projects')
+            .select('id, title, nodes, updated_at, created_at')
+            .eq('user_id', state.authUser.id)
+            .order('updated_at', { ascending: false });
+
+          if (!error && Array.isArray(data)) {
+            const list = data.map(item => ({
+              id: item.id,
+              title: item.title || 'Untitled Project',
+              nodes: item.nodes,
+              rootId: item.nodes ? (item.nodes.root ? 'root' : (Object.keys(item.nodes)[0] || 'root')) : 'root',
+              updatedAt: item.updated_at ? new Date(item.updated_at).getTime() : Date.now()
+            }));
+            const key = `mm_${username}_projects`;
+            const localMap = {};
+            list.forEach(p => { localMap[p.id] = p; });
+            try { localStorage.setItem(key, JSON.stringify(localMap)); } catch (e) {}
+            return list;
+          }
+        } catch (e) {
+          console.warn('[Storage] Supabase getProjects error, falling back:', e);
+        }
+      }
+    }
+
     try {
       const res = await fetch(`/api/projects?user=${encodeURIComponent(username)}`);
       if (res.ok) {
@@ -134,6 +164,30 @@ const StorageService = {
   },
 
   async getProject(username, projectId) {
+    if (window.AuthService && typeof window.AuthService.getClient === 'function') {
+      const client = window.AuthService.getClient();
+      if (client && state.authUser && state.authUser.id) {
+        try {
+          const { data, error } = await client
+            .from('projects')
+            .select('*')
+            .eq('id', projectId)
+            .eq('user_id', state.authUser.id)
+            .maybeSingle();
+
+          if (!error && data) {
+            return {
+              id: data.id,
+              title: data.title || 'Untitled Project',
+              nodes: data.nodes,
+              rootId: data.nodes ? (data.nodes.root ? 'root' : (Object.keys(data.nodes)[0] || 'root')) : 'root',
+              updatedAt: data.updated_at ? new Date(data.updated_at).getTime() : Date.now()
+            };
+          }
+        } catch (e) {}
+      }
+    }
+
     try {
       const res = await fetch(`/api/projects/${projectId}?user=${encodeURIComponent(username)}`);
       if (res.ok) return await res.json();
@@ -162,6 +216,7 @@ const StorageService = {
     };
 
     this._saveQueue = this._saveQueue.then(async () => {
+      // 1. Local backend REST save
       try {
         await fetch(`/api/projects?user=${encodeURIComponent(username)}`, {
           method: 'POST',
@@ -170,11 +225,36 @@ const StorageService = {
         });
       } catch (e) {}
 
+      // 2. Local storage mirror
       const key = `mm_${username}_projects`;
       const local = localStorage.getItem(key);
       const obj = local ? JSON.parse(local) : {};
       obj[record.id] = record;
-      localStorage.setItem(key, JSON.stringify(obj));
+      try { localStorage.setItem(key, JSON.stringify(obj)); } catch (e) {}
+
+      // 3. Supabase Cloud sync if authenticated
+      if (window.AuthService && typeof window.AuthService.getClient === 'function') {
+        const client = window.AuthService.getClient();
+        if (client && state.authUser && state.authUser.id) {
+          try {
+            const { error } = await client.from('projects').upsert({
+              id: record.id,
+              user_id: state.authUser.id,
+              title: record.title || 'Untitled Mind Map',
+              nodes: record.nodes,
+              updated_at: new Date().toISOString()
+            });
+            if (error) {
+              console.warn('[Storage] Supabase save warning:', error.message);
+              if (error.code === 'P0001' || error.message.includes('limit reached')) {
+                showToast('Free plan limit reached (3 maps max). Upgrade to Pro for unlimited cloud maps.', 'warning', 4500);
+              }
+            }
+          } catch (cloudErr) {
+            console.warn('[Storage] Supabase cloud save error:', cloudErr);
+          }
+        }
+      }
     }).catch(err => {
       console.error('Save queue error:', err);
     });
@@ -183,12 +263,14 @@ const StorageService = {
   },
 
   async deleteProject(username, projectId) {
+    // 1. Local backend REST delete
     try {
       await fetch(`/api/projects/${projectId}?user=${encodeURIComponent(username)}`, {
         method: 'DELETE'
       });
     } catch (e) {}
 
+    // 2. Local storage delete
     const key = `mm_${username}_projects`;
     const local = localStorage.getItem(key);
     if (local) {
@@ -197,6 +279,18 @@ const StorageService = {
         delete obj[projectId];
         localStorage.setItem(key, JSON.stringify(obj));
       } catch (err) {}
+    }
+
+    // 3. Supabase Cloud delete if authenticated
+    if (window.AuthService && typeof window.AuthService.getClient === 'function') {
+      const client = window.AuthService.getClient();
+      if (client && state.authUser && state.authUser.id) {
+        try {
+          await client.from('projects').delete().eq('id', projectId).eq('user_id', state.authUser.id);
+        } catch (e) {
+          console.warn('[Storage] Supabase delete error:', e);
+        }
+      }
     }
   }
 };
@@ -1139,12 +1233,25 @@ async function executeCloudImport() {
     return;
   }
 
+  // Check Free tier project count limit (3 projects)
+  if (state.authUser && (state.authUser.tier || 'free') === 'free') {
+    const existing = await StorageService.getProjects(state.currentUser);
+    const existingCount = existing ? existing.length : 0;
+    if (existingCount + localProjects.length > 3) {
+      showToast(`Free plan limit is 3 cloud mind maps (currently ${existingCount}). Importing ${localProjects.length} maps would exceed your limit. Please upgrade to Pro for unlimited maps.`, 'warning', 5000);
+      closeCloudImportModal();
+      openPricingModal();
+      return;
+    }
+  }
+
   setButtonLoading(btnConfirmCloudImport, true, 'Import Copies to Cloud (Safe)');
   try {
     let importedCount = 0;
     for (const proj of localProjects) {
       // Save copy into active user's projects safely without touching local storage
-      const copyId = `cloud_${proj.id.replace('cloud_', '')}`;
+      const sanitizedId = String(proj.id).replace(/[^a-zA-Z0-9_-]/g, '_');
+      const copyId = `cloud_${sanitizedId.replace(/^cloud_/, '')}`;
       await StorageService.saveProject(state.currentUser, {
         id: copyId,
         title: proj.title,
@@ -2332,6 +2439,17 @@ function setupEventListeners() {
 
   // Confirm Create Project
   btnConfirmCreateProject.addEventListener('click', async () => {
+    // Enforce Free tier 3-project limit for cloud accounts
+    if (state.authUser && (state.authUser.tier || 'free') === 'free') {
+      const existing = await StorageService.getProjects(state.currentUser);
+      if (existing && existing.length >= 3) {
+        showToast('Free Starter plan limit reached (maximum 3 mind maps). Please upgrade to Pro for unlimited mind maps.', 'warning', 4500);
+        newProjectModal.classList.remove('active');
+        openPricingModal();
+        return;
+      }
+    }
+
     const title = newProjectNameInput.value.trim() || 'New Mind Map';
     const templateKey = state.selectedTemplate || 'blank';
     const templateFn = TEMPLATES[templateKey] || TEMPLATES.blank;
@@ -2454,6 +2572,17 @@ function setupEventListeners() {
   if (btnApplyAiNew) {
     btnApplyAiNew.addEventListener('click', async () => {
       if (!currentGeneratedMindMap) return;
+
+      // Enforce Free tier 3-project limit for cloud accounts
+      if (state.authUser && (state.authUser.tier || 'free') === 'free') {
+        const existing = await StorageService.getProjects(state.currentUser);
+        if (existing && existing.length >= 3) {
+          showToast('Free Starter plan limit reached (maximum 3 mind maps). Please upgrade to Pro for unlimited mind maps.', 'warning', 4500);
+          closeAiGeneratorModal();
+          openPricingModal();
+          return;
+        }
+      }
 
       const newId = `proj_${Date.now()}`;
       const title = currentGeneratedMindMap.title || 'AI Mind Map';

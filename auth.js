@@ -431,6 +431,13 @@
     },
 
     /**
+     * Get initialized Supabase client instance
+     */
+    getClient() {
+      return _client;
+    },
+
+    /**
      * Get User Profile metadata (e.g. tier, display name)
      */
     getUserProfile() {

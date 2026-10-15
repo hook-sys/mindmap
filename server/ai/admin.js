@@ -2,13 +2,33 @@
  * MindMap Studio — Super Admin Authorization & Security Guard
  * 
  * Enforces strict server-side authorization for AI Provider Management:
- * - Direct Admin Secret Key verification (x-admin-key header)
- * - Supabase JWT verification & admin role/email authorization
- * - Rejects unauthorized requests with 401 Unauthorized or 403 Forbidden
+ * - Direct Admin Secret Key verification (x-admin-key header) with timing-safe comparison
+ * - Cryptographic Supabase JWT verification (HMAC SHA-256 signature, expiry, audience)
+ * - Strict production rejection of missing or invalid credentials (401/403)
+ * - Hardened environment protection (no unintended cloud bypasses)
  * - Never trusts client-side storage, profiles, or query strings
  */
 
 const crypto = require('crypto');
+
+/**
+ * Timing-safe string comparison to prevent side-channel timing attacks
+ * @param {string} a 
+ * @param {string} b 
+ * @returns {boolean}
+ */
+function safeTimingCompare(a, b) {
+  if (typeof a !== 'string' || typeof b !== 'string') return false;
+  const bufA = Buffer.from(a, 'utf8');
+  const bufB = Buffer.from(b, 'utf8');
+
+  if (bufA.length !== bufB.length) {
+    // Execute dummy comparison to keep constant-time behavior
+    crypto.timingSafeEqual(bufA, bufA);
+    return false;
+  }
+  return crypto.timingSafeEqual(bufA, bufB);
+}
 
 /**
  * Decodes a base64url or base64 string
@@ -38,26 +58,34 @@ function parseJwt(token) {
 }
 
 /**
- * Verifies JWT signature if SUPABASE_JWT_SECRET is configured
+ * Verifies JWT signature using HMAC SHA-256 and timing-safe comparison
  */
 function verifyJwtSignature(parsedJwt, secret) {
-  if (!secret) return true; // Signature check skipped if secret not configured
+  if (!secret) return false;
   try {
     const expectedSig = crypto
       .createHmac('sha256', secret)
       .update(`${parsedJwt.rawParts[0]}.${parsedJwt.rawParts[1]}`)
-      .digest('base64')
-      .replace(/=/g, '')
-      .replace(/\+/g, '-')
-      .replace(/\//g, '_');
+      .digest('base64url');
 
-    return crypto.timingSafeEqual(
-      Buffer.from(parsedJwt.signature),
-      Buffer.from(expectedSig)
-    );
+    return safeTimingCompare(parsedJwt.signature, expectedSig);
   } catch (e) {
     return false;
   }
+}
+
+/**
+ * Determines whether the incoming request originates from a local development environment
+ */
+function isLocalhostRequest(req) {
+  const headers = req.headers || {};
+  const host = (headers.host || '').toLowerCase();
+  const remoteAddr = req.socket?.remoteAddress || req.connection?.remoteAddress || '';
+
+  const isLocalHost = host.startsWith('localhost') || host.startsWith('127.0.0.1');
+  const isLocalIp = remoteAddr === '127.0.0.1' || remoteAddr === '::1' || remoteAddr === '::ffff:127.0.0.1';
+
+  return isLocalHost || isLocalIp;
 }
 
 /**
@@ -75,17 +103,17 @@ function verifySuperAdmin(req) {
     .map(e => e.trim().toLowerCase())
     .filter(Boolean);
 
-  // 1. Check x-admin-key header (direct server key authentication)
+  // 1. Check x-admin-key header (direct server secret key authentication)
   const reqAdminKey = headers['x-admin-key'];
   if (reqAdminKey && typeof reqAdminKey === 'string') {
-    if (adminSecretKey && reqAdminKey.trim() === adminSecretKey.trim()) {
+    if (adminSecretKey && safeTimingCompare(reqAdminKey.trim(), adminSecretKey.trim())) {
       return {
         authorized: true,
         authType: 'admin_key',
         user: { role: 'super_admin', identifier: 'secret_key' }
       };
     }
-    // If admin key was explicitly provided but wrong
+    // Explicit admin key supplied, but invalid
     return {
       authorized: false,
       statusCode: 403,
@@ -101,7 +129,7 @@ function verifySuperAdmin(req) {
       return {
         authorized: false,
         statusCode: 401,
-        error: 'Malformed authorization token.'
+        error: 'Malformed authorization token: token string is empty.'
       };
     }
 
@@ -116,7 +144,7 @@ function verifySuperAdmin(req) {
 
     const { payload } = parsedJwt;
 
-    // Check expiration
+    // Check expiration claim
     const now = Math.floor(Date.now() / 1000);
     if (payload.exp && payload.exp < now) {
       return {
@@ -126,13 +154,40 @@ function verifySuperAdmin(req) {
       };
     }
 
-    // Check signature if SUPABASE_JWT_SECRET is set
+    // Check not-before claim
+    if (payload.nbf && payload.nbf > now) {
+      return {
+        authorized: false,
+        statusCode: 401,
+        error: 'Authentication token is not yet valid.'
+      };
+    }
+
+    // Check audience claim (Supabase default is 'authenticated')
+    if (payload.aud && payload.aud !== 'authenticated') {
+      return {
+        authorized: false,
+        statusCode: 401,
+        error: `Invalid token audience: "${payload.aud}". Expected "authenticated".`
+      };
+    }
+
+    // Verify cryptographic signature
     if (process.env.SUPABASE_JWT_SECRET) {
       if (!verifyJwtSignature(parsedJwt, process.env.SUPABASE_JWT_SECRET)) {
         return {
           authorized: false,
           statusCode: 401,
-          error: 'JWT signature verification failed.'
+          error: 'JWT signature verification failed. Token is invalid or has been tampered with.'
+        };
+      }
+    } else {
+      // In production, refuse unsigned/unverifiable JWT tokens for admin actions unless running mock test suite
+      if (isProd && process.env.ALLOW_MOCK_JWT_DEV !== 'true') {
+        return {
+          authorized: false,
+          statusCode: 401,
+          error: 'Server cannot verify JWT signature: SUPABASE_JWT_SECRET environment variable is missing on server. Admin JWT authentication disabled for security.'
         };
       }
     }
@@ -143,7 +198,7 @@ function verifySuperAdmin(req) {
     const isSuperAdminFlag = payload.user_metadata?.is_super_admin === true ||
                              payload.app_metadata?.is_super_admin === true;
 
-    // A. Check against ADMIN_EMAILS whitelist
+    // Check against ADMIN_EMAILS whitelist
     if (adminEmails.length > 0 && userEmail && adminEmails.includes(userEmail)) {
       return {
         authorized: true,
@@ -152,7 +207,7 @@ function verifySuperAdmin(req) {
       };
     }
 
-    // B. Check role metadata
+    // Check role metadata
     if (appRole === 'super_admin' || userRole === 'super_admin' || isSuperAdminFlag) {
       return {
         authorized: true,
@@ -179,8 +234,8 @@ function verifySuperAdmin(req) {
     };
   }
 
-  // In Local Development:
-  // If developer set ADMIN_SECRET_KEY or ADMIN_EMAILS, enforce it
+  // In non-production environments:
+  // If developer configured ADMIN_SECRET_KEY or ADMIN_EMAILS, enforce it
   if (adminSecretKey || adminEmails.length > 0) {
     return {
       authorized: false,
@@ -189,16 +244,26 @@ function verifySuperAdmin(req) {
     };
   }
 
-  // Local development convenience fallback when no admin secrets are configured
-  console.warn('[ADMIN SECURITY] Running in local development without ADMIN_SECRET_KEY or ADMIN_EMAILS. Development admin access granted.');
+  // STRICT CHECK: Development fallback is ONLY granted if explicitly calling from localhost/127.0.0.1
+  if (isLocalhostRequest(req)) {
+    console.warn('[ADMIN SECURITY] Running in local development without ADMIN_SECRET_KEY or ADMIN_EMAILS. Development admin access granted for localhost.');
+    return {
+      authorized: true,
+      authType: 'dev_local_fallback',
+      user: { email: 'dev-admin@mindmap.local', role: 'super_admin' }
+    };
+  }
+
   return {
-    authorized: true,
-    authType: 'dev_local_fallback',
-    user: { email: 'dev-admin@mindmap.local', role: 'super_admin' }
+    authorized: false,
+    statusCode: 401,
+    error: 'Authentication required. Super Admin credentials missing.'
   };
 }
 
 module.exports = {
   verifySuperAdmin,
-  parseJwt
+  parseJwt,
+  verifyJwtSignature,
+  safeTimingCompare
 };

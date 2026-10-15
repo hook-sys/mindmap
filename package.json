@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "node server.js",
     "start": "node server.js",
-    "build": "node build_standalone.js"
+    "build": "node build_standalone.js",
+    "test": "node tests/run_all_tests.js"
   },
   "keywords": [
     "mindmap",
