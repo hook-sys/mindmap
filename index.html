@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MindMap Studio - Visual Mind Mapping Tool</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Top Application Header (52-56px) -->
+    <header class="toolbar" id="main-header">
+      <div class="toolbar-left">
+        <div class="brand">
+          <div class="logo-icon">🧠</div>
+          <div class="logo-text">
+            <h1>MindMap Studio</h1>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Project Title & Save Status -->
+        <div class="project-bar">
+          <span class="project-pill-icon">📁</span>
+          <input type="text" id="project-title-input" class="project-title-input" value="Main Project" title="Click to rename project" placeholder="Project Name">
+          <div id="save-status" class="save-status-pill" title="Project is automatically saved">
+            <span class="save-dot"></span>
+            <span id="save-status-text">Saved</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="toolbar-right">
+        <button id="btn-new-project-trigger" class="btn secondary btn-sm" title="Create a brand new mind map">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+          <span class="btn-label">New</span>
+        </button>
+        <button id="btn-projects-mgr" class="btn secondary btn-sm" title="View and switch your saved projects">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+          <span class="btn-label">My Projects</span>
+        </button>
+        <button id="btn-export-img" class="btn primary btn-sm" title="Export as High-Resolution PNG Image">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <span class="btn-label">Export</span>
+        </button>
+
+        <div class="divider"></div>
+
+        <!-- User Profile Dropdown -->
+        <div class="user-menu-wrapper">
+          <button id="btn-user-profile" class="user-pill-btn" title="Manage User Profile">
+            <span class="user-avatar-badge" id="user-avatar-badge">U</span>
+            <span class="user-name-text" id="user-name-text">Default User</span>
+            <span class="user-dropdown-arrow">▾</span>
+          </button>
+          <div class="user-dropdown" id="user-dropdown">
+            <div class="user-dropdown-header">
+              <span class="user-dropdown-caption">Active User Profile</span>
+              <strong id="user-dropdown-name">Default User</strong>
+            </div>
+            <div class="user-dropdown-divider"></div>
+            <button id="btn-switch-user-modal" class="dropdown-item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              <span>Switch / Add User Profile</span>
+            </button>
+            <button id="btn-help" class="dropdown-item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              <span>Keyboard Shortcuts & Help</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Canvas Area -->
+    <main class="canvas-viewport" id="canvas-viewport">
+      <!-- Floating Canvas Toolbar / Action Shelf -->
+      <aside class="canvas-toolbar" id="canvas-toolbar" aria-label="Canvas actions">
+        <!-- Node Creation Buttons -->
+        <div class="toolbar-section">
+          <button id="btn-add-child" class="btn ghost btn-sm" title="Add a sub-branch to the selected node (Tab)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+            <span>Child</span>
+            <kbd class="shortcut-tag">Tab</kbd>
+          </button>
+          <button id="btn-add-sibling" class="btn ghost btn-sm" title="Add a peer node on the same level (Enter)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+            <span>Sibling</span>
+            <kbd class="shortcut-tag">↵</kbd>
+          </button>
+        </div>
+
+        <div class="toolbar-divider"></div>
+
+        <!-- Layout, Color & Delete -->
+        <div class="toolbar-section">
+          <button id="btn-auto-layout" class="btn ghost btn-sm" title="Auto arrange all nodes">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            <span class="btn-label">Auto Layout</span>
+          </button>
+
+          <div class="color-picker-dropdown">
+            <button id="btn-color-palette" class="btn ghost btn-sm" title="Change Node Color">
+              <span class="color-preview" id="current-color-dot"></span>
+              <span class="btn-label">Color</span>
+            </button>
+            <div class="color-popover" id="color-popover">
+              <span class="color-option" data-color="#4F46E5" style="background: #4F46E5;"></span>
+              <span class="color-option" data-color="#0284C7" style="background: #0284C7;"></span>
+              <span class="color-option" data-color="#0D9488" style="background: #0D9488;"></span>
+              <span class="color-option" data-color="#16A34A" style="background: #16A34A;"></span>
+              <span class="color-option" data-color="#D97706" style="background: #D97706;"></span>
+              <span class="color-option" data-color="#DC2626" style="background: #DC2626;"></span>
+              <span class="color-option" data-color="#9333EA" style="background: #9333EA;"></span>
+              <span class="color-option" data-color="#DB2777" style="background: #DB2777;"></span>
+              <span class="color-option" data-color="#4B5563" style="background: #4B5563;"></span>
+            </div>
+          </div>
+
+          <button id="btn-delete-node" class="btn ghost-danger btn-sm" title="Delete the selected node (Delete/Backspace)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+            <span class="btn-label">Delete</span>
+          </button>
+        </div>
+
+        <div class="toolbar-divider"></div>
+
+        <!-- History -->
+        <div class="toolbar-section">
+          <button id="btn-undo" class="btn icon-only ghost btn-sm" title="Undo (Ctrl+Z)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7v6h6"/><path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13"/></svg>
+          </button>
+          <button id="btn-redo" class="btn icon-only ghost btn-sm" title="Redo (Ctrl+Y)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 7v6h-6"/><path d="M3 17a9 9 0 0 1 9-9 9 9 0 0 1 6 2.3l3 2.7"/></svg>
+          </button>
+        </div>
+      </aside>
+
+      <div class="canvas-world" id="canvas-world">
+        <!-- SVG for Connecting Lines -->
+        <svg id="svg-connectors" class="svg-connectors"></svg>
+        
+        <!-- HTML Nodes Container -->
+        <div id="nodes-container" class="nodes-container"></div>
+      </div>
+
+      <!-- Floating Bottom Left Controls: Shortcuts & Quick Tip -->
+      <div class="canvas-bottom-left">
+        <button id="btn-shortcuts-pill" class="shortcuts-pill-btn" title="View Keyboard Shortcuts & Help">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <span>Shortcuts</span>
+        </button>
+
+        <div class="quick-tip" id="quick-tip-banner">
+          <span>💡 <kbd>Tab</kbd> Child &bull; <kbd>Enter</kbd> Sibling &bull; Auto-saved</span>
+          <button id="btn-close-tip" class="tip-close" title="Dismiss tip">&times;</button>
+        </div>
+      </div>
+
+      <!-- Floating Bottom Right Controls: Zoom & View -->
+      <div class="canvas-bottom-right">
+        <div class="floating-controls">
+          <button id="btn-zoom-out" title="Zoom Out (−)">−</button>
+          <span id="zoom-level">100%</span>
+          <button id="btn-zoom-in" title="Zoom In (+)">+</button>
+          <div class="divider-v"></div>
+          <button id="btn-fit-screen" title="Fit to Screen (View all nodes)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+          </button>
+          <button id="btn-reset-view" title="Center View (100%)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg>
+          </button>
+        </div>
+      </div>
+    </main>
+
+    <!-- Modal: Projects Manager (My Projects) -->
+    <div class="modal-overlay" id="projects-modal">
+      <div class="modal-content modal-large">
+        <div class="modal-header">
+          <div>
+            <h2>My Projects</h2>
+            <p class="modal-subtitle">Projects saved for user: <strong id="modal-project-user-label">Default User</strong></p>
+          </div>
+          <div class="modal-header-actions">
+            <button id="btn-modal-create-project" class="btn primary">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+              <span>+ New Project</span>
+            </button>
+            <button class="modal-close" id="btn-close-projects-modal">&times;</button>
+          </div>
+        </div>
+        <div class="modal-body">
+          <div id="projects-list-container" class="projects-grid">
+            <!-- Dynamic project cards rendered by JS -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: New Project Creator with Templates -->
+    <div class="modal-overlay" id="new-project-modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Create New Project</h2>
+          <button class="modal-close" id="btn-close-new-project-modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="new-project-name-input">Project Title</label>
+            <input type="text" id="new-project-name-input" class="form-input" placeholder="e.g., Marketing Strategy 2026" value="New Mind Map">
+          </div>
+
+          <div class="form-group">
+            <label>Choose Starter Template</label>
+            <div class="templates-grid">
+              <div class="template-card selected" data-template="blank">
+                <div class="template-icon">📄</div>
+                <div class="template-info">
+                  <h4>Blank Canvas</h4>
+                  <p>Start with a single central idea</p>
+                </div>
+              </div>
+              <div class="template-card" data-template="plan">
+                <div class="template-icon">🎯</div>
+                <div class="template-info">
+                  <h4>Project Plan</h4>
+                  <p>Goals, Tasks, Milestones & Results</p>
+                </div>
+              </div>
+              <div class="template-card" data-template="brainstorm">
+                <div class="template-icon">💡</div>
+                <div class="template-info">
+                  <h4>Brainstorming</h4>
+                  <p>Ideas, Pros, Cons & Solutions</p>
+                </div>
+              </div>
+              <div class="template-card" data-template="meeting">
+                <div class="template-icon">📝</div>
+                <div class="template-info">
+                  <h4>Meeting Notes</h4>
+                  <p>Agenda, Decisions & Next Actions</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn secondary" id="btn-cancel-new-project">Cancel</button>
+          <button class="btn primary" id="btn-confirm-create-project">Create & Open Project</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: User Profile Switcher & Creator -->
+    <div class="modal-overlay" id="users-modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>User Profiles</h2>
+          <button class="modal-close" id="btn-close-users-modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <p class="modal-desc">Each user profile keeps their mind maps and projects completely separate.</p>
+
+          <label>Existing Profiles</label>
+          <div id="users-list-container" class="users-list">
+            <!-- Dynamic users list rendered by JS -->
+          </div>
+
+          <div class="form-group user-add-group">
+            <label for="new-username-input">Create New Profile</label>
+            <div class="input-with-button">
+              <input type="text" id="new-username-input" class="form-input" placeholder="Enter profile name (e.g. Alex, Team)">
+              <button id="btn-submit-add-user" class="btn primary">Add Profile</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Keyboard Shortcuts Help -->
+    <div class="modal-overlay" id="help-modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Keyboard Shortcuts & Usage Guide</h2>
+          <button class="modal-close" id="btn-close-modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <table class="shortcuts-table">
+            <thead>
+              <tr>
+                <th>Action</th>
+                <th>Shortcut / Method</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Add Child Node</td>
+                <td><kbd>Tab</kbd> or click <b>+ Child</b> directly on the node</td>
+              </tr>
+              <tr>
+                <td>Add Sibling Node</td>
+                <td><kbd>Enter</kbd> or top toolbar button</td>
+              </tr>
+              <tr>
+                <td>Edit Node Text</td>
+                <td><b>Double-click</b> on the node text</td>
+              </tr>
+              <tr>
+                <td>Delete Node</td>
+                <td><kbd>Delete</kbd> / <kbd>Backspace</kbd> or click <b>Delete</b> icon</td>
+              </tr>
+              <tr>
+                <td>Collapse / Expand Branches</td>
+                <td>Click the <b>[−] / [+]</b> circle badge on the node</td>
+              </tr>
+              <tr>
+                <td>Move / Reposition Nodes</td>
+                <td><b>Drag & drop</b> any node with mouse</td>
+              </tr>
+              <tr>
+                <td>Pan Canvas</td>
+                <td>Click and drag on empty canvas background</td>
+              </tr>
+              <tr>
+                <td>Zoom In / Out</td>
+                <td><b>Mouse scroll wheel</b> or +/- floating buttons</td>
+              </tr>
+              <tr>
+                <td>Undo / Redo</td>
+                <td><kbd>Ctrl + Z</kbd> / <kbd>Ctrl + Y</kbd></td>
+              </tr>
+            </tbody>
+          </table>
+          <p class="modal-note">💾 Your work is auto-saved in your user profile! You can switch users or create multiple projects at any time.</p>
+        </div>
+        <div class="modal-footer">
+          <button class="btn primary" id="btn-got-it">Got it!</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

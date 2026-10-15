@@ -1,0 +1,29 @@
+# Personal User & Mind Map Data (Strictly Excluded)
+data/
+data/users/
+*.json.tmp_*
+
+# Backups & Archives
+backups/
+backup_pre_security/
+*.bak
+
+# Environment & Credentials
+.env
+.env.*
+*.local
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS & Editor generated files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Node modules
+node_modules/
