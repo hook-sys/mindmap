@@ -1,5 +1,9 @@
 {
   "version": 2,
   "buildCommand": null,
-  "outputDirectory": "."
+  "outputDirectory": ".",
+  "rewrites": [
+    { "source": "/api/ai/(.*)", "destination": "/api/ai" },
+    { "source": "/api/ai", "destination": "/api/ai" }
+  ]
 }

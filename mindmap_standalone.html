@@ -1870,6 +1870,222 @@ button:disabled {
   }
 }
 
+/* ================= AI MIND MAP GENERATOR & EXPAND STYLING ================= */
+.ai-header-btn {
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.35);
+  font-weight: 600;
+  transition: all 0.15s ease;
+}
+
+.ai-header-btn:hover {
+  background: linear-gradient(135deg, #4338ca 0%, #6d28d9 100%) !important;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.45);
+  transform: translateY(-1px);
+}
+
+.ai-modal-content {
+  max-width: 620px;
+}
+
+.ai-modal-header-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.ai-badge-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, #e0e7ff, #ede9fe);
+  border: 1px solid rgba(99, 102, 241, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 19px;
+  flex-shrink: 0;
+}
+
+.ai-provider-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 4px 12px;
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-bottom: 14px;
+}
+
+.provider-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #10b981;
+}
+
+.provider-dot.online {
+  background: #10b981;
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.25);
+}
+
+.ai-prompt-textarea {
+  font-size: 13.5px;
+  line-height: 1.5;
+  resize: vertical;
+}
+
+.ai-options-row {
+  display: flex;
+  gap: 16px;
+  margin: 14px 0 10px;
+}
+
+.ai-radio-group {
+  display: flex;
+  gap: 18px;
+  margin-top: 6px;
+}
+
+.ai-radio-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.ai-guidance-callout {
+  padding: 10px 14px;
+  background: #f8fafc;
+  border-left: 3px solid #6366f1;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  color: #475569;
+  line-height: 1.45;
+  margin-top: 14px;
+}
+
+/* AI Preview Step */
+.ai-preview-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border-default);
+}
+
+.ai-preview-caption {
+  font-size: 11px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.ai-preview-header h3 {
+  margin: 2px 0 4px;
+  font-size: 16px;
+  color: var(--text-primary);
+}
+
+.ai-preview-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  background: #e0e7ff;
+  color: #4338ca;
+  border-radius: var(--radius-full);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.ai-preview-scroll-area {
+  max-height: 280px;
+  overflow-y: auto;
+  background: #f8fafc;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  padding: 14px;
+}
+
+.ai-preview-tree {
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.ai-preview-branch {
+  margin-bottom: 10px;
+}
+
+.ai-preview-branch-title {
+  font-weight: 600;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ai-preview-branch-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.ai-preview-children-list {
+  list-style: none;
+  padding-left: 20px;
+  margin: 4px 0 0;
+  color: var(--text-secondary);
+  font-size: 12.5px;
+}
+
+.ai-preview-child-item {
+  position: relative;
+  padding: 2px 0;
+}
+
+.ai-preview-child-item::before {
+  content: "•";
+  position: absolute;
+  left: -12px;
+  color: #818cf8;
+}
+
+.modal-footer-actions-row {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+.ai-expand-toolbar-btn {
+  color: #6366f1 !important;
+}
+
+.ai-expand-toolbar-btn:hover {
+  background: #eef2ff !important;
+  color: #4338ca !important;
+}
+
+.node-btn.ai-expand-btn {
+  color: #7c3aed;
+}
+
+.node-btn.ai-expand-btn:hover {
+  background: #ede9fe;
+  color: #6d28d9;
+}
+
+
 
 </style>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1902,6 +2118,10 @@ button:disabled {
       </div>
 
       <div class="toolbar-right">
+        <button id="btn-ai-generator" class="btn primary btn-sm ai-header-btn" title="Generate full mind map with AI">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+          <span class="btn-label">AI Generate</span>
+        </button>
         <button id="btn-new-project-trigger" class="btn secondary btn-sm" title="Create a brand new mind map">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
           <span class="btn-label">New</span>
@@ -2001,6 +2221,10 @@ button:disabled {
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
             <span>Sibling</span>
             <kbd class="shortcut-tag">↵</kbd>
+          </button>
+          <button id="btn-ai-expand" class="btn ghost btn-sm ai-expand-toolbar-btn" title="Expand selected node with AI (Generate subtopics)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+            <span class="btn-label">AI Expand</span>
           </button>
         </div>
 
@@ -2374,6 +2598,143 @@ button:disabled {
               </button>
             </form>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: AI Mind Map Generator -->
+    <div class="modal-overlay" id="ai-generator-modal">
+      <div class="modal-content modal-large ai-modal-content">
+        <div class="modal-header">
+          <div class="ai-modal-header-brand">
+            <span class="ai-badge-icon">✨</span>
+            <div>
+              <h2>AI Mind Map Generator</h2>
+              <p class="modal-subtitle">Generate a full mind map from any topic or concept</p>
+            </div>
+          </div>
+          <button class="modal-close" id="btn-close-ai-modal">&times;</button>
+        </div>
+
+        <div class="modal-body">
+          <!-- Active AI Provider Badge -->
+          <div class="ai-provider-pill" id="ai-active-provider-pill">
+            <span class="provider-dot online"></span>
+            <span>Active Provider: <strong id="ai-provider-name-display">Fal AI</strong> (<span id="ai-provider-model-display">anthropic/claude-3.5-sonnet</span>)</span>
+          </div>
+
+          <!-- Alert / Error banner -->
+          <div id="ai-generator-alert" class="auth-alert" style="display: none;">
+            <span class="auth-alert-icon" id="ai-alert-icon">⚠️</span>
+            <span class="auth-alert-text" id="ai-alert-text"></span>
+          </div>
+
+          <!-- Step 1: Input Step -->
+          <div id="ai-input-step">
+            <div class="form-group">
+              <label for="ai-prompt-input">Enter Topic, Question, or Project Concept</label>
+              <textarea id="ai-prompt-input" class="form-input ai-prompt-textarea" rows="3" placeholder="e.g. Sustainable Energy Transition: challenges, solar and wind integration, smart grid storage, and policy incentives" maxlength="800"></textarea>
+              <small class="form-help">Be descriptive for richer sub-branches and actionable ideas.</small>
+            </div>
+
+            <div class="ai-options-row">
+              <div class="form-group" style="flex: 1;">
+                <label>Detail Level</label>
+                <div class="ai-radio-group">
+                  <label class="ai-radio-label">
+                    <input type="radio" name="ai-detail-level" value="standard" checked>
+                    <span>Standard (8–14 nodes)</span>
+                  </label>
+                  <label class="ai-radio-label">
+                    <input type="radio" name="ai-detail-level" value="deep">
+                    <span>Deep (15–25 nodes)</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div class="ai-guidance-callout">
+              💡 <strong>Safe &amp; Non-Destructive:</strong> You will see an interactive preview before applying. You can choose to save as a new project or replace the current canvas.
+            </div>
+          </div>
+
+          <!-- Step 2: Preview & Confirmation Step (Shown after AI generation) -->
+          <div id="ai-preview-step" style="display: none;">
+            <div class="ai-preview-header">
+              <div>
+                <span class="ai-preview-caption">Generated Preview</span>
+                <h3 id="ai-preview-title">Topic Title</h3>
+                <span class="ai-preview-badge" id="ai-preview-count">0 nodes</span>
+              </div>
+            </div>
+
+            <div class="ai-preview-scroll-area">
+              <div id="ai-preview-tree" class="ai-preview-tree">
+                <!-- Dynamically populated hierarchy preview -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <!-- Footer actions for Input step -->
+          <div id="ai-input-footer-actions" class="modal-footer-actions-row">
+            <button type="button" class="btn secondary" id="btn-cancel-ai-modal">Cancel</button>
+            <button type="button" class="btn primary" id="btn-submit-ai-generate">
+              <span class="btn-spinner" style="display: none;"></span>
+              <span class="btn-text">Generate Mind Map ✨</span>
+            </button>
+          </div>
+
+          <!-- Footer actions for Preview step -->
+          <div id="ai-preview-footer-actions" class="modal-footer-actions-row" style="display: none;">
+            <button type="button" class="btn secondary" id="btn-discard-ai-preview">Back to Edit</button>
+            <button type="button" class="btn outline" id="btn-apply-ai-replace" title="Replace the canvas with this mind map">Replace Current Canvas</button>
+            <button type="button" class="btn primary" id="btn-apply-ai-new" title="Create a new separate project with this mind map">Create as New Project (Recommended)</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: AI Expand Node -->
+    <div class="modal-overlay" id="ai-expand-modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="ai-modal-header-brand">
+            <span class="ai-badge-icon">✨</span>
+            <div>
+              <h2>Expand Node with AI</h2>
+              <p class="modal-subtitle">Generate subtopics and ideas using Fal AI</p>
+            </div>
+          </div>
+          <button class="modal-close" id="btn-close-expand-modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div id="ai-expand-alert" class="auth-alert" style="display: none;">
+            <span class="auth-alert-icon">⚠️</span>
+            <span class="auth-alert-text" id="ai-expand-alert-text"></span>
+          </div>
+
+          <p class="modal-desc">
+            Expanding node: <strong id="ai-expand-node-label">Target Node</strong>
+          </p>
+
+          <div class="form-group">
+            <label for="ai-expand-count">Number of subtopics to generate</label>
+            <select id="ai-expand-count" class="form-input">
+              <option value="3">3 subtopics</option>
+              <option value="4" selected>4 subtopics</option>
+              <option value="5">5 subtopics</option>
+              <option value="6">6 subtopics</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn secondary" id="btn-cancel-expand-modal">Cancel</button>
+          <button type="button" class="btn primary" id="btn-confirm-ai-expand">
+            <span class="btn-spinner" style="display: none;"></span>
+            <span class="btn-text">Expand Node ✨</span>
+          </button>
         </div>
       </div>
     </div>
@@ -3226,6 +3587,42 @@ const toastBannerIcon = document.getElementById('toast-banner-icon');
 const toastBannerMessage = document.getElementById('toast-banner-message');
 let toastTimeout = null;
 
+// AI Generator & Expand Elements
+const btnAiGenerator = document.getElementById('btn-ai-generator');
+const btnAiExpand = document.getElementById('btn-ai-expand');
+
+const aiGeneratorModal = document.getElementById('ai-generator-modal');
+const btnCloseAiModal = document.getElementById('btn-close-ai-modal');
+const btnCancelAiModal = document.getElementById('btn-cancel-ai-modal');
+const aiPromptInput = document.getElementById('ai-prompt-input');
+const btnSubmitAiGenerate = document.getElementById('btn-submit-ai-generate');
+const aiGeneratorAlert = document.getElementById('ai-generator-alert');
+const aiAlertText = document.getElementById('ai-alert-text');
+const aiInputStep = document.getElementById('ai-input-step');
+const aiPreviewStep = document.getElementById('ai-preview-step');
+const aiInputFooterActions = document.getElementById('ai-input-footer-actions');
+const aiPreviewFooterActions = document.getElementById('ai-preview-footer-actions');
+const aiPreviewTitle = document.getElementById('ai-preview-title');
+const aiPreviewCount = document.getElementById('ai-preview-count');
+const aiPreviewTree = document.getElementById('ai-preview-tree');
+const btnDiscardAiPreview = document.getElementById('btn-discard-ai-preview');
+const btnApplyAiReplace = document.getElementById('btn-apply-ai-replace');
+const btnApplyAiNew = document.getElementById('btn-apply-ai-new');
+const aiProviderNameDisplay = document.getElementById('ai-provider-name-display');
+const aiProviderModelDisplay = document.getElementById('ai-provider-model-display');
+
+const aiExpandModal = document.getElementById('ai-expand-modal');
+const btnCloseExpandModal = document.getElementById('btn-close-expand-modal');
+const btnCancelExpandModal = document.getElementById('btn-cancel-expand-modal');
+const btnConfirmAiExpand = document.getElementById('btn-confirm-ai-expand');
+const aiExpandNodeLabel = document.getElementById('ai-expand-node-label');
+const aiExpandCount = document.getElementById('ai-expand-count');
+const aiExpandAlert = document.getElementById('ai-expand-alert');
+const aiExpandAlertText = document.getElementById('ai-expand-alert-text');
+
+let currentGeneratedMindMap = null;
+let currentExpandTargetNodeId = null;
+
 // Modals
 const projectsModal = document.getElementById('projects-modal');
 const btnCloseProjectsModal = document.getElementById('btn-close-projects-modal');
@@ -3540,6 +3937,151 @@ function setCloudConfigAlert(message, type = 'error') {
 
 function clearCloudConfigAlert() {
   if (cloudConfigAlert) cloudConfigAlert.style.display = 'none';
+}
+
+// ================= AI MULTI-PROVIDER UI CONTROLLERS =================
+
+async function fetchAiStatus() {
+  try {
+    const res = await fetch('/api/ai/status');
+    if (res.ok) {
+      const data = await res.json();
+      if (aiProviderNameDisplay) {
+        aiProviderNameDisplay.innerText = data.activeProviderName || 'Fal AI';
+      }
+      if (aiProviderModelDisplay && data.models && data.models.length > 0) {
+        const defaultMod = data.models.find(m => m.default) || data.models[0];
+        aiProviderModelDisplay.innerText = defaultMod.id;
+      }
+      return data;
+    }
+  } catch (e) {
+    console.warn('[AI] Could not fetch AI status:', e.message);
+  }
+  return null;
+}
+
+function openAiGeneratorModal() {
+  userDropdown.classList.remove('active');
+  clearAiGeneratorAlert();
+  currentGeneratedMindMap = null;
+
+  if (aiPromptInput) aiPromptInput.value = '';
+  if (aiInputStep) aiInputStep.style.display = 'block';
+  if (aiPreviewStep) aiPreviewStep.style.display = 'none';
+  if (aiInputFooterActions) aiInputFooterActions.style.display = 'flex';
+  if (aiPreviewFooterActions) aiPreviewFooterActions.style.display = 'none';
+
+  aiGeneratorModal.classList.add('active');
+  fetchAiStatus();
+  setTimeout(() => {
+    if (aiPromptInput) aiPromptInput.focus();
+  }, 100);
+}
+
+function closeAiGeneratorModal() {
+  aiGeneratorModal.classList.remove('active');
+  clearAiGeneratorAlert();
+  currentGeneratedMindMap = null;
+}
+
+function setAiGeneratorAlert(message, type = 'error') {
+  if (!aiGeneratorAlert || !aiAlertText) return;
+  aiGeneratorAlert.className = `auth-alert ${type}`;
+  if (type === 'success') {
+    aiAlertIcon.innerText = '✓';
+  } else if (type === 'info') {
+    aiAlertIcon.innerText = 'ℹ️';
+  } else {
+    aiAlertIcon.innerText = '⚠️';
+  }
+  aiAlertText.innerText = message;
+  aiGeneratorAlert.style.display = 'flex';
+}
+
+function clearAiGeneratorAlert() {
+  if (aiGeneratorAlert) aiGeneratorAlert.style.display = 'none';
+}
+
+function renderAiPreviewTree(generatedData) {
+  if (!aiPreviewTree) return;
+  aiPreviewTree.innerHTML = '';
+
+  const nodes = generatedData.nodes || {};
+  const rootId = generatedData.rootId || 'root';
+  const rootNode = nodes[rootId] || { text: 'Central Topic' };
+
+  if (aiPreviewTitle) {
+    aiPreviewTitle.innerText = generatedData.title || rootNode.text;
+  }
+  if (aiPreviewCount) {
+    const totalCount = Object.keys(nodes).length;
+    aiPreviewCount.innerText = `${totalCount} nodes generated`;
+  }
+
+  // Find direct branches (children of root)
+  const branches = Object.values(nodes).filter(n => n.parentId === rootId);
+
+  branches.forEach(branch => {
+    const branchEl = document.createElement('div');
+    branchEl.className = 'ai-preview-branch';
+
+    const titleEl = document.createElement('div');
+    titleEl.className = 'ai-preview-branch-title';
+    titleEl.innerHTML = `
+      <span class="ai-preview-branch-dot" style="background: ${branch.color || '#4F46E5'};"></span>
+      <strong>${escapeHtml(branch.text)}</strong>
+    `;
+    branchEl.appendChild(titleEl);
+
+    // Sub-children of this branch
+    const subChildren = Object.values(nodes).filter(n => n.parentId === branch.id);
+    if (subChildren.length > 0) {
+      const listEl = document.createElement('ul');
+      listEl.className = 'ai-preview-children-list';
+      subChildren.forEach(sc => {
+        const itemEl = document.createElement('li');
+        itemEl.className = 'ai-preview-child-item';
+        itemEl.innerText = sc.text;
+        listEl.appendChild(itemEl);
+      });
+      branchEl.appendChild(listEl);
+    }
+
+    aiPreviewTree.appendChild(branchEl);
+  });
+}
+
+function openAiExpandModal(nodeId) {
+  const targetNode = state.nodes[nodeId];
+  if (!targetNode) {
+    showToast('Please select a valid node to expand.', 'error');
+    return;
+  }
+
+  currentExpandTargetNodeId = nodeId;
+  if (aiExpandNodeLabel) {
+    aiExpandNodeLabel.innerText = `"${targetNode.text}"`;
+  }
+  clearAiExpandAlert();
+  aiExpandModal.classList.add('active');
+}
+
+function closeAiExpandModal() {
+  aiExpandModal.classList.remove('active');
+  clearAiExpandAlert();
+  currentExpandTargetNodeId = null;
+}
+
+function setAiExpandAlert(message, type = 'error') {
+  if (!aiExpandAlert || !aiExpandAlertText) return;
+  aiExpandAlert.className = `auth-alert ${type}`;
+  aiExpandAlertText.innerText = message;
+  aiExpandAlert.style.display = 'flex';
+}
+
+function clearAiExpandAlert() {
+  if (aiExpandAlert) aiExpandAlert.style.display = 'none';
 }
 
 // Load or restore projects for given user
@@ -4042,7 +4584,17 @@ function renderNodes() {
     });
     quickBar.appendChild(btnAdd);
 
-    // Color Cycle button
+    // AI Expand button (Fal AI)
+    const btnAiNode = document.createElement('button');
+    btnAiNode.className = 'node-btn ai-expand-btn';
+    btnAiNode.title = 'Expand node with AI (Fal AI)';
+    btnAiNode.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>`;
+    btnAiNode.addEventListener('mousedown', (e) => e.stopPropagation());
+    btnAiNode.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openAiExpandModal(node.id);
+    });
+    quickBar.appendChild(btnAiNode);
     const btnColor = document.createElement('button');
     btnColor.className = 'node-btn color-btn';
     btnColor.title = 'Cycle Color';
@@ -4735,6 +5287,216 @@ function setupEventListeners() {
     e.stopPropagation();
     userDropdown.classList.toggle('active');
   });
+
+  // AI Generator Button (Top Toolbar)
+  if (btnAiGenerator) {
+    btnAiGenerator.addEventListener('click', () => {
+      openAiGeneratorModal();
+    });
+  }
+
+  // AI Expand Button (Canvas Toolbar)
+  if (btnAiExpand) {
+    btnAiExpand.addEventListener('click', () => {
+      if (state.selectedId) {
+        openAiExpandModal(state.selectedId);
+      } else {
+        openAiExpandModal(state.rootId);
+      }
+    });
+  }
+
+  // AI Generator Modal Controls
+  if (btnCloseAiModal) {
+    btnCloseAiModal.addEventListener('click', closeAiGeneratorModal);
+  }
+  if (btnCancelAiModal) {
+    btnCancelAiModal.addEventListener('click', closeAiGeneratorModal);
+  }
+
+  // Submit AI Generate
+  if (btnSubmitAiGenerate) {
+    btnSubmitAiGenerate.addEventListener('click', async () => {
+      clearAiGeneratorAlert();
+      const prompt = (aiPromptInput ? aiPromptInput.value : '').trim();
+
+      if (!prompt) {
+        setAiGeneratorAlert('Please enter a topic or concept to generate a mind map.', 'error');
+        return;
+      }
+
+      const detailLevel = document.querySelector('input[name="ai-detail-level"]:checked')?.value || 'standard';
+
+      setButtonLoading(btnSubmitAiGenerate, true, 'Generating Mind Map ✨');
+      try {
+        const res = await fetch('/api/ai/generate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ prompt, detailLevel })
+        });
+
+        const data = await res.json();
+        if (!res.ok || !data.success) {
+          const errMsg = data.error || 'Failed to generate mind map with AI.';
+          setAiGeneratorAlert(errMsg, 'error');
+          return;
+        }
+
+        // Store generated data and transition to Preview step
+        currentGeneratedMindMap = data.data;
+
+        aiInputStep.style.display = 'none';
+        aiPreviewStep.style.display = 'block';
+        aiInputFooterActions.style.display = 'none';
+        aiPreviewFooterActions.style.display = 'flex';
+
+        renderAiPreviewTree(currentGeneratedMindMap);
+      } catch (err) {
+        setAiGeneratorAlert(err.message || 'Network error communicating with AI service.', 'error');
+      } finally {
+        setButtonLoading(btnSubmitAiGenerate, false, 'Generate Mind Map ✨');
+      }
+    });
+  }
+
+  // Discard preview / Back to edit
+  if (btnDiscardAiPreview) {
+    btnDiscardAiPreview.addEventListener('click', () => {
+      aiPreviewStep.style.display = 'none';
+      aiInputStep.style.display = 'block';
+      aiPreviewFooterActions.style.display = 'none';
+      aiInputFooterActions.style.display = 'flex';
+      clearAiGeneratorAlert();
+    });
+  }
+
+  // Apply as New Project
+  if (btnApplyAiNew) {
+    btnApplyAiNew.addEventListener('click', async () => {
+      if (!currentGeneratedMindMap) return;
+
+      const newId = `proj_${Date.now()}`;
+      const title = currentGeneratedMindMap.title || 'AI Mind Map';
+
+      state.currentProjectId = newId;
+      state.currentProjectTitle = title;
+      state.nodes = currentGeneratedMindMap.nodes;
+      state.rootId = currentGeneratedMindMap.rootId || 'root';
+      state.selectedId = state.rootId;
+
+      projectTitleInput.value = title;
+      await StorageService.saveProject(state.currentUser, {
+        id: newId,
+        title: title,
+        nodes: state.nodes,
+        rootId: state.rootId
+      });
+
+      state.history = [];
+      state.historyIndex = -1;
+      saveHistorySnapshot();
+
+      closeAiGeneratorModal();
+      centerView();
+      render();
+      showToast(`Created new AI mind map: "${title}"`, 'success');
+    });
+  }
+
+  // Apply and Replace Current Canvas
+  if (btnApplyAiReplace) {
+    btnApplyAiReplace.addEventListener('click', async () => {
+      if (!currentGeneratedMindMap) return;
+
+      if (!confirm('Are you sure you want to replace your current canvas? This will update the active project nodes.')) {
+        return;
+      }
+
+      const title = currentGeneratedMindMap.title || state.currentProjectTitle;
+      state.currentProjectTitle = title;
+      state.nodes = currentGeneratedMindMap.nodes;
+      state.rootId = currentGeneratedMindMap.rootId || 'root';
+      state.selectedId = state.rootId;
+
+      projectTitleInput.value = title;
+      saveHistorySnapshot();
+
+      closeAiGeneratorModal();
+      centerView();
+      render();
+      showToast('Replaced current canvas with AI generated mind map!', 'success');
+    });
+  }
+
+  // AI Expand Modal Controls
+  if (btnCloseExpandModal) {
+    btnCloseExpandModal.addEventListener('click', closeAiExpandModal);
+  }
+  if (btnCancelExpandModal) {
+    btnCancelExpandModal.addEventListener('click', closeAiExpandModal);
+  }
+
+  // Confirm AI Expand
+  if (btnConfirmAiExpand) {
+    btnConfirmAiExpand.addEventListener('click', async () => {
+      clearAiExpandAlert();
+      const targetNode = state.nodes[currentExpandTargetNodeId];
+      if (!targetNode) {
+        setAiExpandAlert('Target node not found.', 'error');
+        return;
+      }
+
+      const count = parseInt(aiExpandCount.value, 10) || 4;
+
+      setButtonLoading(btnConfirmAiExpand, true, 'Expand Node ✨');
+      try {
+        const res = await fetch('/api/ai/expand', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            nodeId: targetNode.id,
+            nodeText: targetNode.text,
+            mindMapTopic: state.currentProjectTitle,
+            count,
+            existingNodes: state.nodes
+          })
+        });
+
+        const data = await res.json();
+        if (!res.ok || !data.success) {
+          const errMsg = data.error || 'Failed to expand node with AI.';
+          setAiExpandAlert(errMsg, 'error');
+          return;
+        }
+
+        const newNodes = data.newNodes || [];
+        if (newNodes.length === 0) {
+          setAiExpandAlert('No child nodes returned by AI.', 'error');
+          return;
+        }
+
+        // Add new nodes to state
+        newNodes.forEach(node => {
+          state.nodes[node.id] = node;
+        });
+
+        // Ensure parent is expanded
+        targetNode.collapsed = false;
+
+        // Select the first expanded child for convenience
+        state.selectedId = newNodes[0].id;
+
+        saveHistorySnapshot();
+        closeAiExpandModal();
+        render();
+        showToast(`Expanded "${targetNode.text}" with ${newNodes.length} AI subtopics!`, 'success');
+      } catch (err) {
+        setAiExpandAlert(err.message || 'Error expanding node.', 'error');
+      } finally {
+        setButtonLoading(btnConfirmAiExpand, false, 'Expand Node ✨');
+      }
+    });
+  }
 
   // Header Quick Auth Button
   if (btnHeaderAuth) {

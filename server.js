@@ -1,6 +1,7 @@
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
+const { aiService } = require('./server/ai/service');
 
 const PORT = process.env.PORT || 3000;
 const HOST = '127.0.0.1'; // Strictly bind to localhost (prevent LAN access)
@@ -144,6 +145,51 @@ const server = http.createServer(async (req, res) => {
 
   // ================= API ROUTES =================
   if (pathname.startsWith('/api/')) {
+    // AI Multi-Provider Routes (Fal AI, etc.)
+    if (pathname.startsWith('/api/ai/')) {
+      // 1. GET /api/ai/status
+      if (pathname === '/api/ai/status' && req.method === 'GET') {
+        try {
+          const status = aiService.getStatus();
+          return sendJson(res, 200, { success: true, ...status });
+        } catch (e) {
+          return sendError(res, 500, 'Failed to retrieve AI status', e);
+        }
+      }
+
+      // 2. POST /api/ai/generate
+      if (pathname === '/api/ai/generate') {
+        if (req.method !== 'POST') {
+          return sendJson(res, 405, { error: 'Method Not Allowed' }, { 'Allow': 'POST' });
+        }
+        try {
+          const body = await parseJsonBody(req);
+          const result = await aiService.generateMindMap(body);
+          return sendJson(res, 200, result);
+        } catch (e) {
+          const status = e.statusCode || 500;
+          return sendJson(res, status, { success: false, error: e.message, code: e.code || 'AI_GENERATION_FAILED' });
+        }
+      }
+
+      // 3. POST /api/ai/expand
+      if (pathname === '/api/ai/expand') {
+        if (req.method !== 'POST') {
+          return sendJson(res, 405, { error: 'Method Not Allowed' }, { 'Allow': 'POST' });
+        }
+        try {
+          const body = await parseJsonBody(req);
+          const result = await aiService.expandNode(body);
+          return sendJson(res, 200, result);
+        } catch (e) {
+          const status = e.statusCode || 500;
+          return sendJson(res, status, { success: false, error: e.message, code: e.code || 'AI_EXPANSION_FAILED' });
+        }
+      }
+
+      return sendError(res, 404, 'Unknown AI API endpoint');
+    }
+
     const rawUser = parsedUrl.searchParams.get('user');
     const username = sanitizeName(rawUser || 'Default User');
     const userFolder = path.resolve(USERS_DIR, username);

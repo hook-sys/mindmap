@@ -313,6 +313,42 @@ const toastBannerIcon = document.getElementById('toast-banner-icon');
 const toastBannerMessage = document.getElementById('toast-banner-message');
 let toastTimeout = null;
 
+// AI Generator & Expand Elements
+const btnAiGenerator = document.getElementById('btn-ai-generator');
+const btnAiExpand = document.getElementById('btn-ai-expand');
+
+const aiGeneratorModal = document.getElementById('ai-generator-modal');
+const btnCloseAiModal = document.getElementById('btn-close-ai-modal');
+const btnCancelAiModal = document.getElementById('btn-cancel-ai-modal');
+const aiPromptInput = document.getElementById('ai-prompt-input');
+const btnSubmitAiGenerate = document.getElementById('btn-submit-ai-generate');
+const aiGeneratorAlert = document.getElementById('ai-generator-alert');
+const aiAlertText = document.getElementById('ai-alert-text');
+const aiInputStep = document.getElementById('ai-input-step');
+const aiPreviewStep = document.getElementById('ai-preview-step');
+const aiInputFooterActions = document.getElementById('ai-input-footer-actions');
+const aiPreviewFooterActions = document.getElementById('ai-preview-footer-actions');
+const aiPreviewTitle = document.getElementById('ai-preview-title');
+const aiPreviewCount = document.getElementById('ai-preview-count');
+const aiPreviewTree = document.getElementById('ai-preview-tree');
+const btnDiscardAiPreview = document.getElementById('btn-discard-ai-preview');
+const btnApplyAiReplace = document.getElementById('btn-apply-ai-replace');
+const btnApplyAiNew = document.getElementById('btn-apply-ai-new');
+const aiProviderNameDisplay = document.getElementById('ai-provider-name-display');
+const aiProviderModelDisplay = document.getElementById('ai-provider-model-display');
+
+const aiExpandModal = document.getElementById('ai-expand-modal');
+const btnCloseExpandModal = document.getElementById('btn-close-expand-modal');
+const btnCancelExpandModal = document.getElementById('btn-cancel-expand-modal');
+const btnConfirmAiExpand = document.getElementById('btn-confirm-ai-expand');
+const aiExpandNodeLabel = document.getElementById('ai-expand-node-label');
+const aiExpandCount = document.getElementById('ai-expand-count');
+const aiExpandAlert = document.getElementById('ai-expand-alert');
+const aiExpandAlertText = document.getElementById('ai-expand-alert-text');
+
+let currentGeneratedMindMap = null;
+let currentExpandTargetNodeId = null;
+
 // Modals
 const projectsModal = document.getElementById('projects-modal');
 const btnCloseProjectsModal = document.getElementById('btn-close-projects-modal');
@@ -627,6 +663,151 @@ function setCloudConfigAlert(message, type = 'error') {
 
 function clearCloudConfigAlert() {
   if (cloudConfigAlert) cloudConfigAlert.style.display = 'none';
+}
+
+// ================= AI MULTI-PROVIDER UI CONTROLLERS =================
+
+async function fetchAiStatus() {
+  try {
+    const res = await fetch('/api/ai/status');
+    if (res.ok) {
+      const data = await res.json();
+      if (aiProviderNameDisplay) {
+        aiProviderNameDisplay.innerText = data.activeProviderName || 'Fal AI';
+      }
+      if (aiProviderModelDisplay && data.models && data.models.length > 0) {
+        const defaultMod = data.models.find(m => m.default) || data.models[0];
+        aiProviderModelDisplay.innerText = defaultMod.id;
+      }
+      return data;
+    }
+  } catch (e) {
+    console.warn('[AI] Could not fetch AI status:', e.message);
+  }
+  return null;
+}
+
+function openAiGeneratorModal() {
+  userDropdown.classList.remove('active');
+  clearAiGeneratorAlert();
+  currentGeneratedMindMap = null;
+
+  if (aiPromptInput) aiPromptInput.value = '';
+  if (aiInputStep) aiInputStep.style.display = 'block';
+  if (aiPreviewStep) aiPreviewStep.style.display = 'none';
+  if (aiInputFooterActions) aiInputFooterActions.style.display = 'flex';
+  if (aiPreviewFooterActions) aiPreviewFooterActions.style.display = 'none';
+
+  aiGeneratorModal.classList.add('active');
+  fetchAiStatus();
+  setTimeout(() => {
+    if (aiPromptInput) aiPromptInput.focus();
+  }, 100);
+}
+
+function closeAiGeneratorModal() {
+  aiGeneratorModal.classList.remove('active');
+  clearAiGeneratorAlert();
+  currentGeneratedMindMap = null;
+}
+
+function setAiGeneratorAlert(message, type = 'error') {
+  if (!aiGeneratorAlert || !aiAlertText) return;
+  aiGeneratorAlert.className = `auth-alert ${type}`;
+  if (type === 'success') {
+    aiAlertIcon.innerText = '✓';
+  } else if (type === 'info') {
+    aiAlertIcon.innerText = 'ℹ️';
+  } else {
+    aiAlertIcon.innerText = '⚠️';
+  }
+  aiAlertText.innerText = message;
+  aiGeneratorAlert.style.display = 'flex';
+}
+
+function clearAiGeneratorAlert() {
+  if (aiGeneratorAlert) aiGeneratorAlert.style.display = 'none';
+}
+
+function renderAiPreviewTree(generatedData) {
+  if (!aiPreviewTree) return;
+  aiPreviewTree.innerHTML = '';
+
+  const nodes = generatedData.nodes || {};
+  const rootId = generatedData.rootId || 'root';
+  const rootNode = nodes[rootId] || { text: 'Central Topic' };
+
+  if (aiPreviewTitle) {
+    aiPreviewTitle.innerText = generatedData.title || rootNode.text;
+  }
+  if (aiPreviewCount) {
+    const totalCount = Object.keys(nodes).length;
+    aiPreviewCount.innerText = `${totalCount} nodes generated`;
+  }
+
+  // Find direct branches (children of root)
+  const branches = Object.values(nodes).filter(n => n.parentId === rootId);
+
+  branches.forEach(branch => {
+    const branchEl = document.createElement('div');
+    branchEl.className = 'ai-preview-branch';
+
+    const titleEl = document.createElement('div');
+    titleEl.className = 'ai-preview-branch-title';
+    titleEl.innerHTML = `
+      <span class="ai-preview-branch-dot" style="background: ${branch.color || '#4F46E5'};"></span>
+      <strong>${escapeHtml(branch.text)}</strong>
+    `;
+    branchEl.appendChild(titleEl);
+
+    // Sub-children of this branch
+    const subChildren = Object.values(nodes).filter(n => n.parentId === branch.id);
+    if (subChildren.length > 0) {
+      const listEl = document.createElement('ul');
+      listEl.className = 'ai-preview-children-list';
+      subChildren.forEach(sc => {
+        const itemEl = document.createElement('li');
+        itemEl.className = 'ai-preview-child-item';
+        itemEl.innerText = sc.text;
+        listEl.appendChild(itemEl);
+      });
+      branchEl.appendChild(listEl);
+    }
+
+    aiPreviewTree.appendChild(branchEl);
+  });
+}
+
+function openAiExpandModal(nodeId) {
+  const targetNode = state.nodes[nodeId];
+  if (!targetNode) {
+    showToast('Please select a valid node to expand.', 'error');
+    return;
+  }
+
+  currentExpandTargetNodeId = nodeId;
+  if (aiExpandNodeLabel) {
+    aiExpandNodeLabel.innerText = `"${targetNode.text}"`;
+  }
+  clearAiExpandAlert();
+  aiExpandModal.classList.add('active');
+}
+
+function closeAiExpandModal() {
+  aiExpandModal.classList.remove('active');
+  clearAiExpandAlert();
+  currentExpandTargetNodeId = null;
+}
+
+function setAiExpandAlert(message, type = 'error') {
+  if (!aiExpandAlert || !aiExpandAlertText) return;
+  aiExpandAlert.className = `auth-alert ${type}`;
+  aiExpandAlertText.innerText = message;
+  aiExpandAlert.style.display = 'flex';
+}
+
+function clearAiExpandAlert() {
+  if (aiExpandAlert) aiExpandAlert.style.display = 'none';
 }
 
 // Load or restore projects for given user
@@ -1129,7 +1310,17 @@ function renderNodes() {
     });
     quickBar.appendChild(btnAdd);
 
-    // Color Cycle button
+    // AI Expand button (Fal AI)
+    const btnAiNode = document.createElement('button');
+    btnAiNode.className = 'node-btn ai-expand-btn';
+    btnAiNode.title = 'Expand node with AI (Fal AI)';
+    btnAiNode.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>`;
+    btnAiNode.addEventListener('mousedown', (e) => e.stopPropagation());
+    btnAiNode.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openAiExpandModal(node.id);
+    });
+    quickBar.appendChild(btnAiNode);
     const btnColor = document.createElement('button');
     btnColor.className = 'node-btn color-btn';
     btnColor.title = 'Cycle Color';
@@ -1822,6 +2013,216 @@ function setupEventListeners() {
     e.stopPropagation();
     userDropdown.classList.toggle('active');
   });
+
+  // AI Generator Button (Top Toolbar)
+  if (btnAiGenerator) {
+    btnAiGenerator.addEventListener('click', () => {
+      openAiGeneratorModal();
+    });
+  }
+
+  // AI Expand Button (Canvas Toolbar)
+  if (btnAiExpand) {
+    btnAiExpand.addEventListener('click', () => {
+      if (state.selectedId) {
+        openAiExpandModal(state.selectedId);
+      } else {
+        openAiExpandModal(state.rootId);
+      }
+    });
+  }
+
+  // AI Generator Modal Controls
+  if (btnCloseAiModal) {
+    btnCloseAiModal.addEventListener('click', closeAiGeneratorModal);
+  }
+  if (btnCancelAiModal) {
+    btnCancelAiModal.addEventListener('click', closeAiGeneratorModal);
+  }
+
+  // Submit AI Generate
+  if (btnSubmitAiGenerate) {
+    btnSubmitAiGenerate.addEventListener('click', async () => {
+      clearAiGeneratorAlert();
+      const prompt = (aiPromptInput ? aiPromptInput.value : '').trim();
+
+      if (!prompt) {
+        setAiGeneratorAlert('Please enter a topic or concept to generate a mind map.', 'error');
+        return;
+      }
+
+      const detailLevel = document.querySelector('input[name="ai-detail-level"]:checked')?.value || 'standard';
+
+      setButtonLoading(btnSubmitAiGenerate, true, 'Generating Mind Map ✨');
+      try {
+        const res = await fetch('/api/ai/generate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ prompt, detailLevel })
+        });
+
+        const data = await res.json();
+        if (!res.ok || !data.success) {
+          const errMsg = data.error || 'Failed to generate mind map with AI.';
+          setAiGeneratorAlert(errMsg, 'error');
+          return;
+        }
+
+        // Store generated data and transition to Preview step
+        currentGeneratedMindMap = data.data;
+
+        aiInputStep.style.display = 'none';
+        aiPreviewStep.style.display = 'block';
+        aiInputFooterActions.style.display = 'none';
+        aiPreviewFooterActions.style.display = 'flex';
+
+        renderAiPreviewTree(currentGeneratedMindMap);
+      } catch (err) {
+        setAiGeneratorAlert(err.message || 'Network error communicating with AI service.', 'error');
+      } finally {
+        setButtonLoading(btnSubmitAiGenerate, false, 'Generate Mind Map ✨');
+      }
+    });
+  }
+
+  // Discard preview / Back to edit
+  if (btnDiscardAiPreview) {
+    btnDiscardAiPreview.addEventListener('click', () => {
+      aiPreviewStep.style.display = 'none';
+      aiInputStep.style.display = 'block';
+      aiPreviewFooterActions.style.display = 'none';
+      aiInputFooterActions.style.display = 'flex';
+      clearAiGeneratorAlert();
+    });
+  }
+
+  // Apply as New Project
+  if (btnApplyAiNew) {
+    btnApplyAiNew.addEventListener('click', async () => {
+      if (!currentGeneratedMindMap) return;
+
+      const newId = `proj_${Date.now()}`;
+      const title = currentGeneratedMindMap.title || 'AI Mind Map';
+
+      state.currentProjectId = newId;
+      state.currentProjectTitle = title;
+      state.nodes = currentGeneratedMindMap.nodes;
+      state.rootId = currentGeneratedMindMap.rootId || 'root';
+      state.selectedId = state.rootId;
+
+      projectTitleInput.value = title;
+      await StorageService.saveProject(state.currentUser, {
+        id: newId,
+        title: title,
+        nodes: state.nodes,
+        rootId: state.rootId
+      });
+
+      state.history = [];
+      state.historyIndex = -1;
+      saveHistorySnapshot();
+
+      closeAiGeneratorModal();
+      centerView();
+      render();
+      showToast(`Created new AI mind map: "${title}"`, 'success');
+    });
+  }
+
+  // Apply and Replace Current Canvas
+  if (btnApplyAiReplace) {
+    btnApplyAiReplace.addEventListener('click', async () => {
+      if (!currentGeneratedMindMap) return;
+
+      if (!confirm('Are you sure you want to replace your current canvas? This will update the active project nodes.')) {
+        return;
+      }
+
+      const title = currentGeneratedMindMap.title || state.currentProjectTitle;
+      state.currentProjectTitle = title;
+      state.nodes = currentGeneratedMindMap.nodes;
+      state.rootId = currentGeneratedMindMap.rootId || 'root';
+      state.selectedId = state.rootId;
+
+      projectTitleInput.value = title;
+      saveHistorySnapshot();
+
+      closeAiGeneratorModal();
+      centerView();
+      render();
+      showToast('Replaced current canvas with AI generated mind map!', 'success');
+    });
+  }
+
+  // AI Expand Modal Controls
+  if (btnCloseExpandModal) {
+    btnCloseExpandModal.addEventListener('click', closeAiExpandModal);
+  }
+  if (btnCancelExpandModal) {
+    btnCancelExpandModal.addEventListener('click', closeAiExpandModal);
+  }
+
+  // Confirm AI Expand
+  if (btnConfirmAiExpand) {
+    btnConfirmAiExpand.addEventListener('click', async () => {
+      clearAiExpandAlert();
+      const targetNode = state.nodes[currentExpandTargetNodeId];
+      if (!targetNode) {
+        setAiExpandAlert('Target node not found.', 'error');
+        return;
+      }
+
+      const count = parseInt(aiExpandCount.value, 10) || 4;
+
+      setButtonLoading(btnConfirmAiExpand, true, 'Expand Node ✨');
+      try {
+        const res = await fetch('/api/ai/expand', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            nodeId: targetNode.id,
+            nodeText: targetNode.text,
+            mindMapTopic: state.currentProjectTitle,
+            count,
+            existingNodes: state.nodes
+          })
+        });
+
+        const data = await res.json();
+        if (!res.ok || !data.success) {
+          const errMsg = data.error || 'Failed to expand node with AI.';
+          setAiExpandAlert(errMsg, 'error');
+          return;
+        }
+
+        const newNodes = data.newNodes || [];
+        if (newNodes.length === 0) {
+          setAiExpandAlert('No child nodes returned by AI.', 'error');
+          return;
+        }
+
+        // Add new nodes to state
+        newNodes.forEach(node => {
+          state.nodes[node.id] = node;
+        });
+
+        // Ensure parent is expanded
+        targetNode.collapsed = false;
+
+        // Select the first expanded child for convenience
+        state.selectedId = newNodes[0].id;
+
+        saveHistorySnapshot();
+        closeAiExpandModal();
+        render();
+        showToast(`Expanded "${targetNode.text}" with ${newNodes.length} AI subtopics!`, 'success');
+      } catch (err) {
+        setAiExpandAlert(err.message || 'Error expanding node.', 'error');
+      } finally {
+        setButtonLoading(btnConfirmAiExpand, false, 'Expand Node ✨');
+      }
+    });
+  }
 
   // Header Quick Auth Button
   if (btnHeaderAuth) {
