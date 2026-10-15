@@ -12,6 +12,7 @@ backup_pre_security/
 .env
 .env.*
 *.local
+supabase-config.js
 
 # Logs
 *.log

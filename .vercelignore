@@ -16,3 +16,4 @@ create_backup.js
 .git/
 .env*
 *.log
+supabase-config.js

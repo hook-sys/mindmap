@@ -50,27 +50,70 @@
 
         <div class="divider"></div>
 
+        <!-- Auth Quick Button (Shown in Guest mode) -->
+        <button id="btn-header-auth" class="btn primary btn-sm" title="Sign In or Create Account">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+          <span class="btn-label">Sign In</span>
+        </button>
+
         <!-- User Profile Dropdown -->
         <div class="user-menu-wrapper">
-          <button id="btn-user-profile" class="user-pill-btn" title="Manage User Profile">
+          <button id="btn-user-profile" class="user-pill-btn" title="Manage User Profile & Cloud Account">
             <span class="user-avatar-badge" id="user-avatar-badge">U</span>
-            <span class="user-name-text" id="user-name-text">Default User</span>
+            <span class="user-name-text" id="user-name-text">Guest User</span>
+            <span class="user-plan-badge local" id="user-plan-badge">Local</span>
             <span class="user-dropdown-arrow">▾</span>
           </button>
           <div class="user-dropdown" id="user-dropdown">
             <div class="user-dropdown-header">
-              <span class="user-dropdown-caption">Active User Profile</span>
-              <strong id="user-dropdown-name">Default User</strong>
+              <span class="user-dropdown-caption" id="user-dropdown-caption">Active Mode</span>
+              <strong id="user-dropdown-name">Guest User</strong>
+              <div id="user-dropdown-meta" class="user-dropdown-meta">Local Storage Only</div>
             </div>
+
+            <!-- Guest Action Section -->
+            <div id="dropdown-guest-section" class="dropdown-section">
+              <button id="btn-dropdown-login" class="dropdown-item primary-action">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+                <span>Sign In / Create Account</span>
+              </button>
+              <button id="btn-switch-user-modal" class="dropdown-item">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                <span>Switch / Add Local Profile</span>
+              </button>
+            </div>
+
+            <!-- Authenticated Action Section (Hidden by default) -->
+            <div id="dropdown-auth-section" class="dropdown-section" style="display: none;">
+              <button id="btn-auth-change-password" class="dropdown-item">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                <span>Change Password</span>
+              </button>
+              <button id="btn-switch-to-guest" class="dropdown-item">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+                <span>Switch to Local Guest Mode</span>
+              </button>
+            </div>
+
             <div class="user-dropdown-divider"></div>
-            <button id="btn-switch-user-modal" class="dropdown-item">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-              <span>Switch / Add User Profile</span>
+
+            <button id="btn-open-cloud-config" class="dropdown-item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg>
+              <span>Cloud Connection Settings</span>
             </button>
             <button id="btn-help" class="dropdown-item">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
               <span>Keyboard Shortcuts & Help</span>
             </button>
+
+            <!-- Sign Out Button (Visible only when authenticated) -->
+            <div id="dropdown-logout-section" style="display: none;">
+              <div class="user-dropdown-divider"></div>
+              <button id="btn-auth-logout" class="dropdown-item item-danger">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                <span>Sign Out</span>
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -343,8 +386,191 @@
         </div>
       </div>
     </div>
+
+    <!-- Modal: Supabase Cloud Authentication (Sign In / Sign Up / Recovery) -->
+    <div class="modal-overlay" id="auth-modal">
+      <div class="modal-content auth-modal-content">
+        <div class="modal-header auth-modal-header">
+          <div class="auth-brand-badge">
+            <span class="auth-brand-icon">⚡</span>
+            <div>
+              <h2 id="auth-modal-title">Cloud Account</h2>
+              <p class="modal-subtitle" id="auth-modal-subtitle">Sign in to sync your mind maps securely</p>
+            </div>
+          </div>
+          <button class="modal-close" id="btn-close-auth-modal">&times;</button>
+        </div>
+
+        <!-- Auth Tab Navigation -->
+        <div class="auth-nav-tabs" id="auth-nav-tabs">
+          <button type="button" class="auth-tab active" id="tab-btn-signin" data-tab="signin">Sign In</button>
+          <button type="button" class="auth-tab" id="tab-btn-signup" data-tab="signup">Create Account</button>
+          <button type="button" class="auth-tab" id="tab-btn-recovery" data-tab="recovery">Forgot Password</button>
+        </div>
+
+        <div class="modal-body auth-modal-body">
+          <!-- Notification Alert Box -->
+          <div id="auth-alert" class="auth-alert" style="display: none;">
+            <span class="auth-alert-icon" id="auth-alert-icon">ℹ️</span>
+            <span class="auth-alert-text" id="auth-alert-text"></span>
+          </div>
+
+          <!-- Panel 1: Sign In -->
+          <div class="auth-panel active" id="auth-panel-signin">
+            <form id="form-signin" autocomplete="on">
+              <div class="form-group">
+                <label for="signin-email">Email Address</label>
+                <input type="email" id="signin-email" class="form-input" placeholder="you@example.com" required autocomplete="email">
+              </div>
+              <div class="form-group">
+                <div class="form-label-row">
+                  <label for="signin-password">Password</label>
+                  <a href="#" id="link-forgot-password" class="auth-text-link">Forgot password?</a>
+                </div>
+                <input type="password" id="signin-password" class="form-input" placeholder="••••••••" required autocomplete="current-password">
+              </div>
+              <button type="submit" id="btn-submit-signin" class="btn primary btn-block">
+                <span class="btn-spinner" style="display: none;"></span>
+                <span class="btn-text">Sign In</span>
+              </button>
+            </form>
+            <div class="auth-footer-prompt">
+              Don't have a cloud account? <a href="#" id="link-goto-signup" class="auth-text-link">Create one free</a>
+            </div>
+          </div>
+
+          <!-- Panel 2: Create Account -->
+          <div class="auth-panel" id="auth-panel-signup" style="display: none;">
+            <form id="form-signup" autocomplete="on">
+              <div class="form-group">
+                <label for="signup-name">Full Name or Display Name</label>
+                <input type="text" id="signup-name" class="form-input" placeholder="e.g. Alex Hunter" autocomplete="name">
+              </div>
+              <div class="form-group">
+                <label for="signup-email">Email Address</label>
+                <input type="email" id="signup-email" class="form-input" placeholder="you@example.com" required autocomplete="email">
+              </div>
+              <div class="form-group">
+                <label for="signup-password">Password (min 6 characters)</label>
+                <input type="password" id="signup-password" class="form-input" placeholder="••••••••" minlength="6" required autocomplete="new-password">
+              </div>
+              <div class="form-group">
+                <label for="signup-confirm-password">Confirm Password</label>
+                <input type="password" id="signup-confirm-password" class="form-input" placeholder="••••••••" minlength="6" required autocomplete="new-password">
+              </div>
+              <button type="submit" id="btn-submit-signup" class="btn primary btn-block">
+                <span class="btn-spinner" style="display: none;"></span>
+                <span class="btn-text">Create Free Account</span>
+              </button>
+            </form>
+            <div class="auth-tier-callout">
+              ✨ <strong>Free SaaS Tier:</strong> Unlimited local projects, free cloud authentication & session sync.
+            </div>
+            <div class="auth-footer-prompt">
+              Already have an account? <a href="#" id="link-goto-signin" class="auth-text-link">Sign In</a>
+            </div>
+          </div>
+
+          <!-- Panel 3: Password Recovery -->
+          <div class="auth-panel" id="auth-panel-recovery" style="display: none;">
+            <form id="form-recovery" autocomplete="on">
+              <p class="auth-panel-desc">Enter your registered email address and we'll send you a password reset link.</p>
+              <div class="form-group">
+                <label for="recovery-email">Email Address</label>
+                <input type="email" id="recovery-email" class="form-input" placeholder="you@example.com" required autocomplete="email">
+              </div>
+              <button type="submit" id="btn-submit-recovery" class="btn primary btn-block">
+                <span class="btn-spinner" style="display: none;"></span>
+                <span class="btn-text">Send Reset Link</span>
+              </button>
+            </form>
+            <div class="auth-footer-prompt">
+              Remember your password? <a href="#" id="link-recovery-to-signin" class="auth-text-link">Back to Sign In</a>
+            </div>
+          </div>
+
+          <!-- Panel 4: Update Password (Triggered by recovery callback) -->
+          <div class="auth-panel" id="auth-panel-update-pw" style="display: none;">
+            <form id="form-update-pw" autocomplete="off">
+              <p class="auth-panel-desc">Choose a secure new password for your MindMap Studio account.</p>
+              <div class="form-group">
+                <label for="update-pw-new">New Password (min 6 characters)</label>
+                <input type="password" id="update-pw-new" class="form-input" placeholder="••••••••" minlength="6" required autocomplete="new-password">
+              </div>
+              <div class="form-group">
+                <label for="update-pw-confirm">Confirm New Password</label>
+                <input type="password" id="update-pw-confirm" class="form-input" placeholder="••••••••" minlength="6" required autocomplete="new-password">
+              </div>
+              <button type="submit" id="btn-submit-update-pw" class="btn primary btn-block">
+                <span class="btn-spinner" style="display: none;"></span>
+                <span class="btn-text">Save New Password</span>
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Supabase Cloud Connection Settings -->
+    <div class="modal-overlay" id="cloud-config-modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div>
+            <h2>Cloud Settings</h2>
+            <p class="modal-subtitle">Configure Supabase project for real authentication</p>
+          </div>
+          <button class="modal-close" id="btn-close-cloud-config-modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div id="cloud-config-alert" class="auth-alert" style="display: none;">
+            <span class="auth-alert-icon" id="cloud-config-alert-icon">ℹ️</span>
+            <span class="auth-alert-text" id="cloud-config-alert-text"></span>
+          </div>
+
+          <p class="modal-desc">
+            MindMap Studio uses <strong>Supabase Auth</strong> for authentication. You can connect your free Supabase project by providing your Project URL and Publishable Anon Key.
+          </p>
+
+          <div class="form-group">
+            <label for="input-supabase-url">Supabase Project URL</label>
+            <input type="url" id="input-supabase-url" class="form-input" placeholder="https://xyzprojectid.supabase.co">
+            <small class="form-help">Found in Supabase Dashboard &gt; Project Settings &gt; API</small>
+          </div>
+
+          <div class="form-group">
+            <label for="input-supabase-anon-key">Anon / Public API Key</label>
+            <textarea id="input-supabase-anon-key" class="form-input form-textarea-sm" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." rows="3"></textarea>
+            <small class="form-help">⚠️ Only provide the public <code>anon</code> key. <strong>NEVER</strong> enter your <code>service_role</code> secret!</small>
+          </div>
+
+          <div class="cloud-config-actions-row">
+            <button type="button" id="btn-test-cloud-config" class="btn secondary">
+              <span class="btn-spinner" style="display: none;"></span>
+              <span>Test Connection</span>
+            </button>
+            <button type="button" id="btn-clear-cloud-config" class="btn ghost-danger">Disconnect / Reset</button>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn secondary" id="btn-cancel-cloud-config">Cancel</button>
+          <button type="button" class="btn primary" id="btn-save-cloud-config">Save &amp; Connect</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Floating Global Toast Banner -->
+    <div id="toast-banner" class="toast-banner" style="display: none;">
+      <span id="toast-banner-icon" class="toast-icon">✓</span>
+      <span id="toast-banner-message" class="toast-message">Notification</span>
+    </div>
   </div>
 
+  <!-- External Supabase SDK (v2 official CDN) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- Optional static config file (gitignored) -->
+  <script src="supabase-config.js" onerror="/* optional config */"></script>
+  <!-- MindMap Authentication & Core Application Scripts -->
+  <script src="auth.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

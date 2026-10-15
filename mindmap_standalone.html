@@ -604,6 +604,60 @@ button:disabled {
   color: var(--text-primary);
 }
 
+.dropdown-item.primary-action {
+  background: var(--primary-subtle);
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.dropdown-item.primary-action:hover {
+  background: var(--primary);
+  color: #ffffff;
+}
+
+.dropdown-item.item-danger {
+  color: var(--danger);
+}
+
+.dropdown-item.item-danger:hover {
+  background-color: var(--danger-subtle);
+  color: var(--danger);
+}
+
+.user-plan-badge {
+  padding: 1px 7px;
+  border-radius: var(--radius-full);
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  line-height: 1.4;
+}
+
+.user-plan-badge.local {
+  background: var(--bg-muted);
+  color: var(--text-muted);
+  border: 1px solid var(--border-default);
+}
+
+.user-plan-badge.free {
+  background: #eef2ff;
+  color: #4f46e5;
+  border: 1px solid #c7d2fe;
+}
+
+.user-plan-badge.pro {
+  background: linear-gradient(135deg, #fef3c7, #fde68a);
+  color: #b45309;
+  border: 1px solid #fcd34d;
+}
+
+.user-dropdown-meta {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 3px;
+}
+
 /* ================= COLOR PICKER POPOVER ================= */
 .color-picker-dropdown {
   position: relative;
@@ -1567,6 +1621,256 @@ button:disabled {
   }
 }
 
+/* ================= AUTHENTICATION MODAL & SAAS COMPONENTS ================= */
+.auth-modal-content {
+  max-width: 440px;
+  width: 100%;
+  border-radius: var(--radius-lg);
+  padding: 0;
+  overflow: hidden;
+}
+
+.auth-modal-header {
+  padding: 20px 24px 14px;
+  border-bottom: 1px solid var(--border-subtle);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.auth-brand-badge {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.auth-brand-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  background: var(--primary-subtle);
+  border: 1px solid rgba(79, 70, 229, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+}
+
+.auth-nav-tabs {
+  display: flex;
+  gap: 4px;
+  background: var(--bg-subtle);
+  padding: 4px;
+  margin: 16px 24px 0;
+  border-radius: var(--radius-md);
+}
+
+.auth-tab {
+  flex: 1;
+  padding: 7px 12px;
+  background: transparent;
+  border: none;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: inherit;
+  color: var(--text-muted);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-align: center;
+}
+
+.auth-tab:hover {
+  color: var(--text-primary);
+}
+
+.auth-tab.active {
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  font-weight: 600;
+  box-shadow: var(--shadow-xs);
+}
+
+.auth-modal-body {
+  padding: 18px 24px 24px;
+}
+
+.auth-panel {
+  animation: fadeIn 0.15s ease-out;
+}
+
+.auth-panel-desc {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-bottom: 14px;
+  line-height: 1.45;
+}
+
+.auth-alert {
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 12.5px;
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  margin-bottom: 16px;
+  line-height: 1.45;
+  word-break: break-word;
+}
+
+.auth-alert.error {
+  background: var(--danger-subtle);
+  color: var(--danger);
+  border: 1px solid var(--danger-border);
+}
+
+.auth-alert.success {
+  background: var(--success-subtle);
+  color: var(--success);
+  border: 1px solid var(--success-border);
+}
+
+.auth-alert.info {
+  background: var(--primary-subtle);
+  color: var(--primary);
+  border: 1px solid rgba(79, 70, 229, 0.25);
+}
+
+.auth-alert-icon {
+  font-size: 14px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.form-label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.auth-text-link {
+  color: var(--primary);
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.12s ease;
+}
+
+.auth-text-link:hover {
+  color: var(--primary-hover);
+  text-decoration: underline;
+}
+
+.btn-block {
+  width: 100%;
+  justify-content: center;
+  height: 38px;
+  font-size: 13.5px;
+  font-weight: 600;
+  margin-top: 8px;
+}
+
+.btn-spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-radius: 50%;
+  border-top-color: #ffffff;
+  animation: spin 0.6s linear infinite;
+  margin-right: 6px;
+}
+
+.btn.secondary .btn-spinner {
+  border: 2px solid rgba(0, 0, 0, 0.15);
+  border-top-color: var(--text-primary);
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.auth-tier-callout {
+  margin-top: 14px;
+  padding: 10px 12px;
+  background: #f8fafc;
+  border: 1px dashed var(--border-default);
+  border-radius: var(--radius-sm);
+  font-size: 11.5px;
+  color: var(--text-secondary);
+  line-height: 1.45;
+}
+
+.auth-footer-prompt {
+  text-align: center;
+  margin-top: 18px;
+  font-size: 12.5px;
+  color: var(--text-muted);
+}
+
+/* Cloud Connection Settings Modal */
+.cloud-config-actions-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 14px;
+  gap: 10px;
+}
+
+.form-textarea-sm {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 12px;
+  resize: vertical;
+  line-height: 1.4;
+}
+
+/* Floating Global Toast Banner */
+.toast-banner {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1e293b;
+  color: #f8fafc;
+  padding: 9px 18px;
+  border-radius: var(--radius-full);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.25), 0 8px 10px -6px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  z-index: 10000;
+  font-size: 12.5px;
+  font-weight: 500;
+  animation: toastSlideUp 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+
+.toast-banner.error {
+  background: #991b1b;
+}
+
+.toast-banner.success {
+  background: #065f46;
+}
+
+.toast-icon {
+  font-size: 13px;
+}
+
+@keyframes toastSlideUp {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 12px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0) scale(1);
+  }
+}
+
+
 </style>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1613,27 +1917,70 @@ button:disabled {
 
         <div class="divider"></div>
 
+        <!-- Auth Quick Button (Shown in Guest mode) -->
+        <button id="btn-header-auth" class="btn primary btn-sm" title="Sign In or Create Account">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+          <span class="btn-label">Sign In</span>
+        </button>
+
         <!-- User Profile Dropdown -->
         <div class="user-menu-wrapper">
-          <button id="btn-user-profile" class="user-pill-btn" title="Manage User Profile">
+          <button id="btn-user-profile" class="user-pill-btn" title="Manage User Profile & Cloud Account">
             <span class="user-avatar-badge" id="user-avatar-badge">U</span>
-            <span class="user-name-text" id="user-name-text">Default User</span>
+            <span class="user-name-text" id="user-name-text">Guest User</span>
+            <span class="user-plan-badge local" id="user-plan-badge">Local</span>
             <span class="user-dropdown-arrow">▾</span>
           </button>
           <div class="user-dropdown" id="user-dropdown">
             <div class="user-dropdown-header">
-              <span class="user-dropdown-caption">Active User Profile</span>
-              <strong id="user-dropdown-name">Default User</strong>
+              <span class="user-dropdown-caption" id="user-dropdown-caption">Active Mode</span>
+              <strong id="user-dropdown-name">Guest User</strong>
+              <div id="user-dropdown-meta" class="user-dropdown-meta">Local Storage Only</div>
             </div>
+
+            <!-- Guest Action Section -->
+            <div id="dropdown-guest-section" class="dropdown-section">
+              <button id="btn-dropdown-login" class="dropdown-item primary-action">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+                <span>Sign In / Create Account</span>
+              </button>
+              <button id="btn-switch-user-modal" class="dropdown-item">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                <span>Switch / Add Local Profile</span>
+              </button>
+            </div>
+
+            <!-- Authenticated Action Section (Hidden by default) -->
+            <div id="dropdown-auth-section" class="dropdown-section" style="display: none;">
+              <button id="btn-auth-change-password" class="dropdown-item">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                <span>Change Password</span>
+              </button>
+              <button id="btn-switch-to-guest" class="dropdown-item">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+                <span>Switch to Local Guest Mode</span>
+              </button>
+            </div>
+
             <div class="user-dropdown-divider"></div>
-            <button id="btn-switch-user-modal" class="dropdown-item">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-              <span>Switch / Add User Profile</span>
+
+            <button id="btn-open-cloud-config" class="dropdown-item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg>
+              <span>Cloud Connection Settings</span>
             </button>
             <button id="btn-help" class="dropdown-item">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
               <span>Keyboard Shortcuts & Help</span>
             </button>
+
+            <!-- Sign Out Button (Visible only when authenticated) -->
+            <div id="dropdown-logout-section" style="display: none;">
+              <div class="user-dropdown-divider"></div>
+              <button id="btn-auth-logout" class="dropdown-item item-danger">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                <span>Sign Out</span>
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -1906,8 +2253,663 @@ button:disabled {
         </div>
       </div>
     </div>
+
+    <!-- Modal: Supabase Cloud Authentication (Sign In / Sign Up / Recovery) -->
+    <div class="modal-overlay" id="auth-modal">
+      <div class="modal-content auth-modal-content">
+        <div class="modal-header auth-modal-header">
+          <div class="auth-brand-badge">
+            <span class="auth-brand-icon">⚡</span>
+            <div>
+              <h2 id="auth-modal-title">Cloud Account</h2>
+              <p class="modal-subtitle" id="auth-modal-subtitle">Sign in to sync your mind maps securely</p>
+            </div>
+          </div>
+          <button class="modal-close" id="btn-close-auth-modal">&times;</button>
+        </div>
+
+        <!-- Auth Tab Navigation -->
+        <div class="auth-nav-tabs" id="auth-nav-tabs">
+          <button type="button" class="auth-tab active" id="tab-btn-signin" data-tab="signin">Sign In</button>
+          <button type="button" class="auth-tab" id="tab-btn-signup" data-tab="signup">Create Account</button>
+          <button type="button" class="auth-tab" id="tab-btn-recovery" data-tab="recovery">Forgot Password</button>
+        </div>
+
+        <div class="modal-body auth-modal-body">
+          <!-- Notification Alert Box -->
+          <div id="auth-alert" class="auth-alert" style="display: none;">
+            <span class="auth-alert-icon" id="auth-alert-icon">ℹ️</span>
+            <span class="auth-alert-text" id="auth-alert-text"></span>
+          </div>
+
+          <!-- Panel 1: Sign In -->
+          <div class="auth-panel active" id="auth-panel-signin">
+            <form id="form-signin" autocomplete="on">
+              <div class="form-group">
+                <label for="signin-email">Email Address</label>
+                <input type="email" id="signin-email" class="form-input" placeholder="you@example.com" required autocomplete="email">
+              </div>
+              <div class="form-group">
+                <div class="form-label-row">
+                  <label for="signin-password">Password</label>
+                  <a href="#" id="link-forgot-password" class="auth-text-link">Forgot password?</a>
+                </div>
+                <input type="password" id="signin-password" class="form-input" placeholder="••••••••" required autocomplete="current-password">
+              </div>
+              <button type="submit" id="btn-submit-signin" class="btn primary btn-block">
+                <span class="btn-spinner" style="display: none;"></span>
+                <span class="btn-text">Sign In</span>
+              </button>
+            </form>
+            <div class="auth-footer-prompt">
+              Don't have a cloud account? <a href="#" id="link-goto-signup" class="auth-text-link">Create one free</a>
+            </div>
+          </div>
+
+          <!-- Panel 2: Create Account -->
+          <div class="auth-panel" id="auth-panel-signup" style="display: none;">
+            <form id="form-signup" autocomplete="on">
+              <div class="form-group">
+                <label for="signup-name">Full Name or Display Name</label>
+                <input type="text" id="signup-name" class="form-input" placeholder="e.g. Alex Hunter" autocomplete="name">
+              </div>
+              <div class="form-group">
+                <label for="signup-email">Email Address</label>
+                <input type="email" id="signup-email" class="form-input" placeholder="you@example.com" required autocomplete="email">
+              </div>
+              <div class="form-group">
+                <label for="signup-password">Password (min 6 characters)</label>
+                <input type="password" id="signup-password" class="form-input" placeholder="••••••••" minlength="6" required autocomplete="new-password">
+              </div>
+              <div class="form-group">
+                <label for="signup-confirm-password">Confirm Password</label>
+                <input type="password" id="signup-confirm-password" class="form-input" placeholder="••••••••" minlength="6" required autocomplete="new-password">
+              </div>
+              <button type="submit" id="btn-submit-signup" class="btn primary btn-block">
+                <span class="btn-spinner" style="display: none;"></span>
+                <span class="btn-text">Create Free Account</span>
+              </button>
+            </form>
+            <div class="auth-tier-callout">
+              ✨ <strong>Free SaaS Tier:</strong> Unlimited local projects, free cloud authentication & session sync.
+            </div>
+            <div class="auth-footer-prompt">
+              Already have an account? <a href="#" id="link-goto-signin" class="auth-text-link">Sign In</a>
+            </div>
+          </div>
+
+          <!-- Panel 3: Password Recovery -->
+          <div class="auth-panel" id="auth-panel-recovery" style="display: none;">
+            <form id="form-recovery" autocomplete="on">
+              <p class="auth-panel-desc">Enter your registered email address and we'll send you a password reset link.</p>
+              <div class="form-group">
+                <label for="recovery-email">Email Address</label>
+                <input type="email" id="recovery-email" class="form-input" placeholder="you@example.com" required autocomplete="email">
+              </div>
+              <button type="submit" id="btn-submit-recovery" class="btn primary btn-block">
+                <span class="btn-spinner" style="display: none;"></span>
+                <span class="btn-text">Send Reset Link</span>
+              </button>
+            </form>
+            <div class="auth-footer-prompt">
+              Remember your password? <a href="#" id="link-recovery-to-signin" class="auth-text-link">Back to Sign In</a>
+            </div>
+          </div>
+
+          <!-- Panel 4: Update Password (Triggered by recovery callback) -->
+          <div class="auth-panel" id="auth-panel-update-pw" style="display: none;">
+            <form id="form-update-pw" autocomplete="off">
+              <p class="auth-panel-desc">Choose a secure new password for your MindMap Studio account.</p>
+              <div class="form-group">
+                <label for="update-pw-new">New Password (min 6 characters)</label>
+                <input type="password" id="update-pw-new" class="form-input" placeholder="••••••••" minlength="6" required autocomplete="new-password">
+              </div>
+              <div class="form-group">
+                <label for="update-pw-confirm">Confirm New Password</label>
+                <input type="password" id="update-pw-confirm" class="form-input" placeholder="••••••••" minlength="6" required autocomplete="new-password">
+              </div>
+              <button type="submit" id="btn-submit-update-pw" class="btn primary btn-block">
+                <span class="btn-spinner" style="display: none;"></span>
+                <span class="btn-text">Save New Password</span>
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Supabase Cloud Connection Settings -->
+    <div class="modal-overlay" id="cloud-config-modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div>
+            <h2>Cloud Settings</h2>
+            <p class="modal-subtitle">Configure Supabase project for real authentication</p>
+          </div>
+          <button class="modal-close" id="btn-close-cloud-config-modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div id="cloud-config-alert" class="auth-alert" style="display: none;">
+            <span class="auth-alert-icon" id="cloud-config-alert-icon">ℹ️</span>
+            <span class="auth-alert-text" id="cloud-config-alert-text"></span>
+          </div>
+
+          <p class="modal-desc">
+            MindMap Studio uses <strong>Supabase Auth</strong> for authentication. You can connect your free Supabase project by providing your Project URL and Publishable Anon Key.
+          </p>
+
+          <div class="form-group">
+            <label for="input-supabase-url">Supabase Project URL</label>
+            <input type="url" id="input-supabase-url" class="form-input" placeholder="https://xyzprojectid.supabase.co">
+            <small class="form-help">Found in Supabase Dashboard &gt; Project Settings &gt; API</small>
+          </div>
+
+          <div class="form-group">
+            <label for="input-supabase-anon-key">Anon / Public API Key</label>
+            <textarea id="input-supabase-anon-key" class="form-input form-textarea-sm" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." rows="3"></textarea>
+            <small class="form-help">⚠️ Only provide the public <code>anon</code> key. <strong>NEVER</strong> enter your <code>service_role</code> secret!</small>
+          </div>
+
+          <div class="cloud-config-actions-row">
+            <button type="button" id="btn-test-cloud-config" class="btn secondary">
+              <span class="btn-spinner" style="display: none;"></span>
+              <span>Test Connection</span>
+            </button>
+            <button type="button" id="btn-clear-cloud-config" class="btn ghost-danger">Disconnect / Reset</button>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn secondary" id="btn-cancel-cloud-config">Cancel</button>
+          <button type="button" class="btn primary" id="btn-save-cloud-config">Save &amp; Connect</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Floating Global Toast Banner -->
+    <div id="toast-banner" class="toast-banner" style="display: none;">
+      <span id="toast-banner-icon" class="toast-icon">✓</span>
+      <span id="toast-banner-message" class="toast-message">Notification</span>
+    </div>
   </div>
 
+  <!-- External Supabase SDK (v2 official CDN) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- Optional static config file (gitignored) -->
+  <script src="supabase-config.js" onerror="/* optional config */"></script>
+  <!-- MindMap Authentication & Core Application Scripts -->
+  <script>
+/**
+ * MindMap Studio - Authentication Service (Supabase Auth)
+ * 
+ * Provides production-ready client authentication:
+ * - Real Supabase Auth SDK integration (@supabase/supabase-js v2)
+ * - Sign Up (with full name metadata and optional email confirmation)
+ * - Sign In with email & password
+ * - Sign Out (with canvas data preservation)
+ * - Password Recovery & Reset
+ * - Persistent Session Management & Auto Token Refresh
+ * - Session Expiry detection
+ * - Offline / Guest mode backward compatibility
+ */
+
+(function (window) {
+  'use strict';
+
+  // Internal state
+  let _client = null;
+  let _currentSession = null;
+  let _currentUser = null;
+  let _authChangeListeners = [];
+  let _isConfigured = false;
+  let _initPromise = null;
+
+  // Storage keys
+  const STORAGE_KEYS = {
+    URL: 'mm_supabase_url',
+    ANON_KEY: 'mm_supabase_anon_key'
+  };
+
+  /**
+   * Helper to normalize and translate Supabase error messages into clean, user-friendly text
+   */
+  function formatAuthError(error) {
+    if (!error) return 'An unexpected authentication error occurred.';
+    const msg = (error.message || error.error_description || String(error)).toLowerCase();
+
+    if (msg.includes('invalid login credentials')) {
+      return 'Invalid email or password. Please check your credentials and try again.';
+    }
+    if (msg.includes('user already registered') || msg.includes('email already in use')) {
+      return 'An account with this email already exists. Please sign in instead.';
+    }
+    if (msg.includes('password should be at least') || msg.includes('at least 6 characters')) {
+      return 'Password must be at least 6 characters long.';
+    }
+    if (msg.includes('rate limit') || msg.includes('too many requests')) {
+      return 'Too many attempts. Please wait a few minutes before trying again.';
+    }
+    if (msg.includes('network') || msg.includes('failed to fetch') || msg.includes('fetch failed')) {
+      return 'Unable to reach the authentication server. Please check your internet connection.';
+    }
+    if (msg.includes('email not confirmed')) {
+      return 'Your email has not been confirmed yet. Please check your inbox for the confirmation email.';
+    }
+    if (msg.includes('jwt expired') || msg.includes('token expired')) {
+      return 'Your session has expired. Please sign in again.';
+    }
+
+    return error.message || 'Authentication error. Please try again.';
+  }
+
+  /**
+   * Validate project URL and Anon key format
+   */
+  function validateCredentials(url, anonKey) {
+    if (!url || typeof url !== 'string') {
+      return { valid: false, error: 'Project URL is required.' };
+    }
+    const cleanUrl = url.trim();
+    if (!cleanUrl.startsWith('https://') && !cleanUrl.startsWith('http://127.0.0.1') && !cleanUrl.startsWith('http://localhost')) {
+      return { valid: false, error: 'Project URL must start with https://' };
+    }
+    try {
+      new URL(cleanUrl);
+    } catch (e) {
+      return { valid: false, error: 'Invalid Project URL format.' };
+    }
+
+    if (!anonKey || typeof anonKey !== 'string') {
+      return { valid: false, error: 'Anon public key is required.' };
+    }
+    const cleanKey = anonKey.trim();
+    if (cleanKey.length < 20) {
+      return { valid: false, error: 'Anon key appears too short. Please provide a valid Supabase anon key.' };
+    }
+
+    // Guard: Prevent accidentally using service_role key
+    if (cleanKey.includes('service_role')) {
+      return { valid: false, error: 'SECURITY WARNING: Never use the service_role key in the frontend! Please use the anon (public) key.' };
+    }
+
+    return { valid: true, cleanUrl, cleanKey };
+  }
+
+  const AuthService = {
+    /**
+     * Resolves the Supabase configuration from window config or localStorage
+     */
+    getConfig() {
+      // 1. Check window config (from supabase-config.js if loaded)
+      const winConfig = window.MINDMAP_SUPABASE_CONFIG;
+      const localUrl = localStorage.getItem(STORAGE_KEYS.URL);
+      const localKey = localStorage.getItem(STORAGE_KEYS.ANON_KEY);
+
+      if (localUrl && localKey) {
+        return {
+          url: localUrl.trim(),
+          anonKey: localKey.trim(),
+          source: 'localStorage'
+        };
+      }
+
+      if (winConfig && winConfig.url && winConfig.anonKey && !winConfig.url.includes('YOUR_PROJECT_ID')) {
+        return {
+          url: winConfig.url.trim(),
+          anonKey: winConfig.anonKey.trim(),
+          source: 'configFile'
+        };
+      }
+
+      return null;
+    },
+
+    /**
+     * Check if valid Supabase configuration is present
+     */
+    isConfigured() {
+      return _isConfigured && _client !== null;
+    },
+
+    /**
+     * Save configuration to localStorage and re-initialize client
+     */
+    async saveConfig(url, anonKey) {
+      const validation = validateCredentials(url, anonKey);
+      if (!validation.valid) {
+        throw new Error(validation.error);
+      }
+
+      localStorage.setItem(STORAGE_KEYS.URL, validation.cleanUrl);
+      localStorage.setItem(STORAGE_KEYS.ANON_KEY, validation.cleanKey);
+
+      return this.init(true);
+    },
+
+    /**
+     * Remove saved configuration from localStorage
+     */
+    async clearConfig() {
+      localStorage.removeItem(STORAGE_KEYS.URL);
+      localStorage.removeItem(STORAGE_KEYS.ANON_KEY);
+      _client = null;
+      _currentSession = null;
+      _currentUser = null;
+      _isConfigured = false;
+      this._notifyListeners('CONFIG_CLEARED', null);
+    },
+
+    /**
+     * Initialize Supabase client and retrieve active session
+     */
+    async init(forceReinit = false) {
+      if (_initPromise && !forceReinit) {
+        return _initPromise;
+      }
+
+      _initPromise = (async () => {
+        const config = this.getConfig();
+
+        if (!config) {
+          _isConfigured = false;
+          _client = null;
+          _currentUser = null;
+          _currentSession = null;
+          return { configured: false, user: null };
+        }
+
+        if (typeof window.supabase === 'undefined' || typeof window.supabase.createClient !== 'function') {
+          console.warn('[AuthService] Supabase JS SDK not loaded yet. Running in offline/guest mode.');
+          _isConfigured = false;
+          return { configured: false, user: null, sdkMissing: true };
+        }
+
+        try {
+          _client = window.supabase.createClient(config.url, config.anonKey, {
+            auth: {
+              persistSession: true,
+              autoRefreshToken: true,
+              detectSessionInUrl: true,
+              storage: window.localStorage
+            }
+          });
+
+          _isConfigured = true;
+
+          // Set up auth state change listener
+          _client.auth.onAuthStateChange(async (event, session) => {
+            _currentSession = session;
+            _currentUser = session ? session.user : null;
+            this._notifyListeners(event, session);
+          });
+
+          // Fetch initial session
+          const { data, error } = await _client.auth.getSession();
+          if (error) {
+            console.warn('[AuthService] Error fetching initial session:', error.message);
+          }
+
+          _currentSession = data ? data.session : null;
+          _currentUser = _currentSession ? _currentSession.user : null;
+
+          return {
+            configured: true,
+            user: _currentUser,
+            session: _currentSession
+          };
+        } catch (err) {
+          console.error('[AuthService] Failed to initialize Supabase client:', err);
+          _isConfigured = false;
+          return { configured: false, error: err.message };
+        }
+      })();
+
+      return _initPromise;
+    },
+
+    /**
+     * Test connection to a given Supabase project URL and anon key without saving
+     */
+    async testConnection(url, anonKey) {
+      const validation = validateCredentials(url, anonKey);
+      if (!validation.valid) {
+        return { success: false, error: validation.error };
+      }
+
+      if (typeof window.supabase === 'undefined' || typeof window.supabase.createClient !== 'function') {
+        return { success: false, error: 'Supabase client library is not loaded. Check internet connection.' };
+      }
+
+      try {
+        const testClient = window.supabase.createClient(validation.cleanUrl, validation.cleanKey, {
+          auth: {
+            persistSession: false,
+            autoRefreshToken: false,
+            detectSessionInUrl: false
+          }
+        });
+
+        // Ping auth session endpoint
+        const { error } = await testClient.auth.getSession();
+        if (error && !error.message.includes('fetch')) {
+          // If error is an auth response, server was reached successfully
+          return { success: true };
+        }
+        return { success: true };
+      } catch (err) {
+        return { success: false, error: formatAuthError(err) };
+      }
+    },
+
+    /**
+     * Sign Up with Email and Password
+     */
+    async signUp({ email, password, fullName }) {
+      if (!this.isConfigured()) {
+        throw new Error('Supabase is not configured. Please set up your Project URL and Anon Key first.');
+      }
+
+      if (!email || !email.includes('@')) {
+        throw new Error('Please enter a valid email address.');
+      }
+      if (!password || password.length < 6) {
+        throw new Error('Password must be at least 6 characters long.');
+      }
+
+      const options = {
+        data: {
+          full_name: (fullName || '').trim() || email.split('@')[0],
+          tier: 'free'
+        }
+      };
+
+      const { data, error } = await _client.auth.signUp({
+        email: email.trim(),
+        password,
+        options
+      });
+
+      if (error) {
+        throw new Error(formatAuthError(error));
+      }
+
+      // Supabase may require email confirmation
+      const requiresConfirmation = !!(data.user && (!data.session || data.user.identities?.length === 0));
+
+      if (data.session) {
+        _currentSession = data.session;
+        _currentUser = data.user;
+      }
+
+      return {
+        user: data.user,
+        session: data.session,
+        requiresConfirmation
+      };
+    },
+
+    /**
+     * Sign In with Email and Password
+     */
+    async signIn({ email, password }) {
+      if (!this.isConfigured()) {
+        throw new Error('Supabase is not configured. Please set up your Project URL and Anon Key first.');
+      }
+
+      if (!email || !password) {
+        throw new Error('Please provide both email and password.');
+      }
+
+      const { data, error } = await _client.auth.signInWithPassword({
+        email: email.trim(),
+        password
+      });
+
+      if (error) {
+        throw new Error(formatAuthError(error));
+      }
+
+      _currentSession = data.session;
+      _currentUser = data.user;
+
+      return {
+        user: data.user,
+        session: data.session
+      };
+    },
+
+    /**
+     * Sign Out
+     */
+    async signOut() {
+      if (!_client) {
+        _currentUser = null;
+        _currentSession = null;
+        this._notifyListeners('SIGNED_OUT', null);
+        return { success: true };
+      }
+
+      const { error } = await _client.auth.signOut();
+      _currentUser = null;
+      _currentSession = null;
+
+      if (error) {
+        console.warn('[AuthService] Sign out warning:', error.message);
+      }
+
+      this._notifyListeners('SIGNED_OUT', null);
+      return { success: true };
+    },
+
+    /**
+     * Send Password Recovery / Reset Email
+     */
+    async resetPassword(email) {
+      if (!this.isConfigured()) {
+        throw new Error('Supabase is not configured. Please set up your Project URL and Anon Key first.');
+      }
+
+      if (!email || !email.includes('@')) {
+        throw new Error('Please provide a valid email address.');
+      }
+
+      // Use current window origin + path for redirect
+      const redirectUrl = window.location.origin + window.location.pathname;
+
+      const { data, error } = await _client.auth.resetPasswordForEmail(email.trim(), {
+        redirectTo: redirectUrl
+      });
+
+      if (error) {
+        throw new Error(formatAuthError(error));
+      }
+
+      return { success: true, data };
+    },
+
+    /**
+     * Update Password (when authenticated or in recovery session)
+     */
+    async updatePassword(newPassword) {
+      if (!this.isConfigured() || !_client) {
+        throw new Error('Authentication client is not available.');
+      }
+
+      if (!newPassword || newPassword.length < 6) {
+        throw new Error('New password must be at least 6 characters long.');
+      }
+
+      const { data, error } = await _client.auth.updateUser({
+        password: newPassword
+      });
+
+      if (error) {
+        throw new Error(formatAuthError(error));
+      }
+
+      return { success: true, user: data.user };
+    },
+
+    /**
+     * Get Current Active User
+     */
+    getUser() {
+      return _currentUser;
+    },
+
+    /**
+     * Get Current Active Session
+     */
+    getSession() {
+      return _currentSession;
+    },
+
+    /**
+     * Get User Profile metadata (e.g. tier, display name)
+     */
+    getUserProfile() {
+      if (!_currentUser) return null;
+      const meta = _currentUser.user_metadata || {};
+      return {
+        id: _currentUser.id,
+        email: _currentUser.email,
+        fullName: meta.full_name || _currentUser.email.split('@')[0],
+        tier: meta.tier || 'free',
+        confirmed: !!_currentUser.email_confirmed_at
+      };
+    },
+
+    /**
+     * Register a callback for auth state changes
+     */
+    onAuthStateChange(callback) {
+      if (typeof callback === 'function') {
+        _authChangeListeners.push(callback);
+      }
+      return () => {
+        _authChangeListeners = _authChangeListeners.filter(cb => cb !== callback);
+      };
+    },
+
+    /**
+     * Internal: notify all registered subscribers
+     */
+    _notifyListeners(event, session) {
+      _authChangeListeners.forEach(cb => {
+        try {
+          cb(event, session);
+        } catch (err) {
+          console.error('[AuthService] Error in auth state listener:', err);
+        }
+      });
+    }
+  };
+
+  // Export to global scope
+  window.AuthService = AuthService;
+
+})(window);
+
+</script>
   <script>
 /**
  * MindMap Studio - Visual Mind Mapping Tool
@@ -1921,6 +2923,10 @@ const state = {
   currentProjectTitle: 'Main Project',
   users: ['Default User'],
   selectedTemplate: 'blank',
+
+  // Authentication State (Phase 1 SaaS)
+  authUser: null, // { id, email, fullName, tier }
+  isGuest: true,
 
   nodes: {}, // id -> node object
   rootId: 'root',
@@ -2138,13 +3144,87 @@ const saveStatusPill = document.getElementById('save-status');
 const btnFitScreen = document.getElementById('btn-fit-screen');
 const btnShortcutsPill = document.getElementById('btn-shortcuts-pill');
 
-// User Menu Elements
+// User Menu & Header Auth Elements
+const btnHeaderAuth = document.getElementById('btn-header-auth');
 const btnUserProfile = document.getElementById('btn-user-profile');
 const userAvatarBadge = document.getElementById('user-avatar-badge');
 const userNameText = document.getElementById('user-name-text');
+const userPlanBadge = document.getElementById('user-plan-badge');
 const userDropdown = document.getElementById('user-dropdown');
+const userDropdownCaption = document.getElementById('user-dropdown-caption');
 const userDropdownName = document.getElementById('user-dropdown-name');
+const userDropdownMeta = document.getElementById('user-dropdown-meta');
+const dropdownGuestSection = document.getElementById('dropdown-guest-section');
+const dropdownAuthSection = document.getElementById('dropdown-auth-section');
+const dropdownLogoutSection = document.getElementById('dropdown-logout-section');
+const btnDropdownLogin = document.getElementById('btn-dropdown-login');
 const btnSwitchUserModal = document.getElementById('btn-switch-user-modal');
+const btnAuthChangePassword = document.getElementById('btn-auth-change-password');
+const btnSwitchToGuest = document.getElementById('btn-switch-to-guest');
+const btnOpenCloudConfig = document.getElementById('btn-open-cloud-config');
+const btnAuthLogout = document.getElementById('btn-auth-logout');
+
+// Auth Modal Elements
+const authModal = document.getElementById('auth-modal');
+const btnCloseAuthModal = document.getElementById('btn-close-auth-modal');
+const authModalTitle = document.getElementById('auth-modal-title');
+const authModalSubtitle = document.getElementById('auth-modal-subtitle');
+const authNavTabs = document.getElementById('auth-nav-tabs');
+const tabBtnSignin = document.getElementById('tab-btn-signin');
+const tabBtnSignup = document.getElementById('tab-btn-signup');
+const tabBtnRecovery = document.getElementById('tab-btn-recovery');
+const authAlert = document.getElementById('auth-alert');
+const authAlertIcon = document.getElementById('auth-alert-icon');
+const authAlertText = document.getElementById('auth-alert-text');
+
+const authPanelSignin = document.getElementById('auth-panel-signin');
+const authPanelSignup = document.getElementById('auth-panel-signup');
+const authPanelRecovery = document.getElementById('auth-panel-recovery');
+const authPanelUpdatePw = document.getElementById('auth-panel-update-pw');
+
+const formSignin = document.getElementById('form-signin');
+const signinEmail = document.getElementById('signin-email');
+const signinPassword = document.getElementById('signin-password');
+const btnSubmitSignin = document.getElementById('btn-submit-signin');
+const linkForgotPassword = document.getElementById('link-forgot-password');
+const linkGotoSignup = document.getElementById('link-goto-signup');
+
+const formSignup = document.getElementById('form-signup');
+const signupName = document.getElementById('signup-name');
+const signupEmail = document.getElementById('signup-email');
+const signupPassword = document.getElementById('signup-password');
+const signupConfirmPassword = document.getElementById('signup-confirm-password');
+const btnSubmitSignup = document.getElementById('btn-submit-signup');
+const linkGotoSignin = document.getElementById('link-goto-signin');
+
+const formRecovery = document.getElementById('form-recovery');
+const recoveryEmail = document.getElementById('recovery-email');
+const btnSubmitRecovery = document.getElementById('btn-submit-recovery');
+const linkRecoveryToSignin = document.getElementById('link-recovery-to-signin');
+
+const formUpdatePw = document.getElementById('form-update-pw');
+const updatePwNew = document.getElementById('update-pw-new');
+const updatePwConfirm = document.getElementById('update-pw-confirm');
+const btnSubmitUpdatePw = document.getElementById('btn-submit-update-pw');
+
+// Cloud Config Modal Elements
+const cloudConfigModal = document.getElementById('cloud-config-modal');
+const btnCloseCloudConfigModal = document.getElementById('btn-close-cloud-config-modal');
+const btnCancelCloudConfig = document.getElementById('btn-cancel-cloud-config');
+const inputSupabaseUrl = document.getElementById('input-supabase-url');
+const inputSupabaseAnonKey = document.getElementById('input-supabase-anon-key');
+const btnTestCloudConfig = document.getElementById('btn-test-cloud-config');
+const btnClearCloudConfig = document.getElementById('btn-clear-cloud-config');
+const btnSaveCloudConfig = document.getElementById('btn-save-cloud-config');
+const cloudConfigAlert = document.getElementById('cloud-config-alert');
+const cloudConfigAlertIcon = document.getElementById('cloud-config-alert-icon');
+const cloudConfigAlertText = document.getElementById('cloud-config-alert-text');
+
+// Toast Banner Elements
+const toastBanner = document.getElementById('toast-banner');
+const toastBannerIcon = document.getElementById('toast-banner-icon');
+const toastBannerMessage = document.getElementById('toast-banner-message');
+let toastTimeout = null;
 
 // Modals
 const projectsModal = document.getElementById('projects-modal');
@@ -2172,27 +3252,294 @@ const btnGotIt = document.getElementById('btn-got-it');
 
 const DEFAULT_COLORS = ['#4F46E5', '#0284C7', '#0D9488', '#16A34A', '#D97706', '#DC2626', '#9333EA', '#DB2777'];
 
+// Global Toast Notification Helper
+function showToast(message, type = 'info', duration = 3500) {
+  if (!toastBanner) return;
+  if (toastTimeout) clearTimeout(toastTimeout);
+
+  toastBanner.className = `toast-banner ${type}`;
+  if (type === 'success') {
+    toastBannerIcon.innerText = '✓';
+  } else if (type === 'error') {
+    toastBannerIcon.innerText = '⚠️';
+  } else {
+    toastBannerIcon.innerText = 'ℹ️';
+  }
+  toastBannerMessage.innerText = message;
+  toastBanner.style.display = 'flex';
+
+  toastTimeout = setTimeout(() => {
+    toastBanner.style.display = 'none';
+  }, duration);
+}
+
 // Application Initialization
 async function init() {
-  // Load active user
+  // 1. Initialize Supabase Auth if available
+  if (window.AuthService) {
+    try {
+      const authRes = await window.AuthService.init();
+      if (authRes && authRes.configured && authRes.user) {
+        state.authUser = window.AuthService.getUserProfile();
+        state.isGuest = false;
+      } else {
+        state.authUser = null;
+        state.isGuest = true;
+      }
+
+      // Attach auth state change listener
+      window.AuthService.onAuthStateChange(handleAuthStateChange);
+    } catch (err) {
+      console.warn('[App] AuthService init warning:', err);
+      state.authUser = null;
+      state.isGuest = true;
+    }
+  }
+
+  // 2. Load active local user
   const savedUser = localStorage.getItem('mm_active_user') || 'Default User';
   state.currentUser = savedUser;
+
+  // 3. Update User UI (handles Authenticated SaaS vs Local Guest)
   updateUserUI();
 
-  // Load project for active user
+  // 4. Load projects for active user
   await loadUserProjects(state.currentUser);
 
   updateViewTransform();
   render();
   setupEventListeners();
+
+  // 5. Check for password recovery hash in URL (e.g. #access_token=...&type=recovery)
+  checkPasswordRecoveryHash();
 }
 
 function updateUserUI() {
-  const initial = state.currentUser.charAt(0).toUpperCase();
-  userAvatarBadge.innerText = initial;
-  userNameText.innerText = state.currentUser;
-  userDropdownName.innerText = state.currentUser;
-  modalProjectUserLabel.innerText = state.currentUser;
+  if (state.authUser && !state.isGuest) {
+    // Authenticated SaaS User View
+    const email = state.authUser.email || 'User';
+    const displayName = state.authUser.fullName || email.split('@')[0];
+    const initial = (displayName.charAt(0) || email.charAt(0) || 'U').toUpperCase();
+
+    userAvatarBadge.innerText = initial;
+    userAvatarBadge.style.background = 'linear-gradient(135deg, #4F46E5, #7C3AED)';
+    userNameText.innerText = displayName;
+
+    if (userPlanBadge) {
+      userPlanBadge.innerText = 'Free Plan';
+      userPlanBadge.className = 'user-plan-badge free';
+    }
+
+    if (btnHeaderAuth) btnHeaderAuth.style.display = 'none';
+
+    if (userDropdownCaption) userDropdownCaption.innerText = 'Cloud Account';
+    if (userDropdownName) userDropdownName.innerText = displayName;
+    if (userDropdownMeta) userDropdownMeta.innerText = `${email} • Free Tier`;
+
+    if (dropdownGuestSection) dropdownGuestSection.style.display = 'none';
+    if (dropdownAuthSection) dropdownAuthSection.style.display = 'block';
+    if (dropdownLogoutSection) dropdownLogoutSection.style.display = 'block';
+
+    if (modalProjectUserLabel) modalProjectUserLabel.innerText = `${state.currentUser} (Local)`;
+  } else {
+    // Guest / Local User View
+    const initial = state.currentUser.charAt(0).toUpperCase();
+    userAvatarBadge.innerText = initial;
+    userAvatarBadge.style.background = 'var(--primary)';
+    userNameText.innerText = state.currentUser;
+
+    if (userPlanBadge) {
+      userPlanBadge.innerText = 'Local';
+      userPlanBadge.className = 'user-plan-badge local';
+    }
+
+    if (btnHeaderAuth) btnHeaderAuth.style.display = 'inline-flex';
+
+    if (userDropdownCaption) userDropdownCaption.innerText = 'Local Profile';
+    if (userDropdownName) userDropdownName.innerText = state.currentUser;
+    if (userDropdownMeta) userDropdownMeta.innerText = 'Stored locally on this device';
+
+    if (dropdownGuestSection) dropdownGuestSection.style.display = 'block';
+    if (dropdownAuthSection) dropdownAuthSection.style.display = 'none';
+    if (dropdownLogoutSection) dropdownLogoutSection.style.display = 'none';
+
+    if (modalProjectUserLabel) modalProjectUserLabel.innerText = state.currentUser;
+  }
+}
+
+// Handle Supabase Auth State Changes
+function handleAuthStateChange(event, session) {
+  console.log('[Auth] State change event:', event);
+
+  if (event === 'SIGNED_IN' || event === 'USER_UPDATED') {
+    if (session && session.user) {
+      state.authUser = window.AuthService.getUserProfile();
+      state.isGuest = false;
+      updateUserUI();
+      closeAuthModal();
+      showToast(`Signed in as ${state.authUser.email}`, 'success');
+    }
+  } else if (event === 'SIGNED_OUT') {
+    state.authUser = null;
+    state.isGuest = true;
+    updateUserUI();
+    showToast('Signed out. Your canvas mind map is preserved.', 'info');
+  } else if (event === 'PASSWORD_RECOVERY') {
+    switchAuthTab('update-pw');
+    openAuthModal('update-pw');
+    setAuthAlert('Please enter your new password to regain access.', 'info');
+  } else if (event === 'TOKEN_REFRESHED') {
+    if (session && session.user) {
+      state.authUser = window.AuthService.getUserProfile();
+      state.isGuest = false;
+    }
+  }
+}
+
+// Check for password recovery hash in URL
+function checkPasswordRecoveryHash() {
+  const hash = window.location.hash || '';
+  if (hash.includes('type=recovery') || hash.includes('access_token')) {
+    switchAuthTab('update-pw');
+    openAuthModal('update-pw');
+    setAuthAlert('Set your new password to complete recovery.', 'info');
+    // Clear hash without reloading
+    history.replaceState(null, '', window.location.pathname);
+  }
+}
+
+// Auth Tab Management
+function switchAuthTab(tabName) {
+  clearAuthAlert();
+
+  const tabs = [
+    { name: 'signin', btn: tabBtnSignin, panel: authPanelSignin },
+    { name: 'signup', btn: tabBtnSignup, panel: authPanelSignup },
+    { name: 'recovery', btn: tabBtnRecovery, panel: authPanelRecovery }
+  ];
+
+  tabs.forEach(t => {
+    if (t.btn && t.panel) {
+      if (t.name === tabName) {
+        t.btn.classList.add('active');
+        t.panel.style.display = 'block';
+      } else {
+        t.btn.classList.remove('active');
+        t.panel.style.display = 'none';
+      }
+    }
+  });
+
+  if (authPanelUpdatePw) {
+    if (tabName === 'update-pw') {
+      authPanelUpdatePw.style.display = 'block';
+      if (authNavTabs) authNavTabs.style.display = 'none';
+      if (authModalTitle) authModalTitle.innerText = 'Reset Password';
+      if (authModalSubtitle) authModalSubtitle.innerText = 'Create a new secure password';
+    } else {
+      authPanelUpdatePw.style.display = 'none';
+      if (authNavTabs) authNavTabs.style.display = 'flex';
+      if (authModalTitle) authModalTitle.innerText = 'Cloud Account';
+      if (authModalSubtitle) authModalSubtitle.innerText = 'Sign in to sync your mind maps securely';
+    }
+  }
+}
+
+function setAuthAlert(message, type = 'error') {
+  if (!authAlert || !authAlertText) return;
+  authAlert.className = `auth-alert ${type}`;
+  if (type === 'success') {
+    authAlertIcon.innerText = '✓';
+  } else if (type === 'info') {
+    authAlertIcon.innerText = 'ℹ️';
+  } else {
+    authAlertIcon.innerText = '⚠️';
+  }
+  authAlertText.innerText = message;
+  authAlert.style.display = 'flex';
+}
+
+function clearAuthAlert() {
+  if (authAlert) authAlert.style.display = 'none';
+}
+
+function openAuthModal(defaultTab = 'signin') {
+  // If Supabase is not configured yet, direct user to Cloud Settings modal first
+  if (window.AuthService && !window.AuthService.isConfigured()) {
+    openCloudConfigModal('Please connect your Supabase project credentials first to enable real authentication.');
+    return;
+  }
+
+  userDropdown.classList.remove('active');
+  switchAuthTab(defaultTab);
+  authModal.classList.add('active');
+}
+
+function closeAuthModal() {
+  authModal.classList.remove('active');
+  clearAuthAlert();
+}
+
+function setButtonLoading(btn, isLoading, originalText = '') {
+  if (!btn) return;
+  const spinner = btn.querySelector('.btn-spinner');
+  const label = btn.querySelector('.btn-text');
+
+  if (isLoading) {
+    btn.disabled = true;
+    if (spinner) spinner.style.display = 'inline-block';
+    if (label) label.innerText = 'Please wait...';
+  } else {
+    btn.disabled = false;
+    if (spinner) spinner.style.display = 'none';
+    if (label) label.innerText = originalText;
+  }
+}
+
+// Cloud Config Modal Management
+function openCloudConfigModal(customMessage = null) {
+  userDropdown.classList.remove('active');
+  clearCloudConfigAlert();
+
+  if (window.AuthService) {
+    const config = window.AuthService.getConfig();
+    if (config) {
+      inputSupabaseUrl.value = config.url || '';
+      inputSupabaseAnonKey.value = config.anonKey || '';
+    } else {
+      inputSupabaseUrl.value = '';
+      inputSupabaseAnonKey.value = '';
+    }
+  }
+
+  if (customMessage) {
+    setCloudConfigAlert(customMessage, 'info');
+  }
+
+  cloudConfigModal.classList.add('active');
+}
+
+function closeCloudConfigModal() {
+  cloudConfigModal.classList.remove('active');
+  clearCloudConfigAlert();
+}
+
+function setCloudConfigAlert(message, type = 'error') {
+  if (!cloudConfigAlert || !cloudConfigAlertText) return;
+  cloudConfigAlert.className = `auth-alert ${type}`;
+  if (type === 'success') {
+    cloudConfigAlertIcon.innerText = '✓';
+  } else if (type === 'info') {
+    cloudConfigAlertIcon.innerText = 'ℹ️';
+  } else {
+    cloudConfigAlertIcon.innerText = '⚠️';
+  }
+  cloudConfigAlertText.innerText = message;
+  cloudConfigAlert.style.display = 'flex';
+}
+
+function clearCloudConfigAlert() {
+  if (cloudConfigAlert) cloudConfigAlert.style.display = 'none';
 }
 
 // Load or restore projects for given user
@@ -3388,6 +4735,304 @@ function setupEventListeners() {
     e.stopPropagation();
     userDropdown.classList.toggle('active');
   });
+
+  // Header Quick Auth Button
+  if (btnHeaderAuth) {
+    btnHeaderAuth.addEventListener('click', () => {
+      openAuthModal('signin');
+    });
+  }
+
+  // Dropdown Login Button
+  if (btnDropdownLogin) {
+    btnDropdownLogin.addEventListener('click', () => {
+      openAuthModal('signin');
+    });
+  }
+
+  // Dropdown Auth Logout Button
+  if (btnAuthLogout) {
+    btnAuthLogout.addEventListener('click', async () => {
+      userDropdown.classList.remove('active');
+      if (window.AuthService) {
+        try {
+          await window.AuthService.signOut();
+        } catch (err) {
+          console.error('[Auth] Sign out error:', err);
+        }
+      }
+    });
+  }
+
+  // Dropdown Change Password
+  if (btnAuthChangePassword) {
+    btnAuthChangePassword.addEventListener('click', () => {
+      userDropdown.classList.remove('active');
+      switchAuthTab('update-pw');
+      openAuthModal('update-pw');
+    });
+  }
+
+  // Dropdown Switch to Local Guest Mode
+  if (btnSwitchToGuest) {
+    btnSwitchToGuest.addEventListener('click', () => {
+      userDropdown.classList.remove('active');
+      state.isGuest = true;
+      updateUserUI();
+      showToast('Switched to local guest mode. Cloud account remains saved.', 'info');
+    });
+  }
+
+  // Dropdown Cloud Settings Button
+  if (btnOpenCloudConfig) {
+    btnOpenCloudConfig.addEventListener('click', () => {
+      openCloudConfigModal();
+    });
+  }
+
+  // Auth Modal Close & Tabs
+  if (btnCloseAuthModal) {
+    btnCloseAuthModal.addEventListener('click', closeAuthModal);
+  }
+  if (tabBtnSignin) {
+    tabBtnSignin.addEventListener('click', () => switchAuthTab('signin'));
+  }
+  if (tabBtnSignup) {
+    tabBtnSignup.addEventListener('click', () => switchAuthTab('signup'));
+  }
+  if (tabBtnRecovery) {
+    tabBtnRecovery.addEventListener('click', () => switchAuthTab('recovery'));
+  }
+
+  // In-form Tab Navigation Links
+  if (linkForgotPassword) {
+    linkForgotPassword.addEventListener('click', (e) => {
+      e.preventDefault();
+      switchAuthTab('recovery');
+    });
+  }
+  if (linkGotoSignup) {
+    linkGotoSignup.addEventListener('click', (e) => {
+      e.preventDefault();
+      switchAuthTab('signup');
+    });
+  }
+  if (linkGotoSignin) {
+    linkGotoSignin.addEventListener('click', (e) => {
+      e.preventDefault();
+      switchAuthTab('signin');
+    });
+  }
+  if (linkRecoveryToSignin) {
+    linkRecoveryToSignin.addEventListener('click', (e) => {
+      e.preventDefault();
+      switchAuthTab('signin');
+    });
+  }
+
+  // Form: Sign In
+  if (formSignin) {
+    formSignin.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      clearAuthAlert();
+
+      const email = signinEmail.value.trim();
+      const password = signinPassword.value;
+
+      if (!email || !password) {
+        setAuthAlert('Please fill in both email and password.', 'error');
+        return;
+      }
+
+      setButtonLoading(btnSubmitSignin, true, 'Sign In');
+      try {
+        await window.AuthService.signIn({ email, password });
+        signinPassword.value = '';
+        closeAuthModal();
+      } catch (err) {
+        setAuthAlert(err.message, 'error');
+      } finally {
+        setButtonLoading(btnSubmitSignin, false, 'Sign In');
+      }
+    });
+  }
+
+  // Form: Sign Up
+  if (formSignup) {
+    formSignup.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      clearAuthAlert();
+
+      const fullName = signupName.value.trim();
+      const email = signupEmail.value.trim();
+      const password = signupPassword.value;
+      const confirmPw = signupConfirmPassword.value;
+
+      if (!email || !password) {
+        setAuthAlert('Please provide email and password.', 'error');
+        return;
+      }
+      if (password.length < 6) {
+        setAuthAlert('Password must be at least 6 characters long.', 'error');
+        return;
+      }
+      if (password !== confirmPw) {
+        setAuthAlert('Passwords do not match. Please verify.', 'error');
+        return;
+      }
+
+      setButtonLoading(btnSubmitSignup, true, 'Create Free Account');
+      try {
+        const res = await window.AuthService.signUp({ email, password, fullName });
+        signupPassword.value = '';
+        signupConfirmPassword.value = '';
+
+        if (res.requiresConfirmation) {
+          setAuthAlert('Account created! Please check your email to confirm your registration before signing in.', 'success');
+        } else {
+          closeAuthModal();
+          showToast('Welcome to MindMap Studio! Free Cloud Tier active.', 'success');
+        }
+      } catch (err) {
+        setAuthAlert(err.message, 'error');
+      } finally {
+        setButtonLoading(btnSubmitSignup, false, 'Create Free Account');
+      }
+    });
+  }
+
+  // Form: Password Recovery
+  if (formRecovery) {
+    formRecovery.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      clearAuthAlert();
+
+      const email = recoveryEmail.value.trim();
+      if (!email) {
+        setAuthAlert('Please enter your email address.', 'error');
+        return;
+      }
+
+      setButtonLoading(btnSubmitRecovery, true, 'Send Reset Link');
+      try {
+        await window.AuthService.resetPassword(email);
+        setAuthAlert('Password reset instructions sent! Please check your inbox.', 'success');
+      } catch (err) {
+        setAuthAlert(err.message, 'error');
+      } finally {
+        setButtonLoading(btnSubmitRecovery, false, 'Send Reset Link');
+      }
+    });
+  }
+
+  // Form: Update Password (from recovery link)
+  if (formUpdatePw) {
+    formUpdatePw.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      clearAuthAlert();
+
+      const newPw = updatePwNew.value;
+      const confirmPw = updatePwConfirm.value;
+
+      if (!newPw || newPw.length < 6) {
+        setAuthAlert('New password must be at least 6 characters long.', 'error');
+        return;
+      }
+      if (newPw !== confirmPw) {
+        setAuthAlert('Passwords do not match. Please verify.', 'error');
+        return;
+      }
+
+      setButtonLoading(btnSubmitUpdatePw, true, 'Save New Password');
+      try {
+        await window.AuthService.updatePassword(newPw);
+        updatePwNew.value = '';
+        updatePwConfirm.value = '';
+        closeAuthModal();
+        showToast('Password updated successfully!', 'success');
+      } catch (err) {
+        setAuthAlert(err.message, 'error');
+      } finally {
+        setButtonLoading(btnSubmitUpdatePw, false, 'Save New Password');
+      }
+    });
+  }
+
+  // Cloud Config Modal Listeners
+  if (btnCloseCloudConfigModal) {
+    btnCloseCloudConfigModal.addEventListener('click', closeCloudConfigModal);
+  }
+  if (btnCancelCloudConfig) {
+    btnCancelCloudConfig.addEventListener('click', closeCloudConfigModal);
+  }
+
+  // Test Cloud Connection
+  if (btnTestCloudConfig) {
+    btnTestCloudConfig.addEventListener('click', async () => {
+      clearCloudConfigAlert();
+      const url = inputSupabaseUrl.value.trim();
+      const key = inputSupabaseAnonKey.value.trim();
+
+      if (!url || !key) {
+        setCloudConfigAlert('Please provide both Project URL and Anon Key to test.', 'error');
+        return;
+      }
+
+      setButtonLoading(btnTestCloudConfig, true, 'Test Connection');
+      try {
+        const testRes = await window.AuthService.testConnection(url, key);
+        if (testRes.success) {
+          setCloudConfigAlert('Connection test successful! Valid Supabase credentials.', 'success');
+        } else {
+          setCloudConfigAlert(testRes.error || 'Connection failed.', 'error');
+        }
+      } catch (err) {
+        setCloudConfigAlert(err.message || 'Connection test failed.', 'error');
+      } finally {
+        setButtonLoading(btnTestCloudConfig, false, 'Test Connection');
+      }
+    });
+  }
+
+  // Save Cloud Configuration
+  if (btnSaveCloudConfig) {
+    btnSaveCloudConfig.addEventListener('click', async () => {
+      clearCloudConfigAlert();
+      const url = inputSupabaseUrl.value.trim();
+      const key = inputSupabaseAnonKey.value.trim();
+
+      if (!url || !key) {
+        setCloudConfigAlert('Please provide both Project URL and Anon Public Key.', 'error');
+        return;
+      }
+
+      setButtonLoading(btnSaveCloudConfig, true, 'Save & Connect');
+      try {
+        await window.AuthService.saveConfig(url, key);
+        closeCloudConfigModal();
+        showToast('Supabase connected successfully! You can now sign in.', 'success');
+        openAuthModal('signin');
+      } catch (err) {
+        setCloudConfigAlert(err.message, 'error');
+      } finally {
+        setButtonLoading(btnSaveCloudConfig, false, 'Save & Connect');
+      }
+    });
+  }
+
+  // Clear / Disconnect Cloud Configuration
+  if (btnClearCloudConfig) {
+    btnClearCloudConfig.addEventListener('click', async () => {
+      if (confirm('Are you sure you want to disconnect Supabase cloud configuration?')) {
+        await window.AuthService.clearConfig();
+        inputSupabaseUrl.value = '';
+        inputSupabaseAnonKey.value = '';
+        closeCloudConfigModal();
+        updateUserUI();
+        showToast('Supabase disconnected. Running in local mode.', 'info');
+      }
+    });
+  }
 
   btnSwitchUserModal.addEventListener('click', () => {
     openUsersModal();

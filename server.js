@@ -34,6 +34,9 @@ const ALLOWED_STATIC_FILES = new Set([
   '/index.html',
   '/style.css',
   '/app.js',
+  '/auth.js',
+  '/supabase-config.js',
+  '/supabase-config.example.js',
   '/mindmap_standalone.html',
   '/mindmap.zip',
   '/favicon.ico'

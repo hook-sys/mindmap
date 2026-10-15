@@ -11,6 +11,10 @@ const state = {
   users: ['Default User'],
   selectedTemplate: 'blank',
 
+  // Authentication State (Phase 1 SaaS)
+  authUser: null, // { id, email, fullName, tier }
+  isGuest: true,
+
   nodes: {}, // id -> node object
   rootId: 'root',
   selectedId: null,
@@ -227,13 +231,87 @@ const saveStatusPill = document.getElementById('save-status');
 const btnFitScreen = document.getElementById('btn-fit-screen');
 const btnShortcutsPill = document.getElementById('btn-shortcuts-pill');
 
-// User Menu Elements
+// User Menu & Header Auth Elements
+const btnHeaderAuth = document.getElementById('btn-header-auth');
 const btnUserProfile = document.getElementById('btn-user-profile');
 const userAvatarBadge = document.getElementById('user-avatar-badge');
 const userNameText = document.getElementById('user-name-text');
+const userPlanBadge = document.getElementById('user-plan-badge');
 const userDropdown = document.getElementById('user-dropdown');
+const userDropdownCaption = document.getElementById('user-dropdown-caption');
 const userDropdownName = document.getElementById('user-dropdown-name');
+const userDropdownMeta = document.getElementById('user-dropdown-meta');
+const dropdownGuestSection = document.getElementById('dropdown-guest-section');
+const dropdownAuthSection = document.getElementById('dropdown-auth-section');
+const dropdownLogoutSection = document.getElementById('dropdown-logout-section');
+const btnDropdownLogin = document.getElementById('btn-dropdown-login');
 const btnSwitchUserModal = document.getElementById('btn-switch-user-modal');
+const btnAuthChangePassword = document.getElementById('btn-auth-change-password');
+const btnSwitchToGuest = document.getElementById('btn-switch-to-guest');
+const btnOpenCloudConfig = document.getElementById('btn-open-cloud-config');
+const btnAuthLogout = document.getElementById('btn-auth-logout');
+
+// Auth Modal Elements
+const authModal = document.getElementById('auth-modal');
+const btnCloseAuthModal = document.getElementById('btn-close-auth-modal');
+const authModalTitle = document.getElementById('auth-modal-title');
+const authModalSubtitle = document.getElementById('auth-modal-subtitle');
+const authNavTabs = document.getElementById('auth-nav-tabs');
+const tabBtnSignin = document.getElementById('tab-btn-signin');
+const tabBtnSignup = document.getElementById('tab-btn-signup');
+const tabBtnRecovery = document.getElementById('tab-btn-recovery');
+const authAlert = document.getElementById('auth-alert');
+const authAlertIcon = document.getElementById('auth-alert-icon');
+const authAlertText = document.getElementById('auth-alert-text');
+
+const authPanelSignin = document.getElementById('auth-panel-signin');
+const authPanelSignup = document.getElementById('auth-panel-signup');
+const authPanelRecovery = document.getElementById('auth-panel-recovery');
+const authPanelUpdatePw = document.getElementById('auth-panel-update-pw');
+
+const formSignin = document.getElementById('form-signin');
+const signinEmail = document.getElementById('signin-email');
+const signinPassword = document.getElementById('signin-password');
+const btnSubmitSignin = document.getElementById('btn-submit-signin');
+const linkForgotPassword = document.getElementById('link-forgot-password');
+const linkGotoSignup = document.getElementById('link-goto-signup');
+
+const formSignup = document.getElementById('form-signup');
+const signupName = document.getElementById('signup-name');
+const signupEmail = document.getElementById('signup-email');
+const signupPassword = document.getElementById('signup-password');
+const signupConfirmPassword = document.getElementById('signup-confirm-password');
+const btnSubmitSignup = document.getElementById('btn-submit-signup');
+const linkGotoSignin = document.getElementById('link-goto-signin');
+
+const formRecovery = document.getElementById('form-recovery');
+const recoveryEmail = document.getElementById('recovery-email');
+const btnSubmitRecovery = document.getElementById('btn-submit-recovery');
+const linkRecoveryToSignin = document.getElementById('link-recovery-to-signin');
+
+const formUpdatePw = document.getElementById('form-update-pw');
+const updatePwNew = document.getElementById('update-pw-new');
+const updatePwConfirm = document.getElementById('update-pw-confirm');
+const btnSubmitUpdatePw = document.getElementById('btn-submit-update-pw');
+
+// Cloud Config Modal Elements
+const cloudConfigModal = document.getElementById('cloud-config-modal');
+const btnCloseCloudConfigModal = document.getElementById('btn-close-cloud-config-modal');
+const btnCancelCloudConfig = document.getElementById('btn-cancel-cloud-config');
+const inputSupabaseUrl = document.getElementById('input-supabase-url');
+const inputSupabaseAnonKey = document.getElementById('input-supabase-anon-key');
+const btnTestCloudConfig = document.getElementById('btn-test-cloud-config');
+const btnClearCloudConfig = document.getElementById('btn-clear-cloud-config');
+const btnSaveCloudConfig = document.getElementById('btn-save-cloud-config');
+const cloudConfigAlert = document.getElementById('cloud-config-alert');
+const cloudConfigAlertIcon = document.getElementById('cloud-config-alert-icon');
+const cloudConfigAlertText = document.getElementById('cloud-config-alert-text');
+
+// Toast Banner Elements
+const toastBanner = document.getElementById('toast-banner');
+const toastBannerIcon = document.getElementById('toast-banner-icon');
+const toastBannerMessage = document.getElementById('toast-banner-message');
+let toastTimeout = null;
 
 // Modals
 const projectsModal = document.getElementById('projects-modal');
@@ -261,27 +339,294 @@ const btnGotIt = document.getElementById('btn-got-it');
 
 const DEFAULT_COLORS = ['#4F46E5', '#0284C7', '#0D9488', '#16A34A', '#D97706', '#DC2626', '#9333EA', '#DB2777'];
 
+// Global Toast Notification Helper
+function showToast(message, type = 'info', duration = 3500) {
+  if (!toastBanner) return;
+  if (toastTimeout) clearTimeout(toastTimeout);
+
+  toastBanner.className = `toast-banner ${type}`;
+  if (type === 'success') {
+    toastBannerIcon.innerText = '✓';
+  } else if (type === 'error') {
+    toastBannerIcon.innerText = '⚠️';
+  } else {
+    toastBannerIcon.innerText = 'ℹ️';
+  }
+  toastBannerMessage.innerText = message;
+  toastBanner.style.display = 'flex';
+
+  toastTimeout = setTimeout(() => {
+    toastBanner.style.display = 'none';
+  }, duration);
+}
+
 // Application Initialization
 async function init() {
-  // Load active user
+  // 1. Initialize Supabase Auth if available
+  if (window.AuthService) {
+    try {
+      const authRes = await window.AuthService.init();
+      if (authRes && authRes.configured && authRes.user) {
+        state.authUser = window.AuthService.getUserProfile();
+        state.isGuest = false;
+      } else {
+        state.authUser = null;
+        state.isGuest = true;
+      }
+
+      // Attach auth state change listener
+      window.AuthService.onAuthStateChange(handleAuthStateChange);
+    } catch (err) {
+      console.warn('[App] AuthService init warning:', err);
+      state.authUser = null;
+      state.isGuest = true;
+    }
+  }
+
+  // 2. Load active local user
   const savedUser = localStorage.getItem('mm_active_user') || 'Default User';
   state.currentUser = savedUser;
+
+  // 3. Update User UI (handles Authenticated SaaS vs Local Guest)
   updateUserUI();
 
-  // Load project for active user
+  // 4. Load projects for active user
   await loadUserProjects(state.currentUser);
 
   updateViewTransform();
   render();
   setupEventListeners();
+
+  // 5. Check for password recovery hash in URL (e.g. #access_token=...&type=recovery)
+  checkPasswordRecoveryHash();
 }
 
 function updateUserUI() {
-  const initial = state.currentUser.charAt(0).toUpperCase();
-  userAvatarBadge.innerText = initial;
-  userNameText.innerText = state.currentUser;
-  userDropdownName.innerText = state.currentUser;
-  modalProjectUserLabel.innerText = state.currentUser;
+  if (state.authUser && !state.isGuest) {
+    // Authenticated SaaS User View
+    const email = state.authUser.email || 'User';
+    const displayName = state.authUser.fullName || email.split('@')[0];
+    const initial = (displayName.charAt(0) || email.charAt(0) || 'U').toUpperCase();
+
+    userAvatarBadge.innerText = initial;
+    userAvatarBadge.style.background = 'linear-gradient(135deg, #4F46E5, #7C3AED)';
+    userNameText.innerText = displayName;
+
+    if (userPlanBadge) {
+      userPlanBadge.innerText = 'Free Plan';
+      userPlanBadge.className = 'user-plan-badge free';
+    }
+
+    if (btnHeaderAuth) btnHeaderAuth.style.display = 'none';
+
+    if (userDropdownCaption) userDropdownCaption.innerText = 'Cloud Account';
+    if (userDropdownName) userDropdownName.innerText = displayName;
+    if (userDropdownMeta) userDropdownMeta.innerText = `${email} • Free Tier`;
+
+    if (dropdownGuestSection) dropdownGuestSection.style.display = 'none';
+    if (dropdownAuthSection) dropdownAuthSection.style.display = 'block';
+    if (dropdownLogoutSection) dropdownLogoutSection.style.display = 'block';
+
+    if (modalProjectUserLabel) modalProjectUserLabel.innerText = `${state.currentUser} (Local)`;
+  } else {
+    // Guest / Local User View
+    const initial = state.currentUser.charAt(0).toUpperCase();
+    userAvatarBadge.innerText = initial;
+    userAvatarBadge.style.background = 'var(--primary)';
+    userNameText.innerText = state.currentUser;
+
+    if (userPlanBadge) {
+      userPlanBadge.innerText = 'Local';
+      userPlanBadge.className = 'user-plan-badge local';
+    }
+
+    if (btnHeaderAuth) btnHeaderAuth.style.display = 'inline-flex';
+
+    if (userDropdownCaption) userDropdownCaption.innerText = 'Local Profile';
+    if (userDropdownName) userDropdownName.innerText = state.currentUser;
+    if (userDropdownMeta) userDropdownMeta.innerText = 'Stored locally on this device';
+
+    if (dropdownGuestSection) dropdownGuestSection.style.display = 'block';
+    if (dropdownAuthSection) dropdownAuthSection.style.display = 'none';
+    if (dropdownLogoutSection) dropdownLogoutSection.style.display = 'none';
+
+    if (modalProjectUserLabel) modalProjectUserLabel.innerText = state.currentUser;
+  }
+}
+
+// Handle Supabase Auth State Changes
+function handleAuthStateChange(event, session) {
+  console.log('[Auth] State change event:', event);
+
+  if (event === 'SIGNED_IN' || event === 'USER_UPDATED') {
+    if (session && session.user) {
+      state.authUser = window.AuthService.getUserProfile();
+      state.isGuest = false;
+      updateUserUI();
+      closeAuthModal();
+      showToast(`Signed in as ${state.authUser.email}`, 'success');
+    }
+  } else if (event === 'SIGNED_OUT') {
+    state.authUser = null;
+    state.isGuest = true;
+    updateUserUI();
+    showToast('Signed out. Your canvas mind map is preserved.', 'info');
+  } else if (event === 'PASSWORD_RECOVERY') {
+    switchAuthTab('update-pw');
+    openAuthModal('update-pw');
+    setAuthAlert('Please enter your new password to regain access.', 'info');
+  } else if (event === 'TOKEN_REFRESHED') {
+    if (session && session.user) {
+      state.authUser = window.AuthService.getUserProfile();
+      state.isGuest = false;
+    }
+  }
+}
+
+// Check for password recovery hash in URL
+function checkPasswordRecoveryHash() {
+  const hash = window.location.hash || '';
+  if (hash.includes('type=recovery') || hash.includes('access_token')) {
+    switchAuthTab('update-pw');
+    openAuthModal('update-pw');
+    setAuthAlert('Set your new password to complete recovery.', 'info');
+    // Clear hash without reloading
+    history.replaceState(null, '', window.location.pathname);
+  }
+}
+
+// Auth Tab Management
+function switchAuthTab(tabName) {
+  clearAuthAlert();
+
+  const tabs = [
+    { name: 'signin', btn: tabBtnSignin, panel: authPanelSignin },
+    { name: 'signup', btn: tabBtnSignup, panel: authPanelSignup },
+    { name: 'recovery', btn: tabBtnRecovery, panel: authPanelRecovery }
+  ];
+
+  tabs.forEach(t => {
+    if (t.btn && t.panel) {
+      if (t.name === tabName) {
+        t.btn.classList.add('active');
+        t.panel.style.display = 'block';
+      } else {
+        t.btn.classList.remove('active');
+        t.panel.style.display = 'none';
+      }
+    }
+  });
+
+  if (authPanelUpdatePw) {
+    if (tabName === 'update-pw') {
+      authPanelUpdatePw.style.display = 'block';
+      if (authNavTabs) authNavTabs.style.display = 'none';
+      if (authModalTitle) authModalTitle.innerText = 'Reset Password';
+      if (authModalSubtitle) authModalSubtitle.innerText = 'Create a new secure password';
+    } else {
+      authPanelUpdatePw.style.display = 'none';
+      if (authNavTabs) authNavTabs.style.display = 'flex';
+      if (authModalTitle) authModalTitle.innerText = 'Cloud Account';
+      if (authModalSubtitle) authModalSubtitle.innerText = 'Sign in to sync your mind maps securely';
+    }
+  }
+}
+
+function setAuthAlert(message, type = 'error') {
+  if (!authAlert || !authAlertText) return;
+  authAlert.className = `auth-alert ${type}`;
+  if (type === 'success') {
+    authAlertIcon.innerText = '✓';
+  } else if (type === 'info') {
+    authAlertIcon.innerText = 'ℹ️';
+  } else {
+    authAlertIcon.innerText = '⚠️';
+  }
+  authAlertText.innerText = message;
+  authAlert.style.display = 'flex';
+}
+
+function clearAuthAlert() {
+  if (authAlert) authAlert.style.display = 'none';
+}
+
+function openAuthModal(defaultTab = 'signin') {
+  // If Supabase is not configured yet, direct user to Cloud Settings modal first
+  if (window.AuthService && !window.AuthService.isConfigured()) {
+    openCloudConfigModal('Please connect your Supabase project credentials first to enable real authentication.');
+    return;
+  }
+
+  userDropdown.classList.remove('active');
+  switchAuthTab(defaultTab);
+  authModal.classList.add('active');
+}
+
+function closeAuthModal() {
+  authModal.classList.remove('active');
+  clearAuthAlert();
+}
+
+function setButtonLoading(btn, isLoading, originalText = '') {
+  if (!btn) return;
+  const spinner = btn.querySelector('.btn-spinner');
+  const label = btn.querySelector('.btn-text');
+
+  if (isLoading) {
+    btn.disabled = true;
+    if (spinner) spinner.style.display = 'inline-block';
+    if (label) label.innerText = 'Please wait...';
+  } else {
+    btn.disabled = false;
+    if (spinner) spinner.style.display = 'none';
+    if (label) label.innerText = originalText;
+  }
+}
+
+// Cloud Config Modal Management
+function openCloudConfigModal(customMessage = null) {
+  userDropdown.classList.remove('active');
+  clearCloudConfigAlert();
+
+  if (window.AuthService) {
+    const config = window.AuthService.getConfig();
+    if (config) {
+      inputSupabaseUrl.value = config.url || '';
+      inputSupabaseAnonKey.value = config.anonKey || '';
+    } else {
+      inputSupabaseUrl.value = '';
+      inputSupabaseAnonKey.value = '';
+    }
+  }
+
+  if (customMessage) {
+    setCloudConfigAlert(customMessage, 'info');
+  }
+
+  cloudConfigModal.classList.add('active');
+}
+
+function closeCloudConfigModal() {
+  cloudConfigModal.classList.remove('active');
+  clearCloudConfigAlert();
+}
+
+function setCloudConfigAlert(message, type = 'error') {
+  if (!cloudConfigAlert || !cloudConfigAlertText) return;
+  cloudConfigAlert.className = `auth-alert ${type}`;
+  if (type === 'success') {
+    cloudConfigAlertIcon.innerText = '✓';
+  } else if (type === 'info') {
+    cloudConfigAlertIcon.innerText = 'ℹ️';
+  } else {
+    cloudConfigAlertIcon.innerText = '⚠️';
+  }
+  cloudConfigAlertText.innerText = message;
+  cloudConfigAlert.style.display = 'flex';
+}
+
+function clearCloudConfigAlert() {
+  if (cloudConfigAlert) cloudConfigAlert.style.display = 'none';
 }
 
 // Load or restore projects for given user
@@ -1477,6 +1822,304 @@ function setupEventListeners() {
     e.stopPropagation();
     userDropdown.classList.toggle('active');
   });
+
+  // Header Quick Auth Button
+  if (btnHeaderAuth) {
+    btnHeaderAuth.addEventListener('click', () => {
+      openAuthModal('signin');
+    });
+  }
+
+  // Dropdown Login Button
+  if (btnDropdownLogin) {
+    btnDropdownLogin.addEventListener('click', () => {
+      openAuthModal('signin');
+    });
+  }
+
+  // Dropdown Auth Logout Button
+  if (btnAuthLogout) {
+    btnAuthLogout.addEventListener('click', async () => {
+      userDropdown.classList.remove('active');
+      if (window.AuthService) {
+        try {
+          await window.AuthService.signOut();
+        } catch (err) {
+          console.error('[Auth] Sign out error:', err);
+        }
+      }
+    });
+  }
+
+  // Dropdown Change Password
+  if (btnAuthChangePassword) {
+    btnAuthChangePassword.addEventListener('click', () => {
+      userDropdown.classList.remove('active');
+      switchAuthTab('update-pw');
+      openAuthModal('update-pw');
+    });
+  }
+
+  // Dropdown Switch to Local Guest Mode
+  if (btnSwitchToGuest) {
+    btnSwitchToGuest.addEventListener('click', () => {
+      userDropdown.classList.remove('active');
+      state.isGuest = true;
+      updateUserUI();
+      showToast('Switched to local guest mode. Cloud account remains saved.', 'info');
+    });
+  }
+
+  // Dropdown Cloud Settings Button
+  if (btnOpenCloudConfig) {
+    btnOpenCloudConfig.addEventListener('click', () => {
+      openCloudConfigModal();
+    });
+  }
+
+  // Auth Modal Close & Tabs
+  if (btnCloseAuthModal) {
+    btnCloseAuthModal.addEventListener('click', closeAuthModal);
+  }
+  if (tabBtnSignin) {
+    tabBtnSignin.addEventListener('click', () => switchAuthTab('signin'));
+  }
+  if (tabBtnSignup) {
+    tabBtnSignup.addEventListener('click', () => switchAuthTab('signup'));
+  }
+  if (tabBtnRecovery) {
+    tabBtnRecovery.addEventListener('click', () => switchAuthTab('recovery'));
+  }
+
+  // In-form Tab Navigation Links
+  if (linkForgotPassword) {
+    linkForgotPassword.addEventListener('click', (e) => {
+      e.preventDefault();
+      switchAuthTab('recovery');
+    });
+  }
+  if (linkGotoSignup) {
+    linkGotoSignup.addEventListener('click', (e) => {
+      e.preventDefault();
+      switchAuthTab('signup');
+    });
+  }
+  if (linkGotoSignin) {
+    linkGotoSignin.addEventListener('click', (e) => {
+      e.preventDefault();
+      switchAuthTab('signin');
+    });
+  }
+  if (linkRecoveryToSignin) {
+    linkRecoveryToSignin.addEventListener('click', (e) => {
+      e.preventDefault();
+      switchAuthTab('signin');
+    });
+  }
+
+  // Form: Sign In
+  if (formSignin) {
+    formSignin.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      clearAuthAlert();
+
+      const email = signinEmail.value.trim();
+      const password = signinPassword.value;
+
+      if (!email || !password) {
+        setAuthAlert('Please fill in both email and password.', 'error');
+        return;
+      }
+
+      setButtonLoading(btnSubmitSignin, true, 'Sign In');
+      try {
+        await window.AuthService.signIn({ email, password });
+        signinPassword.value = '';
+        closeAuthModal();
+      } catch (err) {
+        setAuthAlert(err.message, 'error');
+      } finally {
+        setButtonLoading(btnSubmitSignin, false, 'Sign In');
+      }
+    });
+  }
+
+  // Form: Sign Up
+  if (formSignup) {
+    formSignup.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      clearAuthAlert();
+
+      const fullName = signupName.value.trim();
+      const email = signupEmail.value.trim();
+      const password = signupPassword.value;
+      const confirmPw = signupConfirmPassword.value;
+
+      if (!email || !password) {
+        setAuthAlert('Please provide email and password.', 'error');
+        return;
+      }
+      if (password.length < 6) {
+        setAuthAlert('Password must be at least 6 characters long.', 'error');
+        return;
+      }
+      if (password !== confirmPw) {
+        setAuthAlert('Passwords do not match. Please verify.', 'error');
+        return;
+      }
+
+      setButtonLoading(btnSubmitSignup, true, 'Create Free Account');
+      try {
+        const res = await window.AuthService.signUp({ email, password, fullName });
+        signupPassword.value = '';
+        signupConfirmPassword.value = '';
+
+        if (res.requiresConfirmation) {
+          setAuthAlert('Account created! Please check your email to confirm your registration before signing in.', 'success');
+        } else {
+          closeAuthModal();
+          showToast('Welcome to MindMap Studio! Free Cloud Tier active.', 'success');
+        }
+      } catch (err) {
+        setAuthAlert(err.message, 'error');
+      } finally {
+        setButtonLoading(btnSubmitSignup, false, 'Create Free Account');
+      }
+    });
+  }
+
+  // Form: Password Recovery
+  if (formRecovery) {
+    formRecovery.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      clearAuthAlert();
+
+      const email = recoveryEmail.value.trim();
+      if (!email) {
+        setAuthAlert('Please enter your email address.', 'error');
+        return;
+      }
+
+      setButtonLoading(btnSubmitRecovery, true, 'Send Reset Link');
+      try {
+        await window.AuthService.resetPassword(email);
+        setAuthAlert('Password reset instructions sent! Please check your inbox.', 'success');
+      } catch (err) {
+        setAuthAlert(err.message, 'error');
+      } finally {
+        setButtonLoading(btnSubmitRecovery, false, 'Send Reset Link');
+      }
+    });
+  }
+
+  // Form: Update Password (from recovery link)
+  if (formUpdatePw) {
+    formUpdatePw.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      clearAuthAlert();
+
+      const newPw = updatePwNew.value;
+      const confirmPw = updatePwConfirm.value;
+
+      if (!newPw || newPw.length < 6) {
+        setAuthAlert('New password must be at least 6 characters long.', 'error');
+        return;
+      }
+      if (newPw !== confirmPw) {
+        setAuthAlert('Passwords do not match. Please verify.', 'error');
+        return;
+      }
+
+      setButtonLoading(btnSubmitUpdatePw, true, 'Save New Password');
+      try {
+        await window.AuthService.updatePassword(newPw);
+        updatePwNew.value = '';
+        updatePwConfirm.value = '';
+        closeAuthModal();
+        showToast('Password updated successfully!', 'success');
+      } catch (err) {
+        setAuthAlert(err.message, 'error');
+      } finally {
+        setButtonLoading(btnSubmitUpdatePw, false, 'Save New Password');
+      }
+    });
+  }
+
+  // Cloud Config Modal Listeners
+  if (btnCloseCloudConfigModal) {
+    btnCloseCloudConfigModal.addEventListener('click', closeCloudConfigModal);
+  }
+  if (btnCancelCloudConfig) {
+    btnCancelCloudConfig.addEventListener('click', closeCloudConfigModal);
+  }
+
+  // Test Cloud Connection
+  if (btnTestCloudConfig) {
+    btnTestCloudConfig.addEventListener('click', async () => {
+      clearCloudConfigAlert();
+      const url = inputSupabaseUrl.value.trim();
+      const key = inputSupabaseAnonKey.value.trim();
+
+      if (!url || !key) {
+        setCloudConfigAlert('Please provide both Project URL and Anon Key to test.', 'error');
+        return;
+      }
+
+      setButtonLoading(btnTestCloudConfig, true, 'Test Connection');
+      try {
+        const testRes = await window.AuthService.testConnection(url, key);
+        if (testRes.success) {
+          setCloudConfigAlert('Connection test successful! Valid Supabase credentials.', 'success');
+        } else {
+          setCloudConfigAlert(testRes.error || 'Connection failed.', 'error');
+        }
+      } catch (err) {
+        setCloudConfigAlert(err.message || 'Connection test failed.', 'error');
+      } finally {
+        setButtonLoading(btnTestCloudConfig, false, 'Test Connection');
+      }
+    });
+  }
+
+  // Save Cloud Configuration
+  if (btnSaveCloudConfig) {
+    btnSaveCloudConfig.addEventListener('click', async () => {
+      clearCloudConfigAlert();
+      const url = inputSupabaseUrl.value.trim();
+      const key = inputSupabaseAnonKey.value.trim();
+
+      if (!url || !key) {
+        setCloudConfigAlert('Please provide both Project URL and Anon Public Key.', 'error');
+        return;
+      }
+
+      setButtonLoading(btnSaveCloudConfig, true, 'Save & Connect');
+      try {
+        await window.AuthService.saveConfig(url, key);
+        closeCloudConfigModal();
+        showToast('Supabase connected successfully! You can now sign in.', 'success');
+        openAuthModal('signin');
+      } catch (err) {
+        setCloudConfigAlert(err.message, 'error');
+      } finally {
+        setButtonLoading(btnSaveCloudConfig, false, 'Save & Connect');
+      }
+    });
+  }
+
+  // Clear / Disconnect Cloud Configuration
+  if (btnClearCloudConfig) {
+    btnClearCloudConfig.addEventListener('click', async () => {
+      if (confirm('Are you sure you want to disconnect Supabase cloud configuration?')) {
+        await window.AuthService.clearConfig();
+        inputSupabaseUrl.value = '';
+        inputSupabaseAnonKey.value = '';
+        closeCloudConfigModal();
+        updateUserUI();
+        showToast('Supabase disconnected. Running in local mode.', 'info');
+      }
+    });
+  }
 
   btnSwitchUserModal.addEventListener('click', () => {
     openUsersModal();
