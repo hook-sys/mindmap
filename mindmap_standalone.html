@@ -2085,6 +2085,217 @@ button:disabled {
   color: #6d28d9;
 }
 
+/* ==========================================================================
+   Super Admin AI Settings Modal & Badges
+   ========================================================================== */
+.admin-badge-icon {
+  background: #fef3c7 !important;
+  color: #d97706 !important;
+}
+
+.admin-security-callout {
+  display: flex;
+  gap: 12px;
+  padding: 12px 14px;
+  background: var(--bg-subtle, #f8fafc);
+  border: 1px solid var(--border-default, #e2e8f0);
+  border-left: 4px solid #f59e0b;
+  border-radius: var(--radius-sm, 6px);
+  margin-bottom: 16px;
+  align-items: flex-start;
+}
+
+.admin-security-callout .callout-icon {
+  font-size: 20px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.admin-security-callout .callout-body strong {
+  display: block;
+  font-size: 13px;
+  color: var(--text-primary);
+  margin-bottom: 3px;
+}
+
+.admin-security-callout .callout-body p {
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.45;
+  margin: 0;
+}
+
+.admin-security-callout .callout-body code {
+  background: rgba(0, 0, 0, 0.05);
+  padding: 1px 4px;
+  border-radius: 3px;
+  font-size: 11px;
+}
+
+.admin-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+@media (max-width: 640px) {
+  .admin-form-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+}
+
+.admin-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 18px;
+  margin-bottom: 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border-default, #e2e8f0);
+}
+
+.admin-section-header h3 {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.admin-section-badge {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: var(--radius-full, 9999px);
+  background: #ecfdf5;
+  color: #059669;
+  font-weight: 500;
+}
+
+.admin-providers-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+@media (max-width: 640px) {
+  .admin-providers-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.admin-provider-card {
+  padding: 12px;
+  border: 1px solid var(--border-default, #e2e8f0);
+  border-radius: var(--radius-md, 8px);
+  background: var(--bg-surface, #ffffff);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  transition: all 0.15s ease;
+}
+
+.admin-provider-card.active-card {
+  border-color: #6366f1;
+  background: #fbfbfe;
+  box-shadow: 0 0 0 1px #6366f1;
+}
+
+.admin-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.admin-card-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.admin-card-env {
+  font-family: monospace;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.admin-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 4px;
+}
+
+.admin-key-status {
+  font-size: 11.5px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.admin-key-status.status-ok {
+  color: #059669;
+}
+
+.admin-key-status.status-missing {
+  color: #d97706;
+}
+
+.admin-active-pill {
+  font-size: 10.5px;
+  padding: 1px 6px;
+  background: #6366f1;
+  color: #ffffff;
+  border-radius: var(--radius-full, 9999px);
+  font-weight: 600;
+}
+
+.admin-test-box {
+  padding: 12px 14px;
+  background: var(--bg-subtle, #f8fafc);
+  border: 1px solid var(--border-default, #e2e8f0);
+  border-radius: var(--radius-md, 8px);
+  margin-top: 14px;
+}
+
+.test-box-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.test-box-header p {
+  font-size: 11.5px;
+  color: var(--text-secondary);
+  margin: 2px 0 0;
+}
+
+.admin-test-result {
+  margin-top: 10px;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm, 6px);
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.admin-test-result.success {
+  background: #ecfdf5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+}
+
+.admin-test-result.error {
+  background: #fef2f2;
+  color: #991b1b;
+  border: 1px solid #fecaca;
+}
+
+
 
 
 </style>
@@ -2187,6 +2398,10 @@ button:disabled {
             <button id="btn-open-cloud-config" class="dropdown-item">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg>
               <span>Cloud Connection Settings</span>
+            </button>
+            <button id="btn-open-super-admin" class="dropdown-item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <span>Super Admin AI Settings</span>
             </button>
             <button id="btn-help" class="dropdown-item">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
@@ -2786,6 +3001,97 @@ button:disabled {
       </div>
     </div>
 
+    <!-- Modal: Super Admin AI Provider Settings -->
+    <div class="modal-overlay" id="super-admin-modal">
+      <div class="modal-content modal-large admin-modal-content">
+        <div class="modal-header">
+          <div class="ai-modal-header-brand">
+            <span class="ai-badge-icon admin-badge-icon">⚡</span>
+            <div>
+              <h2>Super Admin — AI Provider Settings</h2>
+              <p class="modal-subtitle">Configure multi-provider routing, model defaults &amp; server credentials</p>
+            </div>
+          </div>
+          <button class="modal-close" id="btn-close-super-admin-modal">&times;</button>
+        </div>
+
+        <div class="modal-body">
+          <!-- Alert / Status Banner -->
+          <div id="super-admin-alert" class="auth-alert" style="display: none;">
+            <span class="auth-alert-icon" id="super-admin-alert-icon">ℹ️</span>
+            <span class="auth-alert-text" id="super-admin-alert-text"></span>
+          </div>
+
+          <!-- Security & Safety Notice -->
+          <div class="admin-security-callout">
+            <div class="callout-icon">🛡️</div>
+            <div class="callout-body">
+              <strong>Server-Side Secret Isolation &amp; Cost Safeguards:</strong>
+              <p>API keys (<code>FAL_KEY</code>, <code>GEMINI_API_KEY</code>, etc.) are strictly kept in server environment variables. Zero credentials are sent to the client browser or stored in local files. Testing connections verifies key format without triggering live billable inference charges.</p>
+            </div>
+          </div>
+
+          <!-- Provider Selection & Defaults -->
+          <div class="admin-form-grid">
+            <div class="form-group">
+              <label for="admin-provider-select">Active AI Provider (Default: Fal AI)</label>
+              <select id="admin-provider-select" class="form-input">
+                <option value="fal">Fal AI (Default)</option>
+                <option value="gemini">Google Gemini</option>
+                <option value="openai">OpenAI</option>
+                <option value="claude">Anthropic Claude</option>
+              </select>
+              <small class="form-help">Sets the default generator &amp; node expander across all user mind maps.</small>
+            </div>
+
+            <div class="form-group">
+              <label for="admin-model-select">Default Model</label>
+              <select id="admin-model-select" class="form-input">
+                <!-- Dynamically populated based on provider -->
+              </select>
+              <small class="form-help" id="admin-model-desc">Select primary reasoning model.</small>
+            </div>
+          </div>
+
+          <!-- Provider Credential & Environment Status -->
+          <div class="admin-section-header">
+            <h3>Provider Status &amp; Credentials</h3>
+            <span class="admin-section-badge">Live Server Verification</span>
+          </div>
+
+          <div class="admin-providers-grid" id="admin-provider-cards">
+            <!-- Dynamically populated cards with masked key status badges -->
+          </div>
+
+          <!-- Connection Verification Section -->
+          <div class="admin-test-box">
+            <div class="test-box-header">
+              <div>
+                <strong>Test Connection Readiness</strong>
+                <p>Verify that server environment variables are loaded and syntactically valid for the selected provider.</p>
+              </div>
+              <button type="button" id="btn-admin-test-connection" class="btn secondary">
+                <span class="btn-spinner" style="display: none;"></span>
+                <span>Test Selected Provider</span>
+              </button>
+            </div>
+            <div id="admin-test-result-box" class="admin-test-result" style="display: none;">
+              <span id="admin-test-icon">✓</span>
+              <span id="admin-test-message">Result message</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn secondary" id="btn-cancel-super-admin">Close</button>
+          <button type="button" class="btn primary" id="btn-save-super-admin">
+            <span class="btn-spinner" style="display: none;"></span>
+            <span class="btn-text">Save &amp; Activate Provider</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
     <!-- Floating Global Toast Banner -->
     <div id="toast-banner" class="toast-banner" style="display: none;">
       <span id="toast-banner-icon" class="toast-icon">✓</span>
@@ -3225,6 +3531,13 @@ button:disabled {
     },
 
     /**
+     * Get Current Access Token (JWT)
+     */
+    getAccessToken() {
+      return _currentSession ? _currentSession.access_token : null;
+    },
+
+    /**
      * Get User Profile metadata (e.g. tier, display name)
      */
     getUserProfile() {
@@ -3622,6 +3935,25 @@ const aiExpandAlertText = document.getElementById('ai-expand-alert-text');
 
 let currentGeneratedMindMap = null;
 let currentExpandTargetNodeId = null;
+
+// Super Admin AI Settings Elements
+const btnOpenSuperAdmin = document.getElementById('btn-open-super-admin');
+const superAdminModal = document.getElementById('super-admin-modal');
+const btnCloseSuperAdminModal = document.getElementById('btn-close-super-admin-modal');
+const btnCancelSuperAdmin = document.getElementById('btn-cancel-super-admin');
+const superAdminAlert = document.getElementById('super-admin-alert');
+const superAdminAlertIcon = document.getElementById('super-admin-alert-icon');
+const superAdminAlertText = document.getElementById('super-admin-alert-text');
+const adminProviderSelect = document.getElementById('admin-provider-select');
+const adminModelSelect = document.getElementById('admin-model-select');
+const adminModelDesc = document.getElementById('admin-model-desc');
+const adminProviderCards = document.getElementById('admin-provider-cards');
+const btnAdminTestConnection = document.getElementById('btn-admin-test-connection');
+const adminTestResultBox = document.getElementById('admin-test-result-box');
+const adminTestIcon = document.getElementById('admin-test-icon');
+const adminTestMessage = document.getElementById('admin-test-message');
+const btnSaveSuperAdmin = document.getElementById('btn-save-super-admin');
+let superAdminConfigCache = null;
 
 // Modals
 const projectsModal = document.getElementById('projects-modal');
@@ -4082,6 +4414,157 @@ function setAiExpandAlert(message, type = 'error') {
 
 function clearAiExpandAlert() {
   if (aiExpandAlert) aiExpandAlert.style.display = 'none';
+}
+
+// ==========================================================================
+// Super Admin AI Settings Functions
+// ==========================================================================
+
+function openSuperAdminModal() {
+  if (userDropdown) userDropdown.classList.remove('active');
+  if (superAdminModal) superAdminModal.classList.add('active');
+  loadSuperAdminConfig();
+}
+
+function closeSuperAdminModal() {
+  if (superAdminModal) superAdminModal.classList.remove('active');
+  clearSuperAdminAlert();
+  if (adminTestResultBox) adminTestResultBox.style.display = 'none';
+}
+
+function setSuperAdminAlert(message, type = 'info') {
+  if (!superAdminAlert || !superAdminAlertText) return;
+  superAdminAlert.style.display = 'flex';
+  superAdminAlert.className = `auth-alert ${type}`;
+  if (superAdminAlertIcon) {
+    superAdminAlertIcon.textContent = type === 'success' ? '✓' : type === 'error' ? '⚠️' : 'ℹ️';
+  }
+  superAdminAlertText.textContent = message;
+}
+
+function clearSuperAdminAlert() {
+  if (superAdminAlert) {
+    superAdminAlert.style.display = 'none';
+    if (superAdminAlertText) superAdminAlertText.textContent = '';
+  }
+}
+
+async function getAdminAuthHeaders() {
+  const headers = { 'Content-Type': 'application/json' };
+  if (window.AuthService && typeof window.AuthService.getAccessToken === 'function') {
+    const token = window.AuthService.getAccessToken();
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+  }
+  return headers;
+}
+
+async function loadSuperAdminConfig() {
+  clearSuperAdminAlert();
+  if (adminTestResultBox) adminTestResultBox.style.display = 'none';
+
+  try {
+    const headers = await getAdminAuthHeaders();
+    const res = await fetch('/api/ai/admin/config', { headers });
+    const data = await res.json();
+
+    if (!res.ok || !data.success) {
+      const errMsg = data.error || 'Failed to retrieve Super Admin AI configuration.';
+      setSuperAdminAlert(errMsg, 'error');
+      return;
+    }
+
+    superAdminConfigCache = data;
+    renderSuperAdminUI(data);
+  } catch (err) {
+    setSuperAdminAlert(err.message || 'Error communicating with Super Admin API.', 'error');
+  }
+}
+
+function renderSuperAdminUI(data) {
+  if (!data || !data.providers) return;
+
+  // 1. Populate Provider Dropdown
+  if (adminProviderSelect) {
+    adminProviderSelect.innerHTML = '';
+    data.providers.forEach(p => {
+      const opt = document.createElement('option');
+      opt.value = p.id;
+      opt.textContent = `${p.name} ${p.isConfigured ? '✓' : '(Not Configured)'}`;
+      if (p.id === data.activeProvider) opt.selected = true;
+      adminProviderSelect.appendChild(opt);
+    });
+  }
+
+  // 2. Populate Models for selected provider
+  if (adminProviderSelect) {
+    updateAdminModelDropdown(adminProviderSelect.value);
+  }
+
+  // 3. Render Provider Credential Status Cards
+  renderAdminProviderCards(data.providers, data.activeProvider);
+}
+
+function updateAdminModelDropdown(providerId) {
+  if (!superAdminConfigCache || !adminModelSelect) return;
+  const prov = superAdminConfigCache.providers.find(p => p.id === providerId);
+  if (!prov || !prov.models) return;
+
+  adminModelSelect.innerHTML = '';
+  prov.models.forEach(m => {
+    const opt = document.createElement('option');
+    opt.value = m.id;
+    opt.textContent = `${m.name} (${m.id})`;
+    if (m.id === prov.defaultModel) opt.selected = true;
+    adminModelSelect.appendChild(opt);
+  });
+
+  updateAdminModelDescription();
+}
+
+function updateAdminModelDescription() {
+  if (!superAdminConfigCache || !adminProviderSelect || !adminModelSelect || !adminModelDesc) return;
+  const providerId = adminProviderSelect.value;
+  const modelId = adminModelSelect.value;
+  const prov = superAdminConfigCache.providers.find(p => p.id === providerId);
+  if (!prov) return;
+  const modelObj = prov.models.find(m => m.id === modelId);
+  if (modelObj && modelObj.description) {
+    adminModelDesc.textContent = modelObj.description;
+  } else {
+    adminModelDesc.textContent = `Model ID: ${modelId}`;
+  }
+}
+
+function renderAdminProviderCards(providers, activeProviderId) {
+  if (!adminProviderCards) return;
+  adminProviderCards.innerHTML = '';
+
+  providers.forEach(p => {
+    const card = document.createElement('div');
+    card.className = `admin-provider-card ${p.id === activeProviderId ? 'active-card' : ''}`;
+    
+    const isOk = p.isConfigured;
+    const masked = p.maskedKey || 'Not Configured';
+    const statusClass = isOk ? 'status-ok' : 'status-missing';
+    const statusIcon = isOk ? '✓' : '⚠️';
+
+    card.innerHTML = `
+      <div class="admin-card-header">
+        <span class="admin-card-title">${escapeHtml(p.name)}</span>
+        ${p.id === activeProviderId ? '<span class="admin-active-pill">ACTIVE</span>' : ''}
+      </div>
+      <div class="admin-card-env">${escapeHtml(p.envKeyName)}</div>
+      <div class="admin-card-footer">
+        <span class="admin-key-status ${statusClass}">
+          <span>${statusIcon}</span>
+          <span>${isOk ? `Set (${escapeHtml(masked)})` : 'Missing / Not Configured'}</span>
+        </span>
+      </div>
+    `;
+    adminProviderCards.appendChild(card);
+  });
 }
 
 // Load or restore projects for given user
@@ -5549,6 +6032,122 @@ function setupEventListeners() {
   if (btnOpenCloudConfig) {
     btnOpenCloudConfig.addEventListener('click', () => {
       openCloudConfigModal();
+    });
+  }
+
+  // Super Admin AI Settings Button
+  if (btnOpenSuperAdmin) {
+    btnOpenSuperAdmin.addEventListener('click', () => {
+      openSuperAdminModal();
+    });
+  }
+
+  // Super Admin Modal Controls
+  if (btnCloseSuperAdminModal) {
+    btnCloseSuperAdminModal.addEventListener('click', closeSuperAdminModal);
+  }
+  if (btnCancelSuperAdmin) {
+    btnCancelSuperAdmin.addEventListener('click', closeSuperAdminModal);
+  }
+
+  // Admin Provider Dropdown Change
+  if (adminProviderSelect) {
+    adminProviderSelect.addEventListener('change', (e) => {
+      updateAdminModelDropdown(e.target.value);
+      if (adminTestResultBox) adminTestResultBox.style.display = 'none';
+    });
+  }
+
+  // Admin Model Dropdown Change
+  if (adminModelSelect) {
+    adminModelSelect.addEventListener('change', () => {
+      updateAdminModelDescription();
+    });
+  }
+
+  // Admin Test Connection
+  if (btnAdminTestConnection) {
+    btnAdminTestConnection.addEventListener('click', async () => {
+      clearSuperAdminAlert();
+      const providerId = adminProviderSelect ? adminProviderSelect.value : 'fal';
+
+      setButtonLoading(btnAdminTestConnection, true, 'Testing...');
+      if (adminTestResultBox) adminTestResultBox.style.display = 'none';
+
+      try {
+        const headers = await getAdminAuthHeaders();
+        const res = await fetch('/api/ai/admin/test-connection', {
+          method: 'POST',
+          headers,
+          body: JSON.stringify({ providerId })
+        });
+
+        const data = await res.json();
+        if (adminTestResultBox) {
+          adminTestResultBox.style.display = 'flex';
+          if (res.ok && data.success) {
+            adminTestResultBox.className = 'admin-test-result success';
+            if (adminTestIcon) adminTestIcon.textContent = '✓';
+            if (adminTestMessage) {
+              adminTestMessage.innerHTML = `<strong>${escapeHtml(data.providerName)}:</strong> ${escapeHtml(data.message)} <br><small style="opacity: 0.85;">${escapeHtml(data.costNotice || '')}</small>`;
+            }
+          } else {
+            adminTestResultBox.className = 'admin-test-result error';
+            if (adminTestIcon) adminTestIcon.textContent = '⚠️';
+            if (adminTestMessage) {
+              adminTestMessage.innerHTML = `<strong>Test Failed:</strong> ${escapeHtml(data.message || data.error || 'Connection check failed.')}`;
+            }
+          }
+        }
+      } catch (err) {
+        if (adminTestResultBox) {
+          adminTestResultBox.style.display = 'flex';
+          adminTestResultBox.className = 'admin-test-result error';
+          if (adminTestIcon) adminTestIcon.textContent = '⚠️';
+          if (adminTestMessage) adminTestMessage.textContent = err.message || 'Network error during test.';
+        }
+      } finally {
+        setButtonLoading(btnAdminTestConnection, false, 'Test Selected Provider');
+      }
+    });
+  }
+
+  // Admin Save Configuration
+  if (btnSaveSuperAdmin) {
+    btnSaveSuperAdmin.addEventListener('click', async () => {
+      clearSuperAdminAlert();
+      const activeProvider = adminProviderSelect ? adminProviderSelect.value : 'fal';
+      const selectedModel = adminModelSelect ? adminModelSelect.value : '';
+
+      setButtonLoading(btnSaveSuperAdmin, true, 'Saving...');
+      try {
+        const headers = await getAdminAuthHeaders();
+        const res = await fetch('/api/ai/admin/config', {
+          method: 'POST',
+          headers,
+          body: JSON.stringify({ activeProvider, selectedModel })
+        });
+
+        const data = await res.json();
+        if (!res.ok || !data.success) {
+          setSuperAdminAlert(data.error || 'Failed to save Super Admin AI settings.', 'error');
+          return;
+        }
+
+        superAdminConfigCache = data;
+        renderSuperAdminUI(data);
+
+        // Update active provider pills in AI Generator modal
+        if (aiProviderNameDisplay) aiProviderNameDisplay.innerText = data.activeProviderName;
+        if (aiProviderModelDisplay) aiProviderModelDisplay.innerText = data.activeModel;
+
+        setSuperAdminAlert(`Successfully updated active provider to ${data.activeProviderName} (${data.activeModel})!`, 'success');
+        showToast(`AI Provider updated: ${data.activeProviderName}`, 'success');
+      } catch (err) {
+        setSuperAdminAlert(err.message || 'Error updating configuration.', 'error');
+      } finally {
+        setButtonLoading(btnSaveSuperAdmin, false, 'Save & Activate Provider');
+      }
     });
   }
 

@@ -349,6 +349,25 @@ const aiExpandAlertText = document.getElementById('ai-expand-alert-text');
 let currentGeneratedMindMap = null;
 let currentExpandTargetNodeId = null;
 
+// Super Admin AI Settings Elements
+const btnOpenSuperAdmin = document.getElementById('btn-open-super-admin');
+const superAdminModal = document.getElementById('super-admin-modal');
+const btnCloseSuperAdminModal = document.getElementById('btn-close-super-admin-modal');
+const btnCancelSuperAdmin = document.getElementById('btn-cancel-super-admin');
+const superAdminAlert = document.getElementById('super-admin-alert');
+const superAdminAlertIcon = document.getElementById('super-admin-alert-icon');
+const superAdminAlertText = document.getElementById('super-admin-alert-text');
+const adminProviderSelect = document.getElementById('admin-provider-select');
+const adminModelSelect = document.getElementById('admin-model-select');
+const adminModelDesc = document.getElementById('admin-model-desc');
+const adminProviderCards = document.getElementById('admin-provider-cards');
+const btnAdminTestConnection = document.getElementById('btn-admin-test-connection');
+const adminTestResultBox = document.getElementById('admin-test-result-box');
+const adminTestIcon = document.getElementById('admin-test-icon');
+const adminTestMessage = document.getElementById('admin-test-message');
+const btnSaveSuperAdmin = document.getElementById('btn-save-super-admin');
+let superAdminConfigCache = null;
+
 // Modals
 const projectsModal = document.getElementById('projects-modal');
 const btnCloseProjectsModal = document.getElementById('btn-close-projects-modal');
@@ -808,6 +827,157 @@ function setAiExpandAlert(message, type = 'error') {
 
 function clearAiExpandAlert() {
   if (aiExpandAlert) aiExpandAlert.style.display = 'none';
+}
+
+// ==========================================================================
+// Super Admin AI Settings Functions
+// ==========================================================================
+
+function openSuperAdminModal() {
+  if (userDropdown) userDropdown.classList.remove('active');
+  if (superAdminModal) superAdminModal.classList.add('active');
+  loadSuperAdminConfig();
+}
+
+function closeSuperAdminModal() {
+  if (superAdminModal) superAdminModal.classList.remove('active');
+  clearSuperAdminAlert();
+  if (adminTestResultBox) adminTestResultBox.style.display = 'none';
+}
+
+function setSuperAdminAlert(message, type = 'info') {
+  if (!superAdminAlert || !superAdminAlertText) return;
+  superAdminAlert.style.display = 'flex';
+  superAdminAlert.className = `auth-alert ${type}`;
+  if (superAdminAlertIcon) {
+    superAdminAlertIcon.textContent = type === 'success' ? '✓' : type === 'error' ? '⚠️' : 'ℹ️';
+  }
+  superAdminAlertText.textContent = message;
+}
+
+function clearSuperAdminAlert() {
+  if (superAdminAlert) {
+    superAdminAlert.style.display = 'none';
+    if (superAdminAlertText) superAdminAlertText.textContent = '';
+  }
+}
+
+async function getAdminAuthHeaders() {
+  const headers = { 'Content-Type': 'application/json' };
+  if (window.AuthService && typeof window.AuthService.getAccessToken === 'function') {
+    const token = window.AuthService.getAccessToken();
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+  }
+  return headers;
+}
+
+async function loadSuperAdminConfig() {
+  clearSuperAdminAlert();
+  if (adminTestResultBox) adminTestResultBox.style.display = 'none';
+
+  try {
+    const headers = await getAdminAuthHeaders();
+    const res = await fetch('/api/ai/admin/config', { headers });
+    const data = await res.json();
+
+    if (!res.ok || !data.success) {
+      const errMsg = data.error || 'Failed to retrieve Super Admin AI configuration.';
+      setSuperAdminAlert(errMsg, 'error');
+      return;
+    }
+
+    superAdminConfigCache = data;
+    renderSuperAdminUI(data);
+  } catch (err) {
+    setSuperAdminAlert(err.message || 'Error communicating with Super Admin API.', 'error');
+  }
+}
+
+function renderSuperAdminUI(data) {
+  if (!data || !data.providers) return;
+
+  // 1. Populate Provider Dropdown
+  if (adminProviderSelect) {
+    adminProviderSelect.innerHTML = '';
+    data.providers.forEach(p => {
+      const opt = document.createElement('option');
+      opt.value = p.id;
+      opt.textContent = `${p.name} ${p.isConfigured ? '✓' : '(Not Configured)'}`;
+      if (p.id === data.activeProvider) opt.selected = true;
+      adminProviderSelect.appendChild(opt);
+    });
+  }
+
+  // 2. Populate Models for selected provider
+  if (adminProviderSelect) {
+    updateAdminModelDropdown(adminProviderSelect.value);
+  }
+
+  // 3. Render Provider Credential Status Cards
+  renderAdminProviderCards(data.providers, data.activeProvider);
+}
+
+function updateAdminModelDropdown(providerId) {
+  if (!superAdminConfigCache || !adminModelSelect) return;
+  const prov = superAdminConfigCache.providers.find(p => p.id === providerId);
+  if (!prov || !prov.models) return;
+
+  adminModelSelect.innerHTML = '';
+  prov.models.forEach(m => {
+    const opt = document.createElement('option');
+    opt.value = m.id;
+    opt.textContent = `${m.name} (${m.id})`;
+    if (m.id === prov.defaultModel) opt.selected = true;
+    adminModelSelect.appendChild(opt);
+  });
+
+  updateAdminModelDescription();
+}
+
+function updateAdminModelDescription() {
+  if (!superAdminConfigCache || !adminProviderSelect || !adminModelSelect || !adminModelDesc) return;
+  const providerId = adminProviderSelect.value;
+  const modelId = adminModelSelect.value;
+  const prov = superAdminConfigCache.providers.find(p => p.id === providerId);
+  if (!prov) return;
+  const modelObj = prov.models.find(m => m.id === modelId);
+  if (modelObj && modelObj.description) {
+    adminModelDesc.textContent = modelObj.description;
+  } else {
+    adminModelDesc.textContent = `Model ID: ${modelId}`;
+  }
+}
+
+function renderAdminProviderCards(providers, activeProviderId) {
+  if (!adminProviderCards) return;
+  adminProviderCards.innerHTML = '';
+
+  providers.forEach(p => {
+    const card = document.createElement('div');
+    card.className = `admin-provider-card ${p.id === activeProviderId ? 'active-card' : ''}`;
+    
+    const isOk = p.isConfigured;
+    const masked = p.maskedKey || 'Not Configured';
+    const statusClass = isOk ? 'status-ok' : 'status-missing';
+    const statusIcon = isOk ? '✓' : '⚠️';
+
+    card.innerHTML = `
+      <div class="admin-card-header">
+        <span class="admin-card-title">${escapeHtml(p.name)}</span>
+        ${p.id === activeProviderId ? '<span class="admin-active-pill">ACTIVE</span>' : ''}
+      </div>
+      <div class="admin-card-env">${escapeHtml(p.envKeyName)}</div>
+      <div class="admin-card-footer">
+        <span class="admin-key-status ${statusClass}">
+          <span>${statusIcon}</span>
+          <span>${isOk ? `Set (${escapeHtml(masked)})` : 'Missing / Not Configured'}</span>
+        </span>
+      </div>
+    `;
+    adminProviderCards.appendChild(card);
+  });
 }
 
 // Load or restore projects for given user
@@ -2275,6 +2445,122 @@ function setupEventListeners() {
   if (btnOpenCloudConfig) {
     btnOpenCloudConfig.addEventListener('click', () => {
       openCloudConfigModal();
+    });
+  }
+
+  // Super Admin AI Settings Button
+  if (btnOpenSuperAdmin) {
+    btnOpenSuperAdmin.addEventListener('click', () => {
+      openSuperAdminModal();
+    });
+  }
+
+  // Super Admin Modal Controls
+  if (btnCloseSuperAdminModal) {
+    btnCloseSuperAdminModal.addEventListener('click', closeSuperAdminModal);
+  }
+  if (btnCancelSuperAdmin) {
+    btnCancelSuperAdmin.addEventListener('click', closeSuperAdminModal);
+  }
+
+  // Admin Provider Dropdown Change
+  if (adminProviderSelect) {
+    adminProviderSelect.addEventListener('change', (e) => {
+      updateAdminModelDropdown(e.target.value);
+      if (adminTestResultBox) adminTestResultBox.style.display = 'none';
+    });
+  }
+
+  // Admin Model Dropdown Change
+  if (adminModelSelect) {
+    adminModelSelect.addEventListener('change', () => {
+      updateAdminModelDescription();
+    });
+  }
+
+  // Admin Test Connection
+  if (btnAdminTestConnection) {
+    btnAdminTestConnection.addEventListener('click', async () => {
+      clearSuperAdminAlert();
+      const providerId = adminProviderSelect ? adminProviderSelect.value : 'fal';
+
+      setButtonLoading(btnAdminTestConnection, true, 'Testing...');
+      if (adminTestResultBox) adminTestResultBox.style.display = 'none';
+
+      try {
+        const headers = await getAdminAuthHeaders();
+        const res = await fetch('/api/ai/admin/test-connection', {
+          method: 'POST',
+          headers,
+          body: JSON.stringify({ providerId })
+        });
+
+        const data = await res.json();
+        if (adminTestResultBox) {
+          adminTestResultBox.style.display = 'flex';
+          if (res.ok && data.success) {
+            adminTestResultBox.className = 'admin-test-result success';
+            if (adminTestIcon) adminTestIcon.textContent = '✓';
+            if (adminTestMessage) {
+              adminTestMessage.innerHTML = `<strong>${escapeHtml(data.providerName)}:</strong> ${escapeHtml(data.message)} <br><small style="opacity: 0.85;">${escapeHtml(data.costNotice || '')}</small>`;
+            }
+          } else {
+            adminTestResultBox.className = 'admin-test-result error';
+            if (adminTestIcon) adminTestIcon.textContent = '⚠️';
+            if (adminTestMessage) {
+              adminTestMessage.innerHTML = `<strong>Test Failed:</strong> ${escapeHtml(data.message || data.error || 'Connection check failed.')}`;
+            }
+          }
+        }
+      } catch (err) {
+        if (adminTestResultBox) {
+          adminTestResultBox.style.display = 'flex';
+          adminTestResultBox.className = 'admin-test-result error';
+          if (adminTestIcon) adminTestIcon.textContent = '⚠️';
+          if (adminTestMessage) adminTestMessage.textContent = err.message || 'Network error during test.';
+        }
+      } finally {
+        setButtonLoading(btnAdminTestConnection, false, 'Test Selected Provider');
+      }
+    });
+  }
+
+  // Admin Save Configuration
+  if (btnSaveSuperAdmin) {
+    btnSaveSuperAdmin.addEventListener('click', async () => {
+      clearSuperAdminAlert();
+      const activeProvider = adminProviderSelect ? adminProviderSelect.value : 'fal';
+      const selectedModel = adminModelSelect ? adminModelSelect.value : '';
+
+      setButtonLoading(btnSaveSuperAdmin, true, 'Saving...');
+      try {
+        const headers = await getAdminAuthHeaders();
+        const res = await fetch('/api/ai/admin/config', {
+          method: 'POST',
+          headers,
+          body: JSON.stringify({ activeProvider, selectedModel })
+        });
+
+        const data = await res.json();
+        if (!res.ok || !data.success) {
+          setSuperAdminAlert(data.error || 'Failed to save Super Admin AI settings.', 'error');
+          return;
+        }
+
+        superAdminConfigCache = data;
+        renderSuperAdminUI(data);
+
+        // Update active provider pills in AI Generator modal
+        if (aiProviderNameDisplay) aiProviderNameDisplay.innerText = data.activeProviderName;
+        if (aiProviderModelDisplay) aiProviderModelDisplay.innerText = data.activeModel;
+
+        setSuperAdminAlert(`Successfully updated active provider to ${data.activeProviderName} (${data.activeModel})!`, 'success');
+        showToast(`AI Provider updated: ${data.activeProviderName}`, 'success');
+      } catch (err) {
+        setSuperAdminAlert(err.message || 'Error updating configuration.', 'error');
+      } finally {
+        setButtonLoading(btnSaveSuperAdmin, false, 'Save & Activate Provider');
+      }
     });
   }
 

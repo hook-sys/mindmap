@@ -105,6 +105,10 @@
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg>
               <span>Cloud Connection Settings</span>
             </button>
+            <button id="btn-open-super-admin" class="dropdown-item">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <span>Super Admin AI Settings</span>
+            </button>
             <button id="btn-help" class="dropdown-item">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
               <span>Keyboard Shortcuts & Help</span>
@@ -699,6 +703,97 @@
         <div class="modal-footer">
           <button type="button" class="btn secondary" id="btn-cancel-cloud-config">Cancel</button>
           <button type="button" class="btn primary" id="btn-save-cloud-config">Save &amp; Connect</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: Super Admin AI Provider Settings -->
+    <div class="modal-overlay" id="super-admin-modal">
+      <div class="modal-content modal-large admin-modal-content">
+        <div class="modal-header">
+          <div class="ai-modal-header-brand">
+            <span class="ai-badge-icon admin-badge-icon">⚡</span>
+            <div>
+              <h2>Super Admin — AI Provider Settings</h2>
+              <p class="modal-subtitle">Configure multi-provider routing, model defaults &amp; server credentials</p>
+            </div>
+          </div>
+          <button class="modal-close" id="btn-close-super-admin-modal">&times;</button>
+        </div>
+
+        <div class="modal-body">
+          <!-- Alert / Status Banner -->
+          <div id="super-admin-alert" class="auth-alert" style="display: none;">
+            <span class="auth-alert-icon" id="super-admin-alert-icon">ℹ️</span>
+            <span class="auth-alert-text" id="super-admin-alert-text"></span>
+          </div>
+
+          <!-- Security & Safety Notice -->
+          <div class="admin-security-callout">
+            <div class="callout-icon">🛡️</div>
+            <div class="callout-body">
+              <strong>Server-Side Secret Isolation &amp; Cost Safeguards:</strong>
+              <p>API keys (<code>FAL_KEY</code>, <code>GEMINI_API_KEY</code>, etc.) are strictly kept in server environment variables. Zero credentials are sent to the client browser or stored in local files. Testing connections verifies key format without triggering live billable inference charges.</p>
+            </div>
+          </div>
+
+          <!-- Provider Selection & Defaults -->
+          <div class="admin-form-grid">
+            <div class="form-group">
+              <label for="admin-provider-select">Active AI Provider (Default: Fal AI)</label>
+              <select id="admin-provider-select" class="form-input">
+                <option value="fal">Fal AI (Default)</option>
+                <option value="gemini">Google Gemini</option>
+                <option value="openai">OpenAI</option>
+                <option value="claude">Anthropic Claude</option>
+              </select>
+              <small class="form-help">Sets the default generator &amp; node expander across all user mind maps.</small>
+            </div>
+
+            <div class="form-group">
+              <label for="admin-model-select">Default Model</label>
+              <select id="admin-model-select" class="form-input">
+                <!-- Dynamically populated based on provider -->
+              </select>
+              <small class="form-help" id="admin-model-desc">Select primary reasoning model.</small>
+            </div>
+          </div>
+
+          <!-- Provider Credential & Environment Status -->
+          <div class="admin-section-header">
+            <h3>Provider Status &amp; Credentials</h3>
+            <span class="admin-section-badge">Live Server Verification</span>
+          </div>
+
+          <div class="admin-providers-grid" id="admin-provider-cards">
+            <!-- Dynamically populated cards with masked key status badges -->
+          </div>
+
+          <!-- Connection Verification Section -->
+          <div class="admin-test-box">
+            <div class="test-box-header">
+              <div>
+                <strong>Test Connection Readiness</strong>
+                <p>Verify that server environment variables are loaded and syntactically valid for the selected provider.</p>
+              </div>
+              <button type="button" id="btn-admin-test-connection" class="btn secondary">
+                <span class="btn-spinner" style="display: none;"></span>
+                <span>Test Selected Provider</span>
+              </button>
+            </div>
+            <div id="admin-test-result-box" class="admin-test-result" style="display: none;">
+              <span id="admin-test-icon">✓</span>
+              <span id="admin-test-message">Result message</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn secondary" id="btn-cancel-super-admin">Close</button>
+          <button type="button" class="btn primary" id="btn-save-super-admin">
+            <span class="btn-spinner" style="display: none;"></span>
+            <span class="btn-text">Save &amp; Activate Provider</span>
+          </button>
         </div>
       </div>
     </div>

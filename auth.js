@@ -424,6 +424,13 @@
     },
 
     /**
+     * Get Current Access Token (JWT)
+     */
+    getAccessToken() {
+      return _currentSession ? _currentSession.access_token : null;
+    },
+
+    /**
      * Get User Profile metadata (e.g. tier, display name)
      */
     getUserProfile() {

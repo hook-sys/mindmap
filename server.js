@@ -2,6 +2,7 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 const { aiService } = require('./server/ai/service');
+const { verifySuperAdmin } = require('./server/ai/admin');
 
 const PORT = process.env.PORT || 3000;
 const HOST = '127.0.0.1'; // Strictly bind to localhost (prevent LAN access)
@@ -147,6 +148,55 @@ const server = http.createServer(async (req, res) => {
   if (pathname.startsWith('/api/')) {
     // AI Multi-Provider Routes (Fal AI, etc.)
     if (pathname.startsWith('/api/ai/')) {
+      // 0. Super Admin AI Settings Endpoints
+      if (pathname.startsWith('/api/ai/admin/')) {
+        const auth = verifySuperAdmin(req);
+        if (!auth.authorized) {
+          return sendJson(res, auth.statusCode || 401, {
+            success: false,
+            error: auth.error || 'Unauthorized: Super Admin access required.',
+            code: 'AUTH_REQUIRED'
+          });
+        }
+
+        // GET /api/ai/admin/config
+        if (pathname === '/api/ai/admin/config' && req.method === 'GET') {
+          try {
+            const config = aiService.getAdminConfig();
+            return sendJson(res, 200, { success: true, ...config, authUser: auth.user });
+          } catch (e) {
+            return sendError(res, 500, 'Failed to retrieve admin configuration', e);
+          }
+        }
+
+        // POST /api/ai/admin/config
+        if (pathname === '/api/ai/admin/config' && req.method === 'POST') {
+          try {
+            const body = await parseJsonBody(req);
+            const updated = aiService.updateAdminConfig(body);
+            return sendJson(res, 200, { success: true, ...updated });
+          } catch (e) {
+            const status = e.statusCode || 500;
+            return sendJson(res, status, { success: false, error: e.message });
+          }
+        }
+
+        // POST /api/ai/admin/test-connection
+        if (pathname === '/api/ai/admin/test-connection' && req.method === 'POST') {
+          try {
+            const body = await parseJsonBody(req);
+            const providerId = body.providerId || aiService.activeProviderId;
+            const testResult = aiService.testProviderConnection(providerId);
+            return sendJson(res, 200, testResult);
+          } catch (e) {
+            const status = e.statusCode || 500;
+            return sendJson(res, status, { success: false, error: e.message });
+          }
+        }
+
+        return sendError(res, 404, 'Unknown AI Admin endpoint');
+      }
+
       // 1. GET /api/ai/status
       if (pathname === '/api/ai/status' && req.method === 'GET') {
         try {

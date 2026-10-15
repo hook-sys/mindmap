@@ -27,6 +27,30 @@ class AIService {
 
     // Initial active provider is Fal AI as required
     this.activeProviderId = 'fal';
+    this.providerModelOverrides = {};
+  }
+
+  /**
+   * Helper to get server environment variable name for a provider
+   */
+  getEnvKeyName(providerId) {
+    switch (providerId) {
+      case 'fal': return 'FAL_KEY';
+      case 'gemini': return 'GEMINI_API_KEY';
+      case 'openai': return 'OPENAI_API_KEY';
+      case 'claude': return 'ANTHROPIC_API_KEY';
+      default: return `${providerId.toUpperCase()}_API_KEY`;
+    }
+  }
+
+  /**
+   * Mask an API key to protect server secrets (only last 4 characters visible)
+   */
+  maskKey(key) {
+    if (!key || typeof key !== 'string') return null;
+    const trimmed = key.trim();
+    if (trimmed.length < 8) return '••••••••';
+    return '••••••••' + trimmed.slice(-4);
   }
 
   /**
@@ -70,6 +94,7 @@ class AIService {
   getStatus() {
     const active = this.getActiveProvider();
     const activeValidation = active.validateConfiguration();
+    const effectiveDefaultModel = this.providerModelOverrides[this.activeProviderId] || active.defaultModel;
 
     const providerList = [];
     for (const [id, prov] of this.providers.entries()) {
@@ -77,7 +102,7 @@ class AIService {
       providerList.push({
         id: prov.id,
         name: prov.name,
-        defaultModel: prov.defaultModel,
+        defaultModel: this.providerModelOverrides[id] || prov.defaultModel,
         configured: v.valid,
         statusError: v.valid ? null : v.error,
         models: prov.getAvailableModels()
@@ -87,10 +112,124 @@ class AIService {
     return {
       activeProvider: active.id,
       activeProviderName: active.name,
+      activeModel: effectiveDefaultModel,
       configured: activeValidation.valid,
       configError: activeValidation.valid ? null : activeValidation.error,
       models: active.getAvailableModels(),
       availableProviders: providerList
+    };
+  }
+
+  /**
+   * Super Admin: Get full provider configurations with masked keys
+   */
+  getAdminConfig() {
+    const active = this.getActiveProvider();
+    const providerList = [];
+
+    for (const [id, prov] of this.providers.entries()) {
+      const envKeyName = this.getEnvKeyName(id);
+      const rawKey = process.env[envKeyName];
+      const validation = prov.validateConfiguration();
+      const defaultModel = this.providerModelOverrides[id] || prov.defaultModel;
+
+      providerList.push({
+        id: prov.id,
+        name: prov.name,
+        envKeyName,
+        isConfigured: validation.valid,
+        maskedKey: validation.valid ? this.maskKey(rawKey) : null,
+        statusError: validation.valid ? null : validation.error,
+        defaultModel,
+        models: prov.getAvailableModels(),
+        isActive: id === this.activeProviderId
+      });
+    }
+
+    return {
+      activeProvider: this.activeProviderId,
+      activeProviderName: active.name,
+      activeModel: this.providerModelOverrides[this.activeProviderId] || active.defaultModel,
+      providers: providerList,
+      serverEnv: {
+        isProduction: process.env.NODE_ENV === 'production' || !!process.env.VERCEL,
+        hasAdminProtection: !!(process.env.ADMIN_SECRET_KEY || process.env.ADMIN_EMAILS)
+      }
+    };
+  }
+
+  /**
+   * Super Admin: Update active provider, model selections and defaults
+   */
+  updateAdminConfig({ activeProvider, selectedModel, providerModelDefaults } = {}) {
+    if (activeProvider) {
+      if (!this.providers.has(activeProvider)) {
+        const err = new Error(`Cannot set active provider to unknown ID: "${activeProvider}"`);
+        err.statusCode = 400;
+        throw err;
+      }
+      this.activeProviderId = activeProvider;
+    }
+
+    if (selectedModel && (activeProvider || this.activeProviderId)) {
+      const targetProviderId = activeProvider || this.activeProviderId;
+      const prov = this.getProvider(targetProviderId);
+      const validModel = prov.getAvailableModels().some(m => m.id === selectedModel);
+      if (!validModel) {
+        const err = new Error(`Model "${selectedModel}" is not supported by provider "${targetProviderId}"`);
+        err.statusCode = 400;
+        throw err;
+      }
+      this.providerModelOverrides[targetProviderId] = selectedModel;
+    }
+
+    if (providerModelDefaults && typeof providerModelDefaults === 'object') {
+      for (const [pId, mId] of Object.entries(providerModelDefaults)) {
+        if (this.providers.has(pId)) {
+          this.providerModelOverrides[pId] = mId;
+        }
+      }
+    }
+
+    return this.getAdminConfig();
+  }
+
+  /**
+   * Super Admin: Test provider configuration safely without running live billable inference
+   */
+  testProviderConnection(providerId) {
+    const provider = this.getProvider(providerId);
+    if (!provider) {
+      const err = new Error(`Provider "${providerId}" not found.`);
+      err.statusCode = 404;
+      throw err;
+    }
+
+    const envKeyName = this.getEnvKeyName(providerId);
+    const rawKey = process.env[envKeyName];
+    const validation = provider.validateConfiguration();
+
+    if (!validation.valid) {
+      return {
+        success: false,
+        providerId: provider.id,
+        providerName: provider.name,
+        envKeyName,
+        isConfigured: false,
+        message: validation.error || `Missing environment variable ${envKeyName} on server.`,
+        code: 'KEY_MISSING'
+      };
+    }
+
+    return {
+      success: true,
+      providerId: provider.id,
+      providerName: provider.name,
+      envKeyName,
+      isConfigured: true,
+      maskedKey: this.maskKey(rawKey),
+      message: `Connection test passed: ${envKeyName} is configured and correctly formatted on server.`,
+      costNotice: 'Live inference billing bypassed during test connection to prevent accidental API charges.'
     };
   }
 
@@ -126,7 +265,7 @@ class AIService {
       throw err;
     }
 
-    const effectiveModel = modelId || provider.defaultModel;
+    const effectiveModel = modelId || this.providerModelOverrides[provider.id] || provider.defaultModel;
 
     const mindMapData = await provider.generateMindMap({
       prompt: prompt.trim(),
@@ -170,7 +309,7 @@ class AIService {
       throw err;
     }
 
-    const effectiveModel = modelId || provider.defaultModel;
+    const effectiveModel = modelId || this.providerModelOverrides[provider.id] || provider.defaultModel;
 
     // Call provider to get expansion items
     const rawExpansion = await provider.expandNode({
