@@ -1,0 +1,18 @@
+# Exclude personal user data and backups
+data/
+data/users/
+backups/
+backup_pre_security/
+*.bak
+
+# Exclude local-only server and scripts
+server.js
+run_app.bat
+run_dev.bat
+make_zip.js
+create_backup.js
+
+# Exclude git and environment
+.git/
+.env*
+*.log
