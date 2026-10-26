@@ -115,31 +115,20 @@ function normalizeMindMap(rawData, defaultPrompt = 'New Mind Map') {
   }
 
   let nodeCounter = 1;
+  const branchCount = branches.length;
+  const branchSpacingX = 220;
 
-  // Split top-level branches into left and right sides
-  const rightBranches = [];
-  const leftBranches = [];
-
-  branches.forEach((branch, idx) => {
-    if (idx % 2 === 0) {
-      rightBranches.push({ branch, colorIdx: (idx + 1) % PALETTE.length });
-    } else {
-      leftBranches.push({ branch, colorIdx: (idx + 1) % PALETTE.length });
-    }
-  });
-
-  // Helper to recursively process children
-  function addBranch(branchData, parentId, color, direction, depth, yPos) {
+  // Helper to recursively process children in top-to-bottom layout
+  function addBranch(branchData, parentId, color, depth, posX, posY) {
     const id = `node_${nodeCounter++}`;
     const text = sanitizeText(branchData.text || branchData.title, 100, `Topic ${nodeCounter}`);
-    const x = depth === 1 ? direction * 240 : (nodes[parentId].x + direction * 220);
 
     nodes[id] = {
       id,
       text,
       parentId,
-      x,
-      y: yPos,
+      x: posX,
+      y: posY,
       color,
       collapsed: false
     };
@@ -147,28 +136,21 @@ function normalizeMindMap(rawData, defaultPrompt = 'New Mind Map') {
     const children = Array.isArray(branchData.children) ? branchData.children : [];
     if (children.length > 0) {
       const childCount = children.length;
-      let startY = yPos - ((childCount - 1) * 60) / 2;
+      const childSpacingX = 180;
+      let startChildX = posX - ((childCount - 1) * childSpacingX) / 2;
       children.forEach((c) => {
-        addBranch(c, id, color, direction, depth + 1, startY);
-        startY += 65;
+        addBranch(c, id, color, depth + 1, Math.round(startChildX), posY + 130);
+        startChildX += childSpacingX;
       });
     }
   }
 
-  // Layout right side
-  let rightY = -((rightBranches.length - 1) * 80) / 2;
-  rightBranches.forEach(({ branch, colorIdx }) => {
-    const branchColor = PALETTE[colorIdx] || PALETTE[1];
-    addBranch(branch, rootId, branchColor, 1, 1, rightY);
-    rightY += 85;
-  });
-
-  // Layout left side
-  let leftY = -((leftBranches.length - 1) * 80) / 2;
-  leftBranches.forEach(({ branch, colorIdx }) => {
-    const branchColor = PALETTE[colorIdx] || PALETTE[2];
-    addBranch(branch, rootId, branchColor, -1, 1, leftY);
-    leftY += 85;
+  // Layout top-level branches horizontally under root (Top-to-Bottom flow)
+  let startBranchX = -((branchCount - 1) * branchSpacingX) / 2;
+  branches.forEach((branch, idx) => {
+    const branchColor = PALETTE[(idx + 1) % PALETTE.length];
+    addBranch(branch, rootId, branchColor, 1, Math.round(startBranchX), 130);
+    startBranchX += branchSpacingX;
   });
 
   return {
@@ -179,7 +161,7 @@ function normalizeMindMap(rawData, defaultPrompt = 'New Mind Map') {
 }
 
 /**
- * Normalizes expanded child nodes for a target parent node
+ * Normalizes expanded child nodes for a target parent node (Top-to-Bottom)
  * 
  * Expected raw format:
  * {
@@ -204,13 +186,10 @@ function normalizeExpandedNodes(rawData, parentNode, existingNodes = {}) {
   const existingIds = new Set(Object.keys(existingNodes));
   const newNodes = [];
 
-  // Determine direction based on parent position relative to root
-  const isRightSide = (parentNode.x >= 0);
-  const direction = isRightSide ? 1 : -1;
-  const childX = parentNode.x + (direction * 220);
-
   const count = Math.min(list.length, 7); // Cap to 7 to prevent clutter
-  let startY = parentNode.y - ((count - 1) * 60) / 2;
+  const childSpacingX = 185;
+  let startX = parentNode.x - ((count - 1) * childSpacingX) / 2;
+  const targetY = parentNode.y + 130;
 
   for (let i = 0; i < count; i++) {
     const rawItem = list[i];
@@ -231,13 +210,13 @@ function normalizeExpandedNodes(rawData, parentNode, existingNodes = {}) {
       id: newId,
       text: cleanText,
       parentId: parentNode.id,
-      x: childX,
-      y: Math.round(startY),
+      x: Math.round(startX),
+      y: targetY,
       color: parentNode.color || '#4F46E5',
       collapsed: false
     });
 
-    startY += 65;
+    startX += childSpacingX;
   }
 
   return newNodes;

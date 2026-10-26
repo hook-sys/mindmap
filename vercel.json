@@ -4,6 +4,8 @@
   "outputDirectory": ".",
   "rewrites": [
     { "source": "/api/ai/(.*)", "destination": "/api/ai" },
-    { "source": "/api/ai", "destination": "/api/ai" }
+    { "source": "/api/ai", "destination": "/api/ai" },
+    { "source": "/api/auth/(.*)", "destination": "/api/ai?action=auth-config" },
+    { "source": "/api/auth", "destination": "/api/ai?action=auth-config" }
   ]
 }

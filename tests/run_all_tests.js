@@ -15,7 +15,8 @@ const suites = [
   { name: 'Admin AI & Security Test Suite', file: 'admin_ai_test.js' },
   { name: 'SaaS Entitlements & Schema Test Suite', file: 'entitlements_test.js' },
   { name: 'HTTP Server API & Integration Test Suite', file: 'server_admin_http_test.js' },
-  { name: 'Core Editor & Regression Test Suite', file: 'editor_regression_test.js' }
+  { name: 'Core Editor & Regression Test Suite', file: 'editor_regression_test.js' },
+  { name: 'Supabase Integration & Cloud CRUD Test Suite', file: 'supabase_integration_test.js' }
 ];
 
 console.log('====================================================');

@@ -146,6 +146,17 @@ const server = http.createServer(async (req, res) => {
 
   // ================= API ROUTES =================
   if (pathname.startsWith('/api/')) {
+    // Supabase Auth Public Configuration endpoint (Loads from server environment)
+    if (pathname === '/api/auth/config' && req.method === 'GET') {
+      const url = process.env.SUPABASE_URL || null;
+      const anonKey = process.env.SUPABASE_ANON_KEY || null;
+      return sendJson(res, 200, {
+        configured: !!(url && anonKey),
+        url: url,
+        anonKey: anonKey
+      });
+    }
+
     // AI Multi-Provider Routes (Fal AI, etc.)
     if (pathname.startsWith('/api/ai/')) {
       // 0. Super Admin AI Settings Endpoints

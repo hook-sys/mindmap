@@ -67,8 +67,8 @@ function addChildNode(nodes, parentId, text = 'New Subtopic') {
   const newNode = {
     id: newId,
     text,
-    x: parent.x + 220,
-    y: parent.y + (childCount * 60) - 30,
+    x: parent.x + ((childCount - 1) * 190),
+    y: parent.y + 130,
     color: parent.color,
     parentId: parentId,
     children: []

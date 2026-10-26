@@ -7,59 +7,59 @@
   <style>
 :root {
   /* ================= DESIGN SYSTEM TOKENS ================= */
-  /* Clean Neutral Palette (Zero Gradients, Minimal SaaS) */
-  --bg-canvas: #f8fafc;
-  --bg-surface: #ffffff;
-  --bg-subtle: #f1f5f9;
-  --bg-muted: #e2e8f0;
+  /* Sleek Glassmorphic Cosmic Palette */
+  --bg-canvas: #0b0f19;
+  --bg-surface: rgba(15, 23, 42, 0.75);
+  --bg-subtle: rgba(255, 255, 255, 0.06);
+  --bg-muted: rgba(255, 255, 255, 0.1);
 
-  --text-primary: #0f172a;
-  --text-secondary: #475569;
-  --text-muted: #64748b;
-  --text-inverted: #ffffff;
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+  --text-inverted: #0b0f19;
 
-  --border-subtle: #f1f5f9;
-  --border-default: #e2e8f0;
-  --border-hover: #cbd5e1;
-  --border-strong: #94a3b8;
+  --border-subtle: rgba(255, 255, 255, 0.06);
+  --border-default: rgba(255, 255, 255, 0.12);
+  --border-hover: rgba(255, 255, 255, 0.22);
+  --border-strong: rgba(255, 255, 255, 0.35);
 
-  /* Primary Brand (Refined Indigo) */
-  --primary: #4f46e5;
-  --primary-hover: #4338ca;
-  --primary-active: #3730a3;
-  --primary-subtle: #eef2ff;
-  --primary-border: #c7d2fe;
+  /* Primary Brand (Luminous Indigo) */
+  --primary: #6366f1;
+  --primary-hover: #4f46e5;
+  --primary-active: #4338ca;
+  --primary-subtle: rgba(99, 102, 241, 0.15);
+  --primary-border: rgba(99, 102, 241, 0.35);
 
   /* Functional Accents */
-  --success: #16a34a;
-  --success-hover: #15803d;
-  --success-subtle: #f0fdf4;
-  --success-border: #bbf7d0;
+  --success: #10b981;
+  --success-hover: #059669;
+  --success-subtle: rgba(16, 185, 129, 0.15);
+  --success-border: rgba(16, 185, 129, 0.35);
 
-  --danger: #dc2626;
-  --danger-hover: #b91c1c;
-  --danger-subtle: #fef2f2;
-  --danger-border: #fecaca;
+  --danger: #ef4444;
+  --danger-hover: #dc2626;
+  --danger-subtle: rgba(239, 68, 68, 0.15);
+  --danger-border: rgba(239, 68, 68, 0.35);
 
-  --warning: #d97706;
-  --warning-subtle: #fffbeb;
-  --warning-border: #fde68a;
+  --warning: #f59e0b;
+  --warning-subtle: rgba(245, 158, 11, 0.15);
+  --warning-border: rgba(245, 158, 11, 0.35);
 
   /* Canvas Grid & Connectors */
-  --canvas-grid-line: #e2e8f0;
-  --connector-default: #94a3b8;
-  --connector-active: #4f46e5;
+  --canvas-grid-line: rgba(255, 255, 255, 0.04);
+  --connector-default: rgba(148, 163, 184, 0.35);
+  --connector-active: #818cf8;
 
-  /* Understated Elevation Shadows (Zero 3D Gimmicks) */
-  --shadow-xs: 0 1px 2px 0 rgba(15, 23, 42, 0.04);
-  --shadow-sm: 0 1px 3px 0 rgba(15, 23, 42, 0.06), 0 1px 2px -1px rgba(15, 23, 42, 0.04);
-  --shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.07), 0 2px 4px -2px rgba(15, 23, 42, 0.04);
-  --shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.08), 0 4px 6px -4px rgba(15, 23, 42, 0.03);
-  --shadow-modal: 0 20px 25px -5px rgba(15, 23, 42, 0.12), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+  /* Glass Elevation Shadows */
+  --shadow-xs: 0 1px 3px 0 rgba(0, 0, 0, 0.25);
+  --shadow-sm: 0 2px 6px 0 rgba(0, 0, 0, 0.35);
+  --shadow-md: 0 4px 12px -2px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 12px 28px -4px rgba(0, 0, 0, 0.55);
+  --shadow-modal: 0 24px 48px -12px rgba(0, 0, 0, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.12);
   
-  --shadow-node: 0 1px 3px 0 rgba(15, 23, 42, 0.07), 0 1px 2px -1px rgba(15, 23, 42, 0.04);
-  --shadow-node-hover: 0 6px 16px -2px rgba(15, 23, 42, 0.09), 0 2px 4px -1px rgba(15, 23, 42, 0.04);
-  --shadow-node-selected: 0 0 0 2px #4f46e5, 0 6px 14px -2px rgba(79, 70, 229, 0.16);
+  --shadow-node: 0 8px 24px -4px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  --shadow-node-hover: 0 12px 32px -4px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  --shadow-node-selected: 0 0 0 2px #6366f1, 0 0 24px rgba(99, 102, 241, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
 
   /* Predictable Border Radii */
   --radius-xs: 4px;
@@ -109,14 +109,16 @@ body, html {
 /* ================= REFINED TOP TOOLBAR ================= */
 .toolbar {
   height: 56px;
-  background: var(--bg-surface);
+  background: rgba(11, 15, 25, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--border-default);
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 16px;
   z-index: 50;
-  box-shadow: var(--shadow-xs);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
   transition: border-color 0.15s ease;
 }
 
@@ -270,11 +272,13 @@ body, html {
   top: 14px;
   left: 50%;
   transform: translateX(-50%);
-  background: var(--bg-surface);
-  border: 1px solid var(--border-default);
+  background: rgba(15, 23, 42, 0.78);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: var(--radius-md);
-  box-shadow: var(--shadow-md);
-  padding: 3px 6px;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  padding: 4px 8px;
   display: flex;
   align-items: center;
   gap: 4px;
@@ -284,8 +288,8 @@ body, html {
 }
 
 .canvas-toolbar:hover {
-  box-shadow: var(--shadow-lg);
-  border-color: var(--border-hover);
+  box-shadow: 0 12px 36px 0 rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.25);
 }
 
 .toolbar-section {
@@ -540,10 +544,12 @@ button:disabled {
   position: absolute;
   top: calc(100% + 6px);
   right: 0;
-  background: var(--bg-surface);
-  border: 1px solid var(--border-default);
+  background: rgba(15, 23, 42, 0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: var(--radius-md);
-  box-shadow: var(--shadow-lg);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.1);
   min-width: 220px;
   display: none;
   flex-direction: column;
@@ -714,12 +720,14 @@ button:disabled {
   position: relative;
   overflow: hidden;
   cursor: grab;
-  background-color: var(--bg-canvas);
-  /* Crisp, subtle grid lines */
-  background-size: 24px 24px;
+  background-color: #0b0f19;
   background-image: 
-    linear-gradient(to right, var(--canvas-grid-line) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--canvas-grid-line) 1px, transparent 1px);
+    radial-gradient(at 15% 15%, rgba(99, 102, 241, 0.15) 0px, transparent 55%),
+    radial-gradient(at 85% 85%, rgba(168, 85, 247, 0.12) 0px, transparent 50%),
+    radial-gradient(at 50% 50%, rgba(14, 165, 233, 0.08) 0px, transparent 65%),
+    linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 100% 100%, 28px 28px, 28px 28px;
 }
 
 .canvas-viewport:active {
@@ -750,18 +758,19 @@ button:disabled {
 .connector-line {
   fill: none;
   stroke: var(--connector-default);
-  stroke-width: 1.75px;
+  stroke-width: 2px;
   stroke-linecap: round;
   stroke-linejoin: round;
-  transition: stroke 0.15s ease, stroke-width 0.15s ease;
+  transition: stroke 0.2s ease, stroke-width 0.2s ease, filter 0.2s ease;
 }
 
 .connector-line.active {
-  stroke-width: 2.5px;
-  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.06));
+  stroke-width: 2.75px;
+  stroke: var(--connector-active);
+  filter: drop-shadow(0 0 6px rgba(129, 140, 248, 0.6));
 }
 
-/* ================= REFINED MINIMALIST NODES ================= */
+/* ================= GLASSMORHIC TOP-TO-BOTTOM NODES ================= */
 .nodes-container {
   position: absolute;
   top: 0;
@@ -775,17 +784,20 @@ button:disabled {
   justify-content: center;
   min-width: 80px;
   max-width: 320px;
-  padding: 8px 14px;
-  background: var(--bg-surface);
+  padding: 9px 16px;
+  background: rgba(15, 23, 42, 0.72);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   color: var(--text-primary);
   border-radius: var(--radius-md);
-  border: 1px solid var(--border-default);
-  box-shadow: var(--shadow-node);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-top: 3px solid var(--node-accent, #6366f1);
+  box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.1);
   cursor: grab;
   user-select: none;
   touch-action: none;
   transform: translate(-50%, -50%);
-  transition: box-shadow 0.15s ease, border-color 0.15s ease;
+  transition: box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease, background 0.2s ease;
   z-index: 10;
 }
 
@@ -793,18 +805,21 @@ button:disabled {
   cursor: grabbing !important;
   z-index: 100 !important;
   transition: none !important;
-  box-shadow: var(--shadow-lg) !important;
+  box-shadow: 0 16px 40px -4px rgba(0, 0, 0, 0.7), 0 0 20px rgba(99, 102, 241, 0.35) !important;
+  transform: translate(-50%, -50%) scale(1.02);
 }
 
 .mind-node:hover {
-  box-shadow: var(--shadow-node-hover);
-  border-color: var(--border-hover);
+  background: rgba(30, 41, 59, 0.82);
+  box-shadow: 0 12px 32px -4px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.25);
   z-index: 20;
 }
 
 .mind-node.selected {
-  border-color: var(--node-accent, var(--primary)) !important;
-  box-shadow: 0 0 0 2px var(--bg-surface), 0 0 0 4px var(--node-accent, var(--primary)), var(--shadow-sm) !important;
+  border-color: var(--node-accent, #6366f1) !important;
+  border-top-color: var(--node-accent, #6366f1) !important;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.5), 0 0 24px rgba(99, 102, 241, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
   z-index: 25;
 }
 
@@ -812,30 +827,30 @@ button:disabled {
 .mind-node.root-node {
   font-size: 14.5px;
   font-weight: 600;
-  padding: 11px 20px;
+  padding: 12px 22px;
   border-radius: 20px;
-  color: var(--text-inverted);
-  border: 1.5px solid transparent !important;
-  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.1), var(--shadow-sm);
+  color: #ffffff;
+  border: 1.5px solid rgba(255, 255, 255, 0.28) !important;
+  box-shadow: 0 10px 32px rgba(79, 70, 229, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.35);
   letter-spacing: -0.15px;
 }
 
 .mind-node.root-node .node-text {
-  color: var(--text-inverted);
+  color: #ffffff;
+  font-weight: 600;
 }
 
 .mind-node.root-node.selected {
-  box-shadow: 0 0 0 2px var(--bg-surface), 0 0 0 4px var(--node-accent, var(--primary)), var(--shadow-md) !important;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.8), 0 0 30px rgba(99, 102, 241, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.5) !important;
 }
 
 /* Level 1 - Primary Branches */
 .mind-node.depth-1 {
   font-size: 13.5px;
   font-weight: 600;
-  padding: 9px 15px;
+  padding: 10px 16px;
   border-radius: var(--radius-md);
-  border-left-width: 4px;
-  box-shadow: var(--shadow-sm);
+  border-top-width: 4px;
 }
 
 /* Level 2 & 3+ - Sub-branches */
@@ -843,10 +858,9 @@ button:disabled {
 .mind-node.depth-3 {
   font-size: 13px;
   font-weight: 500;
-  padding: 7px 13px;
+  padding: 8px 14px;
   border-radius: var(--radius-sm);
-  border-left-width: 3px;
-  box-shadow: var(--shadow-xs);
+  border-top-width: 3px;
 }
 
 .mind-node .node-text {
@@ -859,14 +873,15 @@ button:disabled {
   font-family: inherit;
   pointer-events: auto;
   border-radius: var(--radius-xs);
-  padding: 1px 3px;
+  padding: 1px 4px;
   transition: background-color 0.12s ease;
+  color: var(--text-primary);
 }
 
 .mind-node.editing .node-text {
   cursor: text;
   user-select: text;
-  background-color: var(--bg-subtle);
+  background-color: rgba(255, 255, 255, 0.1);
   outline: 2px solid var(--primary);
   outline-offset: 1px;
 }
@@ -874,20 +889,22 @@ button:disabled {
 /* Floating Quick Actions Bar on Hover / Selection */
 .node-quick-bar {
   position: absolute;
-  top: -30px;
+  top: -34px;
   left: 50%;
   transform: translateX(-50%) translateY(2px);
-  background: var(--bg-surface);
-  border: 1px solid var(--border-default);
+  background: rgba(15, 23, 42, 0.9);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.16);
   border-radius: var(--radius-sm);
-  padding: 2px 3px;
+  padding: 2px 4px;
   display: flex;
   align-items: center;
   gap: 2px;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.12s ease, transform 0.12s ease;
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
   z-index: 50;
   white-space: nowrap;
 }
@@ -957,26 +974,28 @@ button:disabled {
   box-shadow: 0 0 0 1px var(--border-hover);
 }
 
-/* Dedicated Right-Edge Child Add Button (+) */
+/* Dedicated Bottom-Edge Child Add Button (+) */
 .node-add-handle {
   position: absolute;
-  right: -10px;
-  top: 50%;
-  transform: translateY(-50%) scale(0.9);
-  width: 20px;
-  height: 20px;
+  bottom: -11px;
+  left: 50%;
+  transform: translateX(-50%) scale(0.9);
+  width: 22px;
+  height: 22px;
   border-radius: 50%;
-  background: var(--bg-surface);
-  color: var(--text-secondary);
-  border: 1px solid var(--border-default);
+  background: rgba(15, 23, 42, 0.88);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #f1f5f9;
+  border: 1px solid rgba(255, 255, 255, 0.22);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.15s ease, background-color 0.15s ease, transform 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  transition: opacity 0.15s ease, background-color 0.15s ease, transform 0.15s ease, border-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
   z-index: 30;
 }
 
@@ -984,15 +1003,15 @@ button:disabled {
 .mind-node.selected .node-add-handle {
   opacity: 1;
   pointer-events: auto;
-  transform: translateY(-50%) scale(1);
+  transform: translateX(-50%) scale(1);
 }
 
 .node-add-handle:hover {
   background-color: var(--primary);
-  border-color: var(--primary);
-  color: var(--text-inverted);
-  transform: translateY(-50%) scale(1.1);
-  box-shadow: var(--shadow-md);
+  border-color: rgba(255, 255, 255, 0.45);
+  color: #ffffff;
+  transform: translateX(-50%) scale(1.15);
+  box-shadow: 0 0 16px rgba(99, 102, 241, 0.65);
 }
 
 .mind-node.editing .node-add-handle,
@@ -1004,48 +1023,56 @@ button:disabled {
 
 /* Adjust position when node has collapse badge */
 .mind-node.has-children .node-add-handle {
-  right: -32px;
+  left: calc(50% + 15px);
 }
 
 /* Collapse / Expand Toggle Badge */
 .node-collapse-badge {
   position: absolute;
-  right: -10px;
-  top: 50%;
-  transform: translateY(-50%);
-  min-width: 18px;
-  height: 18px;
-  padding: 0 4px;
-  border-radius: 9px;
-  background: var(--bg-surface);
-  color: var(--text-secondary);
-  border: 1px solid var(--border-default);
+  bottom: -11px;
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  border-radius: 10px;
+  background: rgba(15, 23, 42, 0.88);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #cbd5e1;
+  border: 1px solid rgba(255, 255, 255, 0.2);
   font-size: 10.5px;
   font-weight: 600;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-shadow: var(--shadow-xs);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   transition: all 0.15s ease;
   z-index: 32;
   user-select: none;
   line-height: 1;
 }
 
+.mind-node.has-children .node-collapse-badge {
+  left: calc(50% - 15px);
+}
+
 .node-collapse-badge:hover {
-  background-color: var(--bg-subtle);
-  border-color: var(--border-hover);
-  color: var(--text-primary);
-  transform: translateY(-50%) scale(1.08);
+  background-color: rgba(30, 41, 59, 0.95);
+  border-color: rgba(255, 255, 255, 0.35);
+  color: #ffffff;
+  transform: translateX(-50%) scale(1.1);
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.2);
 }
 
 .node-collapse-badge.is-collapsed {
-  background: var(--warning-subtle);
-  border-color: var(--warning);
-  color: var(--warning);
+  background: rgba(217, 119, 6, 0.3);
+  border-color: rgba(245, 158, 11, 0.6);
+  color: #fbbf24;
   font-weight: 700;
-  box-shadow: 0 1px 3px rgba(217, 119, 6, 0.2);
+  box-shadow: 0 0 14px rgba(245, 158, 11, 0.35);
+  left: 50% !important;
 }
 
 /* ================= FLOATING BOTTOM CONTROLS ================= */
@@ -1073,10 +1100,12 @@ button:disabled {
   align-items: center;
   gap: 6px;
   padding: 5px 11px;
-  background: var(--bg-surface);
-  border: 1px solid var(--border-default);
+  background: rgba(15, 23, 42, 0.78);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: var(--radius-md);
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
   color: var(--text-secondary);
   font-size: 12px;
   font-weight: 500;
@@ -1087,10 +1116,10 @@ button:disabled {
 }
 
 .shortcuts-pill-btn:hover {
-  background-color: var(--bg-subtle);
-  border-color: var(--border-hover);
+  background-color: rgba(30, 41, 59, 0.88);
+  border-color: rgba(255, 255, 255, 0.22);
   color: var(--text-primary);
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
 }
 
 .shortcuts-pill-btn svg {
@@ -1098,10 +1127,12 @@ button:disabled {
 }
 
 .floating-controls {
-  background: var(--bg-surface);
+  background: rgba(15, 23, 42, 0.78);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border-radius: var(--radius-md);
-  border: 1px solid var(--border-default);
-  box-shadow: var(--shadow-sm);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
   display: flex;
   align-items: center;
   padding: 3px;
@@ -1110,8 +1141,8 @@ button:disabled {
 }
 
 .floating-controls:hover {
-  box-shadow: var(--shadow-md);
-  border-color: var(--border-hover);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+  border-color: rgba(255, 255, 255, 0.2);
 }
 
 .floating-controls button {
@@ -1158,11 +1189,13 @@ button:disabled {
 
 /* Quick Tip Banner */
 .quick-tip {
-  background: var(--bg-surface);
+  background: rgba(15, 23, 42, 0.78);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   padding: 5px 10px;
   border-radius: var(--radius-md);
-  border: 1px solid var(--border-default);
-  box-shadow: var(--shadow-sm);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
   font-size: 12px;
   color: var(--text-secondary);
   display: flex;
@@ -1207,7 +1240,9 @@ button:disabled {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(15, 23, 42, 0.4);
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   display: none;
   align-items: center;
   justify-content: center;
@@ -1220,8 +1255,10 @@ button:disabled {
 }
 
 .modal-content {
-  background: var(--bg-surface);
-  border: 1px solid var(--border-default);
+  background: rgba(15, 23, 42, 0.9);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.14);
   width: 90%;
   max-width: 520px;
   border-radius: var(--radius-lg);
@@ -3472,6 +3509,7 @@ button:disabled {
   let _authChangeListeners = [];
   let _isConfigured = false;
   let _initPromise = null;
+  let _serverEnvConfig = null;
 
   // Storage keys
   const STORAGE_KEYS = {
@@ -3570,6 +3608,11 @@ button:disabled {
         };
       }
 
+      // 3. Check cached server environment config
+      if (_serverEnvConfig && _serverEnvConfig.url && _serverEnvConfig.anonKey) {
+        return _serverEnvConfig;
+      }
+
       return null;
     },
 
@@ -3605,6 +3648,7 @@ button:disabled {
       _currentSession = null;
       _currentUser = null;
       _isConfigured = false;
+      _serverEnvConfig = null;
       this._notifyListeners('CONFIG_CLEARED', null);
     },
 
@@ -3617,7 +3661,27 @@ button:disabled {
       }
 
       _initPromise = (async () => {
-        const config = this.getConfig();
+        let config = this.getConfig();
+
+        // If not found in localStorage or window, check server environment
+        if (!config) {
+          try {
+            const res = await fetch('/api/auth/config');
+            if (res.ok) {
+              const serverConfig = await res.json();
+              if (serverConfig && serverConfig.configured && serverConfig.url && serverConfig.anonKey) {
+                _serverEnvConfig = {
+                  url: serverConfig.url.trim(),
+                  anonKey: serverConfig.anonKey.trim(),
+                  source: 'environment'
+                };
+                config = _serverEnvConfig;
+              }
+            }
+          } catch (e) {
+            // Server endpoint unreachable or static offline mode
+          }
+        }
 
         if (!config) {
           _isConfigured = false;
@@ -3974,7 +4038,7 @@ const state = {
   dragStartNodePositions: {}
 };
 
-// Built-in Templates
+// Built-in Templates (Top-to-Bottom Hierarchical Layout)
 const TEMPLATES = {
   blank: (title) => ({
     root: {
@@ -3989,25 +4053,25 @@ const TEMPLATES = {
   }),
   plan: (title) => {
     const root = { id: 'root', text: title || 'Project Plan', parentId: null, x: 0, y: 0, color: '#4F46E5', collapsed: false };
-    const c1 = { id: 'node_1', text: 'Objectives 🎯', parentId: 'root', x: 240, y: -90, color: '#0284C7', collapsed: false };
-    const c2 = { id: 'node_2', text: 'Action Steps 📝', parentId: 'root', x: 240, y: 40, color: '#16A34A', collapsed: false };
-    const sc = { id: 'node_3', text: 'Initial Research', parentId: 'node_2', x: 480, y: 40, color: '#16A34A', collapsed: false };
-    const c3 = { id: 'node_4', text: 'Deliverables 🚀', parentId: 'root', x: 240, y: 170, color: '#9333EA', collapsed: false };
+    const c1 = { id: 'node_1', text: 'Objectives 🎯', parentId: 'root', x: -210, y: 130, color: '#0284C7', collapsed: false };
+    const c2 = { id: 'node_2', text: 'Action Steps 📝', parentId: 'root', x: 0, y: 130, color: '#16A34A', collapsed: false };
+    const sc = { id: 'node_3', text: 'Initial Research', parentId: 'node_2', x: 0, y: 260, color: '#16A34A', collapsed: false };
+    const c3 = { id: 'node_4', text: 'Deliverables 🚀', parentId: 'root', x: 210, y: 130, color: '#9333EA', collapsed: false };
     return { root, node_1: c1, node_2: c2, node_3: sc, node_4: c3 };
   },
   brainstorm: (title) => {
     const root = { id: 'root', text: title || 'Brainstorming Session', parentId: null, x: 0, y: 0, color: '#D97706', collapsed: false };
-    const c1 = { id: 'node_1', text: 'Core Problem ❓', parentId: 'root', x: 240, y: -90, color: '#DC2626', collapsed: false };
-    const c2 = { id: 'node_2', text: 'Creative Ideas 💡', parentId: 'root', x: 240, y: 40, color: '#4F46E5', collapsed: false };
-    const sc = { id: 'node_3', text: 'Top Priority Idea', parentId: 'node_2', x: 480, y: 40, color: '#4F46E5', collapsed: false };
-    const c3 = { id: 'node_4', text: 'Key Benefits 👍', parentId: 'root', x: 240, y: 170, color: '#16A34A', collapsed: false };
+    const c1 = { id: 'node_1', text: 'Core Problem ❓', parentId: 'root', x: -210, y: 130, color: '#DC2626', collapsed: false };
+    const c2 = { id: 'node_2', text: 'Creative Ideas 💡', parentId: 'root', x: 0, y: 130, color: '#4F46E5', collapsed: false };
+    const sc = { id: 'node_3', text: 'Top Priority Idea', parentId: 'node_2', x: 0, y: 260, color: '#4F46E5', collapsed: false };
+    const c3 = { id: 'node_4', text: 'Key Benefits 👍', parentId: 'root', x: 210, y: 130, color: '#16A34A', collapsed: false };
     return { root, node_1: c1, node_2: c2, node_3: sc, node_4: c3 };
   },
   meeting: (title) => {
     const root = { id: 'root', text: title || 'Team Meeting Notes', parentId: null, x: 0, y: 0, color: '#0D9488', collapsed: false };
-    const c1 = { id: 'node_1', text: 'Agenda 📋', parentId: 'root', x: 240, y: -90, color: '#0284C7', collapsed: false };
-    const c2 = { id: 'node_2', text: 'Key Discussions 💬', parentId: 'root', x: 240, y: 40, color: '#9333EA', collapsed: false };
-    const c3 = { id: 'node_3', text: 'Decisions & Actions 📌', parentId: 'root', x: 240, y: 170, color: '#DC2626', collapsed: false };
+    const c1 = { id: 'node_1', text: 'Agenda 📋', parentId: 'root', x: -210, y: 130, color: '#0284C7', collapsed: false };
+    const c2 = { id: 'node_2', text: 'Key Discussions 💬', parentId: 'root', x: 0, y: 130, color: '#9333EA', collapsed: false };
+    const c3 = { id: 'node_3', text: 'Decisions & Actions 📌', parentId: 'root', x: 210, y: 130, color: '#DC2626', collapsed: false };
     return { root, node_1: c1, node_2: c2, node_3: c3 };
   }
 };
@@ -4055,18 +4119,22 @@ const StorageService = {
         try {
           const { data, error } = await client
             .from('projects')
-            .select('id, title, nodes, updated_at, created_at')
+            .select('id, title, nodes, data, updated_at, created_at')
             .eq('user_id', state.authUser.id)
             .order('updated_at', { ascending: false });
 
           if (!error && Array.isArray(data)) {
-            const list = data.map(item => ({
-              id: item.id,
-              title: item.title || 'Untitled Project',
-              nodes: item.nodes,
-              rootId: item.nodes ? (item.nodes.root ? 'root' : (Object.keys(item.nodes)[0] || 'root')) : 'root',
-              updatedAt: item.updated_at ? new Date(item.updated_at).getTime() : Date.now()
-            }));
+            const list = data.map(item => {
+              const projectNodes = item.nodes || (item.data && item.data.nodes) || {};
+              const projectRootId = (item.data && item.data.rootId) || (projectNodes.root ? 'root' : (Object.keys(projectNodes)[0] || 'root'));
+              return {
+                id: item.id,
+                title: item.title || 'Untitled Project',
+                nodes: projectNodes,
+                rootId: projectRootId,
+                updatedAt: item.updated_at ? new Date(item.updated_at).getTime() : Date.now()
+              };
+            });
             const key = `mm_${username}_projects`;
             const localMap = {};
             list.forEach(p => { localMap[p.id] = p; });
@@ -4113,11 +4181,13 @@ const StorageService = {
             .maybeSingle();
 
           if (!error && data) {
+            const projectNodes = data.nodes || (data.data && data.data.nodes) || {};
+            const projectRootId = (data.data && data.data.rootId) || (projectNodes.root ? 'root' : (Object.keys(projectNodes)[0] || 'root'));
             return {
               id: data.id,
               title: data.title || 'Untitled Project',
-              nodes: data.nodes,
-              rootId: data.nodes ? (data.nodes.root ? 'root' : (Object.keys(data.nodes)[0] || 'root')) : 'root',
+              nodes: projectNodes,
+              rootId: projectRootId,
               updatedAt: data.updated_at ? new Date(data.updated_at).getTime() : Date.now()
             };
           }
@@ -4174,13 +4244,17 @@ const StorageService = {
         const client = window.AuthService.getClient();
         if (client && state.authUser && state.authUser.id) {
           try {
-            const { error } = await client.from('projects').upsert({
+            const nodeCount = record.nodes ? Object.keys(record.nodes).length : 1;
+            const payload = {
               id: record.id,
               user_id: state.authUser.id,
               title: record.title || 'Untitled Mind Map',
               nodes: record.nodes,
+              data: { nodes: record.nodes, rootId: record.rootId || 'root' },
+              node_count: nodeCount,
               updated_at: new Date().toISOString()
-            });
+            };
+            const { error } = await client.from('projects').upsert(payload);
             if (error) {
               console.warn('[Storage] Supabase save warning:', error.message);
               if (error.code === 'P0001' || error.message.includes('limit reached')) {
@@ -4581,12 +4655,14 @@ function handleAuthStateChange(event, session) {
       updateUserUI();
       closeAuthModal();
       showToast(`Signed in as ${state.authUser.email}`, 'success');
+      loadUserProjects(state.currentUser).then(() => render());
     }
   } else if (event === 'SIGNED_OUT') {
     state.authUser = null;
     state.isGuest = true;
     updateUserUI();
-    showToast('Signed out. Your canvas mind map is preserved.', 'info');
+    showToast('Signed out. Local canvas mind map is preserved.', 'info');
+    loadUserProjects(state.currentUser).then(() => render());
   } else if (event === 'PASSWORD_RECOVERY') {
     switchAuthTab('update-pw');
     openAuthModal('update-pw');
@@ -5444,9 +5520,19 @@ function addChildNode(parentId) {
   const siblings = getChildren(parent.id);
   const isParentRoot = parent.id === state.rootId;
 
-  const direction = (parent.x < 0) ? -1 : 1;
-  const offsetX = (isParentRoot ? 240 : 200) * direction;
-  const offsetY = (siblings.length - (siblings.length ? (siblings.length - 1) / 2 : 0)) * 65;
+  // Top-to-Bottom Layout: Children branch downwards (Y increases)
+  const verticalGap = isParentRoot ? 140 : 125;
+  const targetY = parent.y + verticalGap;
+
+  // Horizontal distribution for sibling children under this parent
+  const siblingCount = siblings.length;
+  const spacingX = 190;
+  let offsetX = 0;
+  if (siblingCount > 0) {
+    const sign = (siblingCount % 2 === 1) ? 1 : -1;
+    const step = Math.ceil(siblingCount / 2);
+    offsetX = sign * step * spacingX;
+  }
 
   let nodeColor = parent.color || '#4F46E5';
   if (isParentRoot) {
@@ -5458,7 +5544,7 @@ function addChildNode(parentId) {
     text: 'New Idea',
     parentId: parent.id,
     x: parent.x + offsetX,
-    y: parent.y + offsetY,
+    y: targetY,
     color: nodeColor,
     collapsed: false
   };
@@ -5486,12 +5572,13 @@ function addSiblingNode(currentNodeId) {
 
   const newId = 'node_' + Date.now() + '_' + Math.floor(Math.random() * 1000);
 
+  // In top-to-bottom layout, sibling is placed horizontally at the same vertical level
   const newNode = {
     id: newId,
     text: 'New Branch',
     parentId: parent.id,
-    x: current.x,
-    y: current.y + 70,
+    x: current.x + 190,
+    y: current.y,
     color: current.color,
     collapsed: false
   };
@@ -5545,67 +5632,58 @@ function changeSelectedNodeColor(color, targetId) {
   render();
 }
 
-// Auto Layout
+// Hierarchical Top-to-Bottom Auto Layout
 function applyAutoLayout() {
   const root = state.nodes[state.rootId];
   if (!root) return;
 
-  root.x = 0;
-  root.y = 0;
+  const nodeWidth = 170;
+  const horizontalGap = 35;
+  const verticalLevelGap = 130;
 
-  const directChildren = getChildren(root.id);
-  const rightChildren = [];
-  const leftChildren = [];
-
-  directChildren.forEach((child, index) => {
-    if (index % 2 === 0) {
-      rightChildren.push(child);
-    } else {
-      leftChildren.push(child);
+  // 1. Calculate subtree bounding widths recursively
+  function getSubtreeWidth(nodeId) {
+    const children = getChildren(nodeId);
+    if (children.length === 0 || state.nodes[nodeId].collapsed) {
+      return nodeWidth;
     }
-  });
-
-  function layoutBranch(node, direction, depth, yStart) {
-    const children = getChildren(node.id);
-    if (children.length === 0) {
-      return { totalHeight: 65, midY: yStart };
-    }
-
-    let currentY = yStart;
-    let childYMidpoints = [];
-
-    children.forEach(child => {
-      const childX = node.x + (direction * 220);
-      const res = layoutBranch(child, direction, depth + 1, currentY);
-      child.x = childX;
-      child.y = res.midY;
-      childYMidpoints.push(res.midY);
-      currentY += Math.max(res.totalHeight, 65);
+    let total = 0;
+    children.forEach((child, idx) => {
+      total += getSubtreeWidth(child.id);
+      if (idx > 0) total += horizontalGap;
     });
-
-    const minChildY = Math.min(...childYMidpoints);
-    const maxChildY = Math.max(...childYMidpoints);
-    const midY = (minChildY + maxChildY) / 2;
-    const totalHeight = currentY - yStart;
-
-    return { totalHeight, midY };
+    return Math.max(nodeWidth, total);
   }
 
-  let rightStartY = -((rightChildren.length - 1) * 70) / 2;
-  rightChildren.forEach(child => {
-    child.x = 240;
-    const res = layoutBranch(child, 1, 1, rightStartY);
-    child.y = res.midY;
-    rightStartY += Math.max(res.totalHeight, 75);
-  });
+  // 2. Position nodes recursively top-to-bottom
+  function layoutNode(nodeId, leftX, depth) {
+    const node = state.nodes[nodeId];
+    node.y = depth * verticalLevelGap;
 
-  let leftStartY = -((leftChildren.length - 1) * 70) / 2;
-  leftChildren.forEach(child => {
-    child.x = -240;
-    const res = layoutBranch(child, -1, 1, leftStartY);
-    child.y = res.midY;
-    leftStartY += Math.max(res.totalHeight, 75);
-  });
+    const children = getChildren(nodeId);
+    if (children.length === 0 || node.collapsed) {
+      node.x = leftX + (nodeWidth / 2);
+      return;
+    }
+
+    let currentLeft = leftX;
+    const childXPositions = [];
+
+    children.forEach((child, idx) => {
+      const childWidth = getSubtreeWidth(child.id);
+      layoutNode(child.id, currentLeft, depth + 1);
+      childXPositions.push(child.x);
+      currentLeft += childWidth + horizontalGap;
+    });
+
+    // Center parent directly above its children
+    const firstX = childXPositions[0];
+    const lastX = childXPositions[childXPositions.length - 1];
+    node.x = (firstX + lastX) / 2;
+  }
+
+  const rootSpan = getSubtreeWidth(root.id);
+  layoutNode(root.id, -rootSpan / 2, 0);
 
   centerView();
   saveHistorySnapshot();
@@ -5687,8 +5765,10 @@ function renderNodes() {
     div.style.setProperty('--node-accent', accentColor);
 
     if (isRoot) {
-      div.style.backgroundColor = accentColor;
+      div.style.background = `linear-gradient(135deg, ${accentColor} 0%, rgba(15, 23, 42, 0.88) 100%)`;
+      div.style.borderColor = accentColor;
     } else {
+      div.style.borderTopColor = accentColor;
       div.style.borderLeftColor = accentColor;
     }
 
@@ -5821,34 +5901,28 @@ function renderConnectors() {
     const pEl = document.getElementById(`node-elem-${parent.id}`);
     const cEl = document.getElementById(`node-elem-${node.id}`);
 
-    const pWidth = pEl ? pEl.offsetWidth : 120;
-    const cWidth = cEl ? cEl.offsetWidth : 120;
+    const pHeight = pEl ? pEl.offsetHeight : 42;
+    const cHeight = cEl ? cEl.offsetHeight : 42;
 
-    let startX, endX;
-    if (node.x >= parent.x) {
-      startX = parent.x + (pWidth / 2);
-      endX = node.x - (cWidth / 2);
-    } else {
-      startX = parent.x - (pWidth / 2);
-      endX = node.x + (cWidth / 2);
-    }
+    // Top-to-Bottom Vertical Connection Anchors:
+    // Parent bottom -> Child top (or inverted if dragged above)
+    const isChildBelow = node.y >= parent.y;
+    const startY = isChildBelow ? parent.y + (pHeight / 2) : parent.y - (pHeight / 2);
+    const endY = isChildBelow ? node.y - (cHeight / 2) : node.y + (cHeight / 2);
+    const startX = parent.x;
+    const endX = node.x;
 
-    const startY = parent.y;
-    const endY = node.y;
-
-    const horizontalDist = Math.abs(endX - startX);
     const verticalDist = Math.abs(endY - startY);
-    // Smooth Bezier handle offset with minimum curve radius
-    const dx = Math.max(horizontalDist * 0.5, Math.min(verticalDist * 0.45, 45));
-    const ctrl1X = node.x >= parent.x ? startX + dx : startX - dx;
-    const ctrl2X = node.x >= parent.x ? endX - dx : endX + dx;
+    const dy = Math.max(verticalDist * 0.5, 30);
+    const ctrl1Y = isChildBelow ? startY + dy : startY - dy;
+    const ctrl2Y = isChildBelow ? endY - dy : endY + dy;
 
-    const pathData = `M ${startX} ${startY} C ${ctrl1X} ${startY}, ${ctrl2X} ${endY}, ${endX} ${endY}`;
+    const pathData = `M ${startX} ${startY} C ${startX} ${ctrl1Y}, ${endX} ${ctrl2Y}, ${endX} ${endY}`;
 
     const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
     path.setAttribute('d', pathData);
     path.setAttribute('class', `connector-line ${isBranchActive ? 'active' : ''}`);
-    path.setAttribute('stroke', isBranchActive ? (node.color || '#4F46E5') : '#cbd5e1');
+    path.setAttribute('stroke', isBranchActive ? (node.color || '#818cf8') : 'rgba(148, 163, 184, 0.45)');
     path.setAttribute('stroke-width', isBranchActive ? '2.5' : '1.75');
 
     svgConnectors.appendChild(path);
@@ -6059,37 +6133,40 @@ function exportToImage() {
   const ctx = canvas.getContext('2d');
   ctx.scale(2, 2);
 
-  ctx.fillStyle = '#ffffff';
+  // Deep glassy canvas background
+  ctx.fillStyle = '#0b0f19';
   ctx.fillRect(0, 0, width, height);
 
+  // Connectors (Top-to-Bottom Vertical Bezier curves)
   nodes.forEach(node => {
     if (!node.parentId || !state.nodes[node.parentId] || !isNodeVisible(node.parentId)) return;
     const parent = state.nodes[node.parentId];
 
     const pEl = document.getElementById(`node-elem-${parent.id}`);
     const cEl = document.getElementById(`node-elem-${node.id}`);
-    const pWidth = pEl ? pEl.offsetWidth : 120;
-    const cWidth = cEl ? cEl.offsetWidth : 120;
+    const pHeight = pEl ? pEl.offsetHeight : 42;
+    const cHeight = cEl ? cEl.offsetHeight : 42;
 
-    let startX = (node.x >= parent.x ? parent.x + pWidth / 2 : parent.x - pWidth / 2) - minX;
-    let endX = (node.x >= parent.x ? node.x - cWidth / 2 : node.x + cWidth / 2) - minX;
-    let startY = parent.y - minY;
-    let endY = node.y - minY;
+    const isChildBelow = node.y >= parent.y;
+    const startY = (isChildBelow ? parent.y + pHeight / 2 : parent.y - pHeight / 2) - minY;
+    const endY = (isChildBelow ? node.y - cHeight / 2 : node.y + cHeight / 2) - minY;
+    const startX = parent.x - minX;
+    const endX = node.x - minX;
 
-    const horizontalDist = Math.abs(endX - startX);
     const verticalDist = Math.abs(endY - startY);
-    const dx = Math.max(horizontalDist * 0.5, Math.min(verticalDist * 0.45, 45));
-    const ctrl1X = node.x >= parent.x ? startX + dx : startX - dx;
-    const ctrl2X = node.x >= parent.x ? endX - dx : endX + dx;
+    const dy = Math.max(verticalDist * 0.5, 30);
+    const ctrl1Y = isChildBelow ? startY + dy : startY - dy;
+    const ctrl2Y = isChildBelow ? endY - dy : endY + dy;
 
     ctx.beginPath();
     ctx.moveTo(startX, startY);
-    ctx.bezierCurveTo(ctrl1X, startY, ctrl2X, endY, endX, endY);
-    ctx.strokeStyle = node.color || '#4F46E5';
+    ctx.bezierCurveTo(startX, ctrl1Y, endX, ctrl2Y, endX, endY);
+    ctx.strokeStyle = node.color || '#818cf8';
     ctx.lineWidth = 2.5;
     ctx.stroke();
   });
 
+  // Nodes (Frosted Glass Cards)
   nodes.forEach(node => {
     const isRoot = node.id === state.rootId;
     const el = document.getElementById(`node-elem-${node.id}`);
@@ -6097,7 +6174,7 @@ function exportToImage() {
     const h = el ? el.offsetHeight : 44;
     const x = (node.x - w / 2) - minX;
     const y = (node.y - h / 2) - minY;
-    const radius = isRoot ? 12 : 8;
+    const radius = isRoot ? 20 : 12;
 
     function drawRoundedRect(c, rx, ry, rw, rh, r) {
       if (typeof c.roundRect === 'function') {
@@ -6115,25 +6192,26 @@ function exportToImage() {
 
     ctx.beginPath();
     drawRoundedRect(ctx, x, y, w, h, radius);
-    ctx.fillStyle = isRoot ? (node.color || '#4F46E5') : '#ffffff';
+    ctx.fillStyle = isRoot ? (node.color || '#4F46E5') : 'rgba(22, 27, 34, 0.85)';
     ctx.fill();
 
-    ctx.lineWidth = 2;
-    ctx.strokeStyle = isRoot ? 'transparent' : '#e2e8f0';
+    ctx.lineWidth = 1.5;
+    ctx.strokeStyle = isRoot ? 'rgba(255, 255, 255, 0.4)' : 'rgba(255, 255, 255, 0.16)';
     ctx.stroke();
 
     if (!isRoot) {
+      // Top accent glass strip
       ctx.beginPath();
-      drawRoundedRect(ctx, x, y, 6, h, [radius, 0, 0, radius]);
-      ctx.fillStyle = node.color || '#4F46E5';
+      drawRoundedRect(ctx, x, y, w, 3.5, [radius, radius, 0, 0]);
+      ctx.fillStyle = node.color || '#818cf8';
       ctx.fill();
     }
 
-    ctx.fillStyle = isRoot ? '#ffffff' : '#0f172a';
-    ctx.font = isRoot ? 'bold 15px "Inter", sans-serif' : '500 14px "Inter", sans-serif';
+    ctx.fillStyle = '#ffffff';
+    ctx.font = isRoot ? 'bold 15px "Inter", sans-serif' : '500 13.5px "Inter", sans-serif';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText(node.text, x + w / 2, y + h / 2);
+    ctx.fillText(node.text, x + w / 2, y + h / 2 + (isRoot ? 0 : 2));
   });
 
   const a = document.createElement('a');

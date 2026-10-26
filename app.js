@@ -37,7 +37,7 @@ const state = {
   dragStartNodePositions: {}
 };
 
-// Built-in Templates
+// Built-in Templates (Top-to-Bottom Hierarchical Layout)
 const TEMPLATES = {
   blank: (title) => ({
     root: {
@@ -52,25 +52,25 @@ const TEMPLATES = {
   }),
   plan: (title) => {
     const root = { id: 'root', text: title || 'Project Plan', parentId: null, x: 0, y: 0, color: '#4F46E5', collapsed: false };
-    const c1 = { id: 'node_1', text: 'Objectives 🎯', parentId: 'root', x: 240, y: -90, color: '#0284C7', collapsed: false };
-    const c2 = { id: 'node_2', text: 'Action Steps 📝', parentId: 'root', x: 240, y: 40, color: '#16A34A', collapsed: false };
-    const sc = { id: 'node_3', text: 'Initial Research', parentId: 'node_2', x: 480, y: 40, color: '#16A34A', collapsed: false };
-    const c3 = { id: 'node_4', text: 'Deliverables 🚀', parentId: 'root', x: 240, y: 170, color: '#9333EA', collapsed: false };
+    const c1 = { id: 'node_1', text: 'Objectives 🎯', parentId: 'root', x: -210, y: 130, color: '#0284C7', collapsed: false };
+    const c2 = { id: 'node_2', text: 'Action Steps 📝', parentId: 'root', x: 0, y: 130, color: '#16A34A', collapsed: false };
+    const sc = { id: 'node_3', text: 'Initial Research', parentId: 'node_2', x: 0, y: 260, color: '#16A34A', collapsed: false };
+    const c3 = { id: 'node_4', text: 'Deliverables 🚀', parentId: 'root', x: 210, y: 130, color: '#9333EA', collapsed: false };
     return { root, node_1: c1, node_2: c2, node_3: sc, node_4: c3 };
   },
   brainstorm: (title) => {
     const root = { id: 'root', text: title || 'Brainstorming Session', parentId: null, x: 0, y: 0, color: '#D97706', collapsed: false };
-    const c1 = { id: 'node_1', text: 'Core Problem ❓', parentId: 'root', x: 240, y: -90, color: '#DC2626', collapsed: false };
-    const c2 = { id: 'node_2', text: 'Creative Ideas 💡', parentId: 'root', x: 240, y: 40, color: '#4F46E5', collapsed: false };
-    const sc = { id: 'node_3', text: 'Top Priority Idea', parentId: 'node_2', x: 480, y: 40, color: '#4F46E5', collapsed: false };
-    const c3 = { id: 'node_4', text: 'Key Benefits 👍', parentId: 'root', x: 240, y: 170, color: '#16A34A', collapsed: false };
+    const c1 = { id: 'node_1', text: 'Core Problem ❓', parentId: 'root', x: -210, y: 130, color: '#DC2626', collapsed: false };
+    const c2 = { id: 'node_2', text: 'Creative Ideas 💡', parentId: 'root', x: 0, y: 130, color: '#4F46E5', collapsed: false };
+    const sc = { id: 'node_3', text: 'Top Priority Idea', parentId: 'node_2', x: 0, y: 260, color: '#4F46E5', collapsed: false };
+    const c3 = { id: 'node_4', text: 'Key Benefits 👍', parentId: 'root', x: 210, y: 130, color: '#16A34A', collapsed: false };
     return { root, node_1: c1, node_2: c2, node_3: sc, node_4: c3 };
   },
   meeting: (title) => {
     const root = { id: 'root', text: title || 'Team Meeting Notes', parentId: null, x: 0, y: 0, color: '#0D9488', collapsed: false };
-    const c1 = { id: 'node_1', text: 'Agenda 📋', parentId: 'root', x: 240, y: -90, color: '#0284C7', collapsed: false };
-    const c2 = { id: 'node_2', text: 'Key Discussions 💬', parentId: 'root', x: 240, y: 40, color: '#9333EA', collapsed: false };
-    const c3 = { id: 'node_3', text: 'Decisions & Actions 📌', parentId: 'root', x: 240, y: 170, color: '#DC2626', collapsed: false };
+    const c1 = { id: 'node_1', text: 'Agenda 📋', parentId: 'root', x: -210, y: 130, color: '#0284C7', collapsed: false };
+    const c2 = { id: 'node_2', text: 'Key Discussions 💬', parentId: 'root', x: 0, y: 130, color: '#9333EA', collapsed: false };
+    const c3 = { id: 'node_3', text: 'Decisions & Actions 📌', parentId: 'root', x: 210, y: 130, color: '#DC2626', collapsed: false };
     return { root, node_1: c1, node_2: c2, node_3: c3 };
   }
 };
@@ -118,18 +118,22 @@ const StorageService = {
         try {
           const { data, error } = await client
             .from('projects')
-            .select('id, title, nodes, updated_at, created_at')
+            .select('id, title, nodes, data, updated_at, created_at')
             .eq('user_id', state.authUser.id)
             .order('updated_at', { ascending: false });
 
           if (!error && Array.isArray(data)) {
-            const list = data.map(item => ({
-              id: item.id,
-              title: item.title || 'Untitled Project',
-              nodes: item.nodes,
-              rootId: item.nodes ? (item.nodes.root ? 'root' : (Object.keys(item.nodes)[0] || 'root')) : 'root',
-              updatedAt: item.updated_at ? new Date(item.updated_at).getTime() : Date.now()
-            }));
+            const list = data.map(item => {
+              const projectNodes = item.nodes || (item.data && item.data.nodes) || {};
+              const projectRootId = (item.data && item.data.rootId) || (projectNodes.root ? 'root' : (Object.keys(projectNodes)[0] || 'root'));
+              return {
+                id: item.id,
+                title: item.title || 'Untitled Project',
+                nodes: projectNodes,
+                rootId: projectRootId,
+                updatedAt: item.updated_at ? new Date(item.updated_at).getTime() : Date.now()
+              };
+            });
             const key = `mm_${username}_projects`;
             const localMap = {};
             list.forEach(p => { localMap[p.id] = p; });
@@ -176,11 +180,13 @@ const StorageService = {
             .maybeSingle();
 
           if (!error && data) {
+            const projectNodes = data.nodes || (data.data && data.data.nodes) || {};
+            const projectRootId = (data.data && data.data.rootId) || (projectNodes.root ? 'root' : (Object.keys(projectNodes)[0] || 'root'));
             return {
               id: data.id,
               title: data.title || 'Untitled Project',
-              nodes: data.nodes,
-              rootId: data.nodes ? (data.nodes.root ? 'root' : (Object.keys(data.nodes)[0] || 'root')) : 'root',
+              nodes: projectNodes,
+              rootId: projectRootId,
               updatedAt: data.updated_at ? new Date(data.updated_at).getTime() : Date.now()
             };
           }
@@ -237,13 +243,17 @@ const StorageService = {
         const client = window.AuthService.getClient();
         if (client && state.authUser && state.authUser.id) {
           try {
-            const { error } = await client.from('projects').upsert({
+            const nodeCount = record.nodes ? Object.keys(record.nodes).length : 1;
+            const payload = {
               id: record.id,
               user_id: state.authUser.id,
               title: record.title || 'Untitled Mind Map',
               nodes: record.nodes,
+              data: { nodes: record.nodes, rootId: record.rootId || 'root' },
+              node_count: nodeCount,
               updated_at: new Date().toISOString()
-            });
+            };
+            const { error } = await client.from('projects').upsert(payload);
             if (error) {
               console.warn('[Storage] Supabase save warning:', error.message);
               if (error.code === 'P0001' || error.message.includes('limit reached')) {
@@ -644,12 +654,14 @@ function handleAuthStateChange(event, session) {
       updateUserUI();
       closeAuthModal();
       showToast(`Signed in as ${state.authUser.email}`, 'success');
+      loadUserProjects(state.currentUser).then(() => render());
     }
   } else if (event === 'SIGNED_OUT') {
     state.authUser = null;
     state.isGuest = true;
     updateUserUI();
-    showToast('Signed out. Your canvas mind map is preserved.', 'info');
+    showToast('Signed out. Local canvas mind map is preserved.', 'info');
+    loadUserProjects(state.currentUser).then(() => render());
   } else if (event === 'PASSWORD_RECOVERY') {
     switchAuthTab('update-pw');
     openAuthModal('update-pw');
@@ -1507,9 +1519,19 @@ function addChildNode(parentId) {
   const siblings = getChildren(parent.id);
   const isParentRoot = parent.id === state.rootId;
 
-  const direction = (parent.x < 0) ? -1 : 1;
-  const offsetX = (isParentRoot ? 240 : 200) * direction;
-  const offsetY = (siblings.length - (siblings.length ? (siblings.length - 1) / 2 : 0)) * 65;
+  // Top-to-Bottom Layout: Children branch downwards (Y increases)
+  const verticalGap = isParentRoot ? 140 : 125;
+  const targetY = parent.y + verticalGap;
+
+  // Horizontal distribution for sibling children under this parent
+  const siblingCount = siblings.length;
+  const spacingX = 190;
+  let offsetX = 0;
+  if (siblingCount > 0) {
+    const sign = (siblingCount % 2 === 1) ? 1 : -1;
+    const step = Math.ceil(siblingCount / 2);
+    offsetX = sign * step * spacingX;
+  }
 
   let nodeColor = parent.color || '#4F46E5';
   if (isParentRoot) {
@@ -1521,7 +1543,7 @@ function addChildNode(parentId) {
     text: 'New Idea',
     parentId: parent.id,
     x: parent.x + offsetX,
-    y: parent.y + offsetY,
+    y: targetY,
     color: nodeColor,
     collapsed: false
   };
@@ -1549,12 +1571,13 @@ function addSiblingNode(currentNodeId) {
 
   const newId = 'node_' + Date.now() + '_' + Math.floor(Math.random() * 1000);
 
+  // In top-to-bottom layout, sibling is placed horizontally at the same vertical level
   const newNode = {
     id: newId,
     text: 'New Branch',
     parentId: parent.id,
-    x: current.x,
-    y: current.y + 70,
+    x: current.x + 190,
+    y: current.y,
     color: current.color,
     collapsed: false
   };
@@ -1608,67 +1631,58 @@ function changeSelectedNodeColor(color, targetId) {
   render();
 }
 
-// Auto Layout
+// Hierarchical Top-to-Bottom Auto Layout
 function applyAutoLayout() {
   const root = state.nodes[state.rootId];
   if (!root) return;
 
-  root.x = 0;
-  root.y = 0;
+  const nodeWidth = 170;
+  const horizontalGap = 35;
+  const verticalLevelGap = 130;
 
-  const directChildren = getChildren(root.id);
-  const rightChildren = [];
-  const leftChildren = [];
-
-  directChildren.forEach((child, index) => {
-    if (index % 2 === 0) {
-      rightChildren.push(child);
-    } else {
-      leftChildren.push(child);
+  // 1. Calculate subtree bounding widths recursively
+  function getSubtreeWidth(nodeId) {
+    const children = getChildren(nodeId);
+    if (children.length === 0 || state.nodes[nodeId].collapsed) {
+      return nodeWidth;
     }
-  });
-
-  function layoutBranch(node, direction, depth, yStart) {
-    const children = getChildren(node.id);
-    if (children.length === 0) {
-      return { totalHeight: 65, midY: yStart };
-    }
-
-    let currentY = yStart;
-    let childYMidpoints = [];
-
-    children.forEach(child => {
-      const childX = node.x + (direction * 220);
-      const res = layoutBranch(child, direction, depth + 1, currentY);
-      child.x = childX;
-      child.y = res.midY;
-      childYMidpoints.push(res.midY);
-      currentY += Math.max(res.totalHeight, 65);
+    let total = 0;
+    children.forEach((child, idx) => {
+      total += getSubtreeWidth(child.id);
+      if (idx > 0) total += horizontalGap;
     });
-
-    const minChildY = Math.min(...childYMidpoints);
-    const maxChildY = Math.max(...childYMidpoints);
-    const midY = (minChildY + maxChildY) / 2;
-    const totalHeight = currentY - yStart;
-
-    return { totalHeight, midY };
+    return Math.max(nodeWidth, total);
   }
 
-  let rightStartY = -((rightChildren.length - 1) * 70) / 2;
-  rightChildren.forEach(child => {
-    child.x = 240;
-    const res = layoutBranch(child, 1, 1, rightStartY);
-    child.y = res.midY;
-    rightStartY += Math.max(res.totalHeight, 75);
-  });
+  // 2. Position nodes recursively top-to-bottom
+  function layoutNode(nodeId, leftX, depth) {
+    const node = state.nodes[nodeId];
+    node.y = depth * verticalLevelGap;
 
-  let leftStartY = -((leftChildren.length - 1) * 70) / 2;
-  leftChildren.forEach(child => {
-    child.x = -240;
-    const res = layoutBranch(child, -1, 1, leftStartY);
-    child.y = res.midY;
-    leftStartY += Math.max(res.totalHeight, 75);
-  });
+    const children = getChildren(nodeId);
+    if (children.length === 0 || node.collapsed) {
+      node.x = leftX + (nodeWidth / 2);
+      return;
+    }
+
+    let currentLeft = leftX;
+    const childXPositions = [];
+
+    children.forEach((child, idx) => {
+      const childWidth = getSubtreeWidth(child.id);
+      layoutNode(child.id, currentLeft, depth + 1);
+      childXPositions.push(child.x);
+      currentLeft += childWidth + horizontalGap;
+    });
+
+    // Center parent directly above its children
+    const firstX = childXPositions[0];
+    const lastX = childXPositions[childXPositions.length - 1];
+    node.x = (firstX + lastX) / 2;
+  }
+
+  const rootSpan = getSubtreeWidth(root.id);
+  layoutNode(root.id, -rootSpan / 2, 0);
 
   centerView();
   saveHistorySnapshot();
@@ -1750,8 +1764,10 @@ function renderNodes() {
     div.style.setProperty('--node-accent', accentColor);
 
     if (isRoot) {
-      div.style.backgroundColor = accentColor;
+      div.style.background = `linear-gradient(135deg, ${accentColor} 0%, rgba(15, 23, 42, 0.88) 100%)`;
+      div.style.borderColor = accentColor;
     } else {
+      div.style.borderTopColor = accentColor;
       div.style.borderLeftColor = accentColor;
     }
 
@@ -1884,34 +1900,28 @@ function renderConnectors() {
     const pEl = document.getElementById(`node-elem-${parent.id}`);
     const cEl = document.getElementById(`node-elem-${node.id}`);
 
-    const pWidth = pEl ? pEl.offsetWidth : 120;
-    const cWidth = cEl ? cEl.offsetWidth : 120;
+    const pHeight = pEl ? pEl.offsetHeight : 42;
+    const cHeight = cEl ? cEl.offsetHeight : 42;
 
-    let startX, endX;
-    if (node.x >= parent.x) {
-      startX = parent.x + (pWidth / 2);
-      endX = node.x - (cWidth / 2);
-    } else {
-      startX = parent.x - (pWidth / 2);
-      endX = node.x + (cWidth / 2);
-    }
+    // Top-to-Bottom Vertical Connection Anchors:
+    // Parent bottom -> Child top (or inverted if dragged above)
+    const isChildBelow = node.y >= parent.y;
+    const startY = isChildBelow ? parent.y + (pHeight / 2) : parent.y - (pHeight / 2);
+    const endY = isChildBelow ? node.y - (cHeight / 2) : node.y + (cHeight / 2);
+    const startX = parent.x;
+    const endX = node.x;
 
-    const startY = parent.y;
-    const endY = node.y;
-
-    const horizontalDist = Math.abs(endX - startX);
     const verticalDist = Math.abs(endY - startY);
-    // Smooth Bezier handle offset with minimum curve radius
-    const dx = Math.max(horizontalDist * 0.5, Math.min(verticalDist * 0.45, 45));
-    const ctrl1X = node.x >= parent.x ? startX + dx : startX - dx;
-    const ctrl2X = node.x >= parent.x ? endX - dx : endX + dx;
+    const dy = Math.max(verticalDist * 0.5, 30);
+    const ctrl1Y = isChildBelow ? startY + dy : startY - dy;
+    const ctrl2Y = isChildBelow ? endY - dy : endY + dy;
 
-    const pathData = `M ${startX} ${startY} C ${ctrl1X} ${startY}, ${ctrl2X} ${endY}, ${endX} ${endY}`;
+    const pathData = `M ${startX} ${startY} C ${startX} ${ctrl1Y}, ${endX} ${ctrl2Y}, ${endX} ${endY}`;
 
     const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
     path.setAttribute('d', pathData);
     path.setAttribute('class', `connector-line ${isBranchActive ? 'active' : ''}`);
-    path.setAttribute('stroke', isBranchActive ? (node.color || '#4F46E5') : '#cbd5e1');
+    path.setAttribute('stroke', isBranchActive ? (node.color || '#818cf8') : 'rgba(148, 163, 184, 0.45)');
     path.setAttribute('stroke-width', isBranchActive ? '2.5' : '1.75');
 
     svgConnectors.appendChild(path);
@@ -2122,37 +2132,40 @@ function exportToImage() {
   const ctx = canvas.getContext('2d');
   ctx.scale(2, 2);
 
-  ctx.fillStyle = '#ffffff';
+  // Deep glassy canvas background
+  ctx.fillStyle = '#0b0f19';
   ctx.fillRect(0, 0, width, height);
 
+  // Connectors (Top-to-Bottom Vertical Bezier curves)
   nodes.forEach(node => {
     if (!node.parentId || !state.nodes[node.parentId] || !isNodeVisible(node.parentId)) return;
     const parent = state.nodes[node.parentId];
 
     const pEl = document.getElementById(`node-elem-${parent.id}`);
     const cEl = document.getElementById(`node-elem-${node.id}`);
-    const pWidth = pEl ? pEl.offsetWidth : 120;
-    const cWidth = cEl ? cEl.offsetWidth : 120;
+    const pHeight = pEl ? pEl.offsetHeight : 42;
+    const cHeight = cEl ? cEl.offsetHeight : 42;
 
-    let startX = (node.x >= parent.x ? parent.x + pWidth / 2 : parent.x - pWidth / 2) - minX;
-    let endX = (node.x >= parent.x ? node.x - cWidth / 2 : node.x + cWidth / 2) - minX;
-    let startY = parent.y - minY;
-    let endY = node.y - minY;
+    const isChildBelow = node.y >= parent.y;
+    const startY = (isChildBelow ? parent.y + pHeight / 2 : parent.y - pHeight / 2) - minY;
+    const endY = (isChildBelow ? node.y - cHeight / 2 : node.y + cHeight / 2) - minY;
+    const startX = parent.x - minX;
+    const endX = node.x - minX;
 
-    const horizontalDist = Math.abs(endX - startX);
     const verticalDist = Math.abs(endY - startY);
-    const dx = Math.max(horizontalDist * 0.5, Math.min(verticalDist * 0.45, 45));
-    const ctrl1X = node.x >= parent.x ? startX + dx : startX - dx;
-    const ctrl2X = node.x >= parent.x ? endX - dx : endX + dx;
+    const dy = Math.max(verticalDist * 0.5, 30);
+    const ctrl1Y = isChildBelow ? startY + dy : startY - dy;
+    const ctrl2Y = isChildBelow ? endY - dy : endY + dy;
 
     ctx.beginPath();
     ctx.moveTo(startX, startY);
-    ctx.bezierCurveTo(ctrl1X, startY, ctrl2X, endY, endX, endY);
-    ctx.strokeStyle = node.color || '#4F46E5';
+    ctx.bezierCurveTo(startX, ctrl1Y, endX, ctrl2Y, endX, endY);
+    ctx.strokeStyle = node.color || '#818cf8';
     ctx.lineWidth = 2.5;
     ctx.stroke();
   });
 
+  // Nodes (Frosted Glass Cards)
   nodes.forEach(node => {
     const isRoot = node.id === state.rootId;
     const el = document.getElementById(`node-elem-${node.id}`);
@@ -2160,7 +2173,7 @@ function exportToImage() {
     const h = el ? el.offsetHeight : 44;
     const x = (node.x - w / 2) - minX;
     const y = (node.y - h / 2) - minY;
-    const radius = isRoot ? 12 : 8;
+    const radius = isRoot ? 20 : 12;
 
     function drawRoundedRect(c, rx, ry, rw, rh, r) {
       if (typeof c.roundRect === 'function') {
@@ -2178,25 +2191,26 @@ function exportToImage() {
 
     ctx.beginPath();
     drawRoundedRect(ctx, x, y, w, h, radius);
-    ctx.fillStyle = isRoot ? (node.color || '#4F46E5') : '#ffffff';
+    ctx.fillStyle = isRoot ? (node.color || '#4F46E5') : 'rgba(22, 27, 34, 0.85)';
     ctx.fill();
 
-    ctx.lineWidth = 2;
-    ctx.strokeStyle = isRoot ? 'transparent' : '#e2e8f0';
+    ctx.lineWidth = 1.5;
+    ctx.strokeStyle = isRoot ? 'rgba(255, 255, 255, 0.4)' : 'rgba(255, 255, 255, 0.16)';
     ctx.stroke();
 
     if (!isRoot) {
+      // Top accent glass strip
       ctx.beginPath();
-      drawRoundedRect(ctx, x, y, 6, h, [radius, 0, 0, radius]);
-      ctx.fillStyle = node.color || '#4F46E5';
+      drawRoundedRect(ctx, x, y, w, 3.5, [radius, radius, 0, 0]);
+      ctx.fillStyle = node.color || '#818cf8';
       ctx.fill();
     }
 
-    ctx.fillStyle = isRoot ? '#ffffff' : '#0f172a';
-    ctx.font = isRoot ? 'bold 15px "Inter", sans-serif' : '500 14px "Inter", sans-serif';
+    ctx.fillStyle = '#ffffff';
+    ctx.font = isRoot ? 'bold 15px "Inter", sans-serif' : '500 13.5px "Inter", sans-serif';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText(node.text, x + w / 2, y + h / 2);
+    ctx.fillText(node.text, x + w / 2, y + h / 2 + (isRoot ? 0 : 2));
   });
 
   const a = document.createElement('a');

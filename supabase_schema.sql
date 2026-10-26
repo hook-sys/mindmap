@@ -39,6 +39,7 @@ CREATE TABLE IF NOT EXISTS public.projects (
   id TEXT PRIMARY KEY,
   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
   title TEXT NOT NULL DEFAULT 'Untitled Project',
+  nodes JSONB,
   data JSONB NOT NULL DEFAULT '{"nodes":{},"rootId":"root"}'::jsonb,
   node_count INTEGER NOT NULL DEFAULT 1,
   is_favorite BOOLEAN NOT NULL DEFAULT FALSE,
@@ -218,3 +219,22 @@ CREATE POLICY "Users can delete own projects"
   FOR DELETE
   TO authenticated
   USING (auth.uid() = user_id);
+
+-- ==============================================================================
+-- 9. Rollback Plan (If needed)
+-- ==============================================================================
+-- To completely undo this migration and restore the database to a blank state:
+--
+-- DROP TRIGGER IF EXISTS trigger_check_project_tier_limit ON public.projects;
+-- DROP FUNCTION IF EXISTS public.check_project_tier_limit();
+-- DROP TRIGGER IF EXISTS trigger_protect_profile_tier_update ON public.profiles;
+-- DROP FUNCTION IF EXISTS public.protect_profile_tier_update();
+-- DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
+-- DROP FUNCTION IF EXISTS public.handle_new_user();
+-- DROP TRIGGER IF EXISTS trigger_projects_updated_at ON public.projects;
+-- DROP TRIGGER IF EXISTS trigger_profiles_updated_at ON public.profiles;
+-- DROP FUNCTION IF EXISTS public.handle_updated_at();
+-- DROP TABLE IF EXISTS public.projects CASCADE;
+-- DROP TABLE IF EXISTS public.profiles CASCADE;
+-- DROP TYPE IF EXISTS subscription_tier CASCADE;
+-- ==============================================================================

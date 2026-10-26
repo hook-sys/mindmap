@@ -22,6 +22,7 @@
   let _authChangeListeners = [];
   let _isConfigured = false;
   let _initPromise = null;
+  let _serverEnvConfig = null;
 
   // Storage keys
   const STORAGE_KEYS = {
@@ -120,6 +121,11 @@
         };
       }
 
+      // 3. Check cached server environment config
+      if (_serverEnvConfig && _serverEnvConfig.url && _serverEnvConfig.anonKey) {
+        return _serverEnvConfig;
+      }
+
       return null;
     },
 
@@ -155,6 +161,7 @@
       _currentSession = null;
       _currentUser = null;
       _isConfigured = false;
+      _serverEnvConfig = null;
       this._notifyListeners('CONFIG_CLEARED', null);
     },
 
@@ -167,7 +174,27 @@
       }
 
       _initPromise = (async () => {
-        const config = this.getConfig();
+        let config = this.getConfig();
+
+        // If not found in localStorage or window, check server environment
+        if (!config) {
+          try {
+            const res = await fetch('/api/auth/config');
+            if (res.ok) {
+              const serverConfig = await res.json();
+              if (serverConfig && serverConfig.configured && serverConfig.url && serverConfig.anonKey) {
+                _serverEnvConfig = {
+                  url: serverConfig.url.trim(),
+                  anonKey: serverConfig.anonKey.trim(),
+                  source: 'environment'
+                };
+                config = _serverEnvConfig;
+              }
+            }
+          } catch (e) {
+            // Server endpoint unreachable or static offline mode
+          }
+        }
 
         if (!config) {
           _isConfigured = false;
